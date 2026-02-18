@@ -31,6 +31,42 @@
   --color-mist: #D8E3E0;
   --color-mist-rgb: 216 227 224;
 
+  /* Semantic text colors (WCAG-friendly defaults) */
+  --color-text-primary: #2D241E;
+  --color-text-primary-rgb: 45 36 30;
+  --color-text-secondary: #66564A;
+  --color-text-secondary-rgb: 102 86 74;
+  --color-text-muted: #8A7A6E;
+  --color-text-muted-rgb: 138 122 110;
+  --color-text-inverse: #FCFAF7;
+  --color-text-inverse-rgb: 252 250 247;
+
+  /* Semantic surfaces */
+  --color-surface-base: #FCFAF7;
+  --color-surface-base-rgb: 252 250 247;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-elevated-rgb: 255 255 255;
+  --color-surface-subtle: #F5F2ED;
+  --color-surface-subtle-rgb: 245 242 237;
+  --color-surface-strong: #2D241E;
+  --color-surface-strong-rgb: 45 36 30;
+  --color-border-soft: #E7D8C6;
+  --color-border-soft-rgb: 231 216 198;
+
+  /* Status colors */
+  --color-success: #2E7D4A;
+  --color-success-rgb: 46 125 74;
+  --color-success-soft: #E9F5EC;
+  --color-success-soft-rgb: 233 245 236;
+  --color-warning: #B17C2D;
+  --color-warning-rgb: 177 124 45;
+  --color-warning-soft: #FBF1E1;
+  --color-warning-soft-rgb: 251 241 225;
+  --color-danger: #B94B4B;
+  --color-danger-rgb: 185 75 75;
+  --color-danger-soft: #FCEAEA;
+  --color-danger-soft-rgb: 252 234 234;
+
   --gradient-warm: linear-gradient(135deg, var(--color-ivoire) 0%, var(--color-cream) 30%, var(--color-dore) 70%, var(--color-marron) 100%);
   --gradient-cool: linear-gradient(135deg, var(--color-mist) 0%, var(--color-sage) 50%, var(--color-slate) 100%);
   --gradient-neutral: linear-gradient(135deg, var(--color-ivoire-dark) 0%, var(--color-marron-light) 50%, var(--color-marron) 100%);
@@ -51,6 +87,12 @@
 
   --spacing-section: 7rem;
   --spacing-card: 3rem;
+
+  --font-size-title-lg: clamp(1.875rem, 2.2vw, 2.625rem);
+  --font-size-title-md: clamp(1.5rem, 1.8vw, 2rem);
+  --font-size-body-lg: 1.125rem;
+  --font-size-body: 1rem;
+  --font-size-body-sm: 0.9375rem;
 
   --transition-fast: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 350ms cubic-bezier(0.4, 0, 0.2, 1);

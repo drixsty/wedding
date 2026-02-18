@@ -1,13 +1,13 @@
 <template>
-  <section class="py-16 sm:py-24 bg-neutral-50">
+  <section class="py-16 sm:py-24 bg-surface-subtle">
     <div class="max-w-6xl mx-auto px-5 sm:px-6">
 
       <!-- Header -->
       <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-3xl sm:text-4xl font-semibold text-neutral-900">
+        <h2 class="text-title-md sm:text-title-lg font-semibold text-content-primary">
           Nos Lieux de Cérémonie
         </h2>
-        <p class="text-neutral-500 mt-2 sm:mt-3 text-sm sm:text-base">
+        <p class="text-content-muted mt-2 sm:mt-3 text-body-sm sm:text-body">
           Des cadres magnifiques pour célébrer notre union
         </p>
       </div>
@@ -25,7 +25,7 @@
       <div class="text-center mt-12">
         <router-link
             to="/infos"
-            class="inline-block px-6 py-3 bg-neutral-900 text-white font-medium rounded-lg shadow hover:bg-neutral-800 transition-colors duration-200"
+            class="inline-block px-6 py-3 bg-surface-strong text-content-inverse font-medium rounded-lg shadow hover:bg-marron-dark transition-colors duration-200"
         >
           📍 Voir tous les détails pratiques
         </router-link>

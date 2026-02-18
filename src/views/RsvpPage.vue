@@ -1,20 +1,20 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-neutral-50 via-white to-neutral-100">
+  <div class="min-h-screen bg-gradient-to-b from-surface-base via-surface-elevated to-surface-subtle">
 
     <!-- Header -->
-    <header class="relative bg-neutral-900 text-white">
+    <header class="relative bg-surface-strong text-content-inverse">
       <div class="container mx-auto px-4 py-16 sm:py-20 text-center">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold tracking-wide animate-fade-in-down">
           {{ t('rsvpPage.title') }}
         </h1>
 
-        <p class="mt-4 text-sm sm:text-base text-white/70 max-w-xl mx-auto animate-fade-in-up">
+        <p class="mt-4 text-sm sm:text-base text-content-inverse/75 max-w-xl mx-auto animate-fade-in-up">
           {{ t('rsvpPage.subtitle') }}
         </p>
       </div>
 
       <!-- Séparateur subtil -->
-      <div class="absolute bottom-0 left-0 w-full h-px bg-white/10"></div>
+      <div class="absolute bottom-0 left-0 w-full h-px bg-content-inverse/10"></div>
     </header>
 
     <!-- Contenu principal -->

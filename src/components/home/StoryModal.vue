@@ -3,15 +3,15 @@
     <transition name="fade">
       <div
           v-if="isOpen"
-          class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-md p-4 z-50"
+          class="fixed inset-0 flex items-center justify-center bg-surface-strong/55 backdrop-blur-md p-4 z-50"
       >
         <div
-            class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full relative overflow-hidden animate-zoomIn flex flex-col"
+            class="bg-surface-elevated rounded-3xl shadow-2xl border border-border-soft/60 max-w-3xl w-full relative overflow-hidden animate-zoomIn flex flex-col"
         >
           <!-- Bouton de fermeture -->
           <button
               @click="isOpen = false"
-              class="absolute top-4 right-4 bg-gray-200 rounded-full p-2 text-gray-700 hover:text-white hover:bg-neutral-900 transition-colors duration-300 z-10"
+              class="absolute top-4 right-4 bg-surface-subtle rounded-full p-2 text-content-secondary hover:text-content-inverse hover:bg-surface-strong transition-colors duration-300 z-10"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                  stroke="currentColor">
@@ -22,10 +22,10 @@
 
           <!-- Content -->
           <div class="p-6 sm:p-8 overflow-y-auto max-h-[80vh]">
-            <h3 class="text-2xl sm:text-3xl font-semibold mb-4 text-center text-neutral-900">
+            <h3 class="text-2xl sm:text-3xl font-semibold mb-4 text-center text-content-primary">
               {{ title }}
             </h3>
-            <div class="space-y-4 text-justify text-neutral-700 text-sm sm:text-base leading-relaxed">
+            <div class="space-y-4 text-justify text-content-secondary text-body-sm sm:text-body leading-relaxed">
               <p v-for="(paragraph, idx) in paragraphs" :key="idx">
                 <span v-html="paragraph"></span>
               </p>

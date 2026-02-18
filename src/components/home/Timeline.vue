@@ -1,13 +1,13 @@
 <template>
-  <section class="py-16 sm:py-24 bg-neutral-50">
+  <section class="py-16 sm:py-24 bg-surface-subtle">
     <div class="max-w-4xl mx-auto px-5 sm:px-6">
 
       <!-- Header -->
       <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900">
+        <h2 class="text-title-md sm:text-title-lg font-semibold tracking-tight text-content-primary">
           Programme
         </h2>
-        <p class="text-neutral-500 mt-3 text-sm sm:text-base">
+        <p class="text-content-muted mt-3 text-body-sm sm:text-body">
           Le déroulé des festivités
         </p>
       </div>
@@ -15,7 +15,7 @@
       <!-- Timeline -->
       <div class="relative">
         <!-- Ligne verticale -->
-        <div class="absolute left-4 sm:left-1/2 sm:-translate-x-1/2 top-0 bottom-0 w-px bg-neutral-200"></div>
+        <div class="absolute left-4 sm:left-1/2 sm:-translate-x-1/2 top-0 bottom-0 w-px bg-border-soft"></div>
 
         <div class="space-y-10">
           <div
@@ -54,8 +54,8 @@
                   <button
                       @click="toggle(index)"
                       class="mt-4 w-full flex items-center justify-between px-4 py-3 rounded-xl
-                           bg-neutral-100 hover:bg-neutral-200 text-sm font-medium transition-all duration-200"
-                      :class="openedIndex === index ? 'bg-neutral-200' : ''"
+                           bg-surface-subtle hover:bg-border-soft text-body-sm font-medium transition-all duration-200"
+                      :class="openedIndex === index ? 'bg-border-soft' : ''"
                   >
                     <span>
                       {{ openedIndex === index ? 'Masquer les détails' : 'Voir les détails' }}
@@ -84,7 +84,7 @@
                       leave-to-class="opacity-0 -translate-y-2"
                   >
                     <div v-show="openedIndex === index" class="mt-4">
-                      <p class="text-sm opacity-80">
+                      <p class="text-body-sm text-content-secondary/85">
                         {{ event.description }}
                       </p>
 
@@ -203,16 +203,16 @@ function getEventStatus(index: number): EventStatus {
 
 const statusMap: Record<EventStatus, { card: string; dot: string }> = {
   past: {
-    card: "bg-neutral-100 text-neutral-400",
-    dot: "bg-neutral-400"
+    card: "bg-surface-subtle text-content-muted",
+    dot: "bg-content-muted"
   },
   current: {
-    card: "bg-black text-white shadow-xl",
-    dot: "bg-black scale-125"
+    card: "bg-surface-strong text-content-inverse shadow-xl",
+    dot: "bg-surface-strong scale-125"
   },
   upcoming: {
-    card: "bg-white shadow-sm",
-    dot: "bg-white border border-neutral-300"
+    card: "bg-surface-elevated shadow-sm border border-border-soft/60",
+    dot: "bg-surface-elevated border border-border-soft"
   }
 }
 
