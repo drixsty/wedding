@@ -1,58 +1,62 @@
-/* Variables CSS pour personnalisation facile */
 :root {
-  /* Palette Ultra-Moderne 2026 - Températures Fraîches */
-  --color-marron: #B89F91;      /* Greige sophistiqué */
-  --color-marron-light: #D4C4B7; /* Sable premium */
-  --color-marron-dark: #8B7A6A;  /* Taupe profond */
-  
-  --color-ivoire: #FCFAF7;       /* Blanc minimaliste */
-  --color-ivoire-dark: #F5F2ED;  /* Lin premium */
-  
-  --color-dore: #C9A87C;         /* Champagne doré */
-  --color-dore-light: #E5D4B8;   /* Crème champagne */
-  --color-dore-dark: #A68B5B;    /* Or mat vintage */
-  
-  /* Accents ultra-modernes - Températures fraîches */
-  --color-sage: #A4B8A4;         /* Sage eucalyptus */
-  --color-mauve: #BEA5B8;        /* Mauve poudré */
-  --color-clay: #C4A29E;         /* Argile rose */
-  --color-slate: #9BA5AF;        /* Bleu-gris ardoise */
-  --color-cream: #F0E6D8;        /* Crème café */
-  --color-mist: #D8E3E0;         /* Brume verte */
-  
-  /* Dégradés signature ultra-modernes */
-  --gradient-warm: linear-gradient(135deg, #FCFAF7 0%, #F0E6D8 30%, #C9A87C 70%, #B89F91 100%);
-  --gradient-cool: linear-gradient(135deg, #D8E3E0 0%, #A4B8A4 50%, #9BA5AF 100%);
-  --gradient-neutral: linear-gradient(135deg, #F5F2ED 0%, #D4C4B7 50%, #B89F91 100%);
-  --gradient-elegant: linear-gradient(135deg, #BEA5B8 0%, #C4A29E 33%, #C9A87C 66%, #A4B8A4 100%);
-  --gradient-gold: linear-gradient(135deg, #C9A87C 0%, #E5D4B8 50%, #A68B5B 100%);
-  --gradient-earth: linear-gradient(135deg, #B89F91 0%, #8B7A6A 50%, #6B5A4A 100%);
-  
-  /* Shadows douces et modernes */
-  --shadow-soft: 0 4px 24px rgba(184, 159, 145, 0.12);
-  --shadow-medium: 0 8px 32px rgba(184, 159, 145, 0.16);
-  --shadow-strong: 0 12px 48px rgba(184, 159, 145, 0.20);
-  --shadow-glow: 0 0 32px rgba(201, 168, 124, 0.25);
-  
-  /* Border Radius contemporains */
+  --color-marron: #B89F91;
+  --color-marron-rgb: 184 159 145;
+  --color-marron-light: #D4C4B7;
+  --color-marron-light-rgb: 212 196 183;
+  --color-marron-dark: #8B7A6A;
+  --color-marron-dark-rgb: 139 122 106;
+
+  --color-ivoire: #FCFAF7;
+  --color-ivoire-rgb: 252 250 247;
+  --color-ivoire-dark: #F5F2ED;
+  --color-ivoire-dark-rgb: 245 242 237;
+
+  --color-dore: #C9A87C;
+  --color-dore-rgb: 201 168 124;
+  --color-dore-light: #E5D4B8;
+  --color-dore-light-rgb: 229 212 184;
+  --color-dore-dark: #A68B5B;
+  --color-dore-dark-rgb: 166 139 91;
+
+  --color-sage: #A4B8A4;
+  --color-sage-rgb: 164 184 164;
+  --color-mauve: #BEA5B8;
+  --color-mauve-rgb: 190 165 184;
+  --color-clay: #C4A29E;
+  --color-clay-rgb: 196 162 158;
+  --color-slate: #9BA5AF;
+  --color-slate-rgb: 155 165 175;
+  --color-cream: #F0E6D8;
+  --color-cream-rgb: 240 230 216;
+  --color-mist: #D8E3E0;
+  --color-mist-rgb: 216 227 224;
+
+  --gradient-warm: linear-gradient(135deg, var(--color-ivoire) 0%, var(--color-cream) 30%, var(--color-dore) 70%, var(--color-marron) 100%);
+  --gradient-cool: linear-gradient(135deg, var(--color-mist) 0%, var(--color-sage) 50%, var(--color-slate) 100%);
+  --gradient-neutral: linear-gradient(135deg, var(--color-ivoire-dark) 0%, var(--color-marron-light) 50%, var(--color-marron) 100%);
+  --gradient-elegant: linear-gradient(135deg, var(--color-mauve) 0%, var(--color-clay) 33%, var(--color-dore) 66%, var(--color-sage) 100%);
+  --gradient-gold: linear-gradient(135deg, var(--color-dore) 0%, var(--color-dore-light) 50%, var(--color-dore-dark) 100%);
+  --gradient-earth: linear-gradient(135deg, var(--color-marron) 0%, var(--color-marron-dark) 50%, var(--color-marron-dark) 100%);
+
+  --shadow-soft: 0 4px 24px rgb(var(--color-marron-rgb) / 0.12);
+  --shadow-medium: 0 8px 32px rgb(var(--color-marron-rgb) / 0.16);
+  --shadow-strong: 0 12px 48px rgb(var(--color-marron-rgb) / 0.2);
+  --shadow-glow: 0 0 32px rgb(var(--color-dore-rgb) / 0.25);
+
   --radius-sm: 1rem;
   --radius-md: 1.5rem;
   --radius-lg: 2rem;
   --radius-xl: 2.5rem;
   --radius-full: 9999px;
-  
-  /* Spacing harmonieux */
+
   --spacing-section: 7rem;
   --spacing-card: 3rem;
-  
-  /* Transitions fluides */
+
   --transition-fast: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 350ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Thème minimaliste moderne */
 body {
   background: linear-gradient(180deg, var(--color-ivoire) 0%, var(--color-ivoire-dark) 100%);
 }
-

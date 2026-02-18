@@ -57,6 +57,37 @@
       </div>
     </div>
 
+    <!-- Theme configuration -->
+    <div class="lux-card mb-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+        <div>
+          <h2 class="text-lg font-serif">Personnalisation des couleurs</h2>
+          <p class="text-sm text-neutral-400">La palette est centralisée et persistée en base (table <code>site_theme</code>).</p>
+        </div>
+        <div class="flex gap-2">
+          <button @click="syncThemeDraft" class="lux-button-sm bg-neutral-700 text-white hover:bg-neutral-600">Réinitialiser</button>
+          <button @click="persistTheme" :disabled="themeSaving" class="lux-button-sm">
+            {{ themeSaving ? 'Enregistrement...' : 'Sauvegarder la palette' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div v-for="colorKey in themeColorKeys" :key="colorKey" class="bg-white/5 border border-white/10 rounded-xl p-3">
+          <label :for="`theme-${colorKey}`" class="block text-xs uppercase text-neutral-400 mb-2">
+            {{ THEME_COLOR_LABELS[colorKey] }}
+          </label>
+          <div class="flex items-center gap-3">
+            <input :id="`theme-${colorKey}`" v-model="themeDraft[colorKey]" type="color" class="h-10 w-14 rounded-lg border border-white/20 bg-transparent p-1" />
+            <input v-model="themeDraft[colorKey]" type="text" class="lux-input flex-1 uppercase" placeholder="#FFFFFF" />
+          </div>
+        </div>
+      </div>
+
+      <p v-if="themeFeedback" class="mt-4 text-sm text-neutral-300">{{ themeFeedback }}</p>
+    </div>
+
+    <!-- Group Actions -->
     <div v-if="selectedGuests.length > 0" class="flex gap-2 mb-4 flex-wrap">
       <button @click="groupValidate" class="lux-button-sm bg-green-500 text-black hover:bg-green-600">{{ t('admin.dashboard.bulkValidate') }}</button>
       <button @click="groupRefuse" class="lux-button-sm bg-red-500 text-black hover:bg-red-600">{{ t('admin.dashboard.bulkRefuse') }}</button>
@@ -106,15 +137,40 @@ import { onMounted, reactive, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { useGuests } from '@/composables/useGuests'
-import { t } from '@/i18n'
+import { useTheme } from '@/composables/useTheme'
+import { THEME_COLOR_KEYS, THEME_COLOR_LABELS } from '@/constants/theme'
 
 const router = useRouter()
 const { signOut } = useAuth()
 const { guests, stats, loading, fetchGuests, fetchStats, updateGuestStatus, deleteGuest } = useGuests()
+const { theme, saveTheme, sanitizeTheme } = useTheme()
 
-const filters = reactive<{ statut: string; presence: '' | boolean; search: string }>({ statut: '', presence: '', search: '' })
+const filters = reactive<{ statut: string; presence: boolean | ''; search: string }>({ statut: '', presence: '', search: '' })
 const selectedGuests = ref<string[]>([])
 const selectAll = ref(false)
+const themeColorKeys = THEME_COLOR_KEYS
+const themeDraft = ref(sanitizeTheme(theme.value))
+const themeSaving = ref(false)
+const themeFeedback = ref<string | null>(null)
+
+function syncThemeDraft() {
+  themeDraft.value = sanitizeTheme(theme.value)
+}
+
+async function persistTheme() {
+  themeSaving.value = true
+  themeFeedback.value = null
+
+  const { error } = await saveTheme(themeDraft.value)
+
+  if (error) {
+    themeFeedback.value = `Impossible d'enregistrer le thème : ${error}`
+  } else {
+    themeFeedback.value = 'Palette enregistrée avec succès.'
+  }
+
+  themeSaving.value = false
+}
 
 const filteredGuests = computed(() => guests.value.filter(g => {
   const statusMatch = filters.statut ? g.statut === filters.statut : true
@@ -129,11 +185,24 @@ async function refuseGuest(id: string) { await updateGuestStatus(id, 'refusé');
 async function deleteGuestConfirm(id: string) { if(confirm(t('admin.dashboard.confirmDeleteGuest'))) { await deleteGuest(id); loadGuests() } }
 async function groupValidate() { for(const id of selectedGuests.value) await updateGuestStatus(id, 'validé'); loadGuests() }
 async function groupRefuse() { for(const id of selectedGuests.value) await updateGuestStatus(id, 'refusé'); loadGuests() }
-async function groupDelete() { if(confirm(t('admin.dashboard.confirmDeleteGuests', { count: selectedGuests.value.length }))) { for(const id of selectedGuests.value) await deleteGuest(id); loadGuests() } }
+async function groupDelete() { if(confirm(`Supprimer ${selectedGuests.value.length} invités ?`)) { for(const id of selectedGuests.value) await deleteGuest(id); loadGuests() } }
+
+watch(theme, () => {
+  syncThemeDraft()
+}, { deep: true })
+
+watch(selectAll, val => {
+  if(val) selectedGuests.value = filteredGuests.value.map(g => g.id)
+  else selectedGuests.value = []
+})
 
 watch(selectAll, val => { selectedGuests.value = val ? filteredGuests.value.map(g => g.id) : [] })
 async function handleLogout() { await signOut(); router.push('/admin/login') }
-onMounted(loadGuests)
+
+onMounted(async () => {
+  await loadGuests()
+  syncThemeDraft()
+})
 </script>
 
 <style scoped>
