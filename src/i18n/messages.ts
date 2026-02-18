@@ -58,6 +58,23 @@ export const messages = {
         ceremony: 'Cérémonie',
         reception: 'Réception'
       },
+      empty: 'Aucune photo disponible pour cette catégorie.',
+      uploadTitle: 'Partagez vos photos',
+      uploadSubtitle: 'Envoyez vos souvenirs du mariage. Ils seront publiés après validation.',
+      form: {
+        title: 'Titre',
+        titlePlaceholder: 'Ex: Danse des mariés',
+        description: 'Description',
+        descriptionPlaceholder: 'Ajoutez un petit mot sur ce moment...',
+        category: 'Catégorie',
+        file: 'Image',
+        fileRequired: 'Merci de sélectionner une image avant l’envoi.',
+        submit: 'Envoyer ma photo',
+        uploading: 'Envoi en cours...',
+        pendingHint: 'Chaque photo est vérifiée par les mariés avant publication.',
+        success: 'Merci ❤️ Votre photo a été envoyée et est en attente de validation.',
+        error: 'Impossible d’envoyer la photo : {error}'
+      },
       photos: {
         1: { title: 'Notre Rencontre', description: 'Le jour où tout a commencé' },
         2: { title: 'Voyage en Afrique', description: 'Safari inoubliable au Kenya' },
@@ -160,6 +177,17 @@ export const messages = {
           cream: 'Accent Cream',
           mist: 'Accent Mist'
         },
+        galleryTitle: 'Gestion de la galerie',
+        galleryDescription: 'Modérez les photos ajoutées par les visiteurs et affichez/masquez-les.',
+        refreshGallery: 'Actualiser les photos',
+        galleryEmpty: 'Aucune photo dans la galerie pour le moment.',
+        noTitle: 'Photo sans titre',
+        guestUpload: 'Visiteur',
+        coupleUpload: 'Couple',
+        hidePhoto: 'Masquer',
+        showPhoto: 'Publier',
+        deletePhoto: 'Supprimer',
+        confirmDeletePhoto: 'Supprimer cette photo de la galerie ?',
         confirmDeleteGuest: 'Supprimer cet invité ?',
         confirmDeleteGuests: 'Supprimer {count} invités ?'
       },

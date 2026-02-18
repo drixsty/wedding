@@ -34,6 +34,8 @@ export interface Photo {
   description?: string
   categorie?: string
   ordre_affichage?: number
+  visible?: boolean
+  uploaded_by_guest?: boolean
   created_at: string
 }
 
