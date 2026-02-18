@@ -19,30 +19,30 @@ export const messages = {
       madeWithCare: 'Fait avec soin pour célébrer notre union'
     },
     home: {
-      subtitle: 'Ensemble pour la vie',
-      cta: 'Confirmer votre présence',
-      momentsTitle: 'Nos Plus Beaux Moments',
-      momentsSubtitle: "Une histoire d'amour en images",
+      subtitle: 'Un chapitre secret qui devient promesse éternelle',
+      cta: 'Entrer dans notre histoire',
+      momentsTitle: 'Fragments d\'une Histoire Extraordinaire',
+      momentsSubtitle: 'Des instants volés, des confidences et des souvenirs qui dessinent notre aventure',
       carousel: {
         1: {
           alt: 'Notre rencontre',
-          title: 'La Rencontre Magique',
-          caption: 'Paris, Festival Afrobeat - Le jour où tout a commencé'
+          title: 'Le Signe du Destin',
+          caption: 'Paris, Festival Afrobeat — un regard, un sourire, et tout a basculé'
         },
         2: {
           alt: 'Notre voyage',
-          title: 'Découverte de l\'Afrique',
-          caption: 'Un voyage inoubliable sur les terres de nos ancêtres'
+          title: 'Retour aux Racines',
+          caption: 'Un périple initiatique entre traditions, rires et promesses'
         },
         3: {
           alt: 'La demande',
-          title: 'La Grande Question',
-          caption: 'Marrakech - Un coucher de soleil, une question, un OUI éternel'
+          title: 'Le Oui sous les Étoiles',
+          caption: 'Marrakech — un coucher de soleil, une bague, un serment murmuré'
         },
         4: {
           alt: 'Nos fiançailles',
-          title: 'Les Fiançailles',
-          caption: 'Entourés de nos proches, prêts pour la grande aventure'
+          title: 'Le Cercle des Nôtres',
+          caption: 'Entre émotions et éclats de joie, nos familles unies pour la suite'
         }
       }
     },
@@ -231,7 +231,7 @@ export const messages = {
     },
     faq: {
       title: 'Questions Fréquentes',
-      subtitle: 'Tout ce que vous devez savoir'
+      subtitle: 'Les réponses à toutes vos questions pour vivre cette célébration pleinement'
     }
   }
 } as const

@@ -2,17 +2,15 @@
   <section class="py-16 sm:py-24 bg-surface-subtle">
     <div class="max-w-6xl mx-auto px-5 sm:px-6">
 
-      <!-- Header -->
       <div class="text-center mb-12 sm:mb-16">
         <h2 class="text-title-md sm:text-title-lg font-semibold text-content-primary">
-          Nos Lieux de Cérémonie
+          Nos lieux, pensés comme un voyage
         </h2>
         <p class="text-content-muted mt-2 sm:mt-3 text-body-sm sm:text-body">
-          Des cadres magnifiques pour célébrer notre union
+          Chaque espace raconte une ambiance : émotion, célébration et souvenirs à partager
         </p>
       </div>
 
-      <!-- Locations Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <LocationCard
             v-for="(location, index) in locations"
@@ -21,13 +19,12 @@
         />
       </div>
 
-      <!-- Call to action -->
       <div class="text-center mt-12">
         <router-link
-            to="/infos"
+            to="/rsvp"
             class="inline-block px-6 py-3 bg-surface-strong text-content-inverse font-medium rounded-lg shadow hover:bg-marron-dark transition-colors duration-200"
         >
-          📍 Voir tous les détails pratiques
+          📍 Recevoir le guide pratique avec votre confirmation
         </router-link>
       </div>
 
@@ -50,25 +47,25 @@ interface Location {
 const locations: Location[] = [
   {
     name: 'La Cérémonie',
-    description: 'Échange des vœux dans un cadre traditionnel africain',
-    address: 'Grande Salle Afrochic, Paris',
-    time: '14h00 - 15h30',
+    description: 'Un écrin végétal et solennel pour nos vœux, accompagné de musique live et de rituels symboliques.',
+    address: 'Pavillon des Cèdres, Paris 16e',
+    time: '14h30 - 16h00',
     icon: '💍',
     image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80'
   },
   {
-    name: 'Le Cocktail',
-    description: 'Cocktail dinatoire dans les jardins tropicaux',
-    address: 'Jardin des Palmiers',
-    time: '16h00 - 19h00',
+    name: 'Le Cocktail Expérience',
+    description: 'Un moment vivant entre dégustations, animations artistiques et espace photo éditorial.',
+    address: 'Jardins suspendus des Cèdres',
+    time: '16h15 - 18h30',
     icon: '🥂',
     image: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=80'
   },
   {
-    name: 'La Réception',
-    description: 'Dîner de gala et soirée dansante',
-    address: 'Salle des Fêtes Royale',
-    time: '19h00 - 02h00',
+    name: 'Le Dîner & La Nuit',
+    description: 'Un dîner en plusieurs actes suivi d’une soirée dansante jusqu’au bout de la nuit.',
+    address: 'Orangerie Royale',
+    time: '19h30 - 00h30',
     icon: '🎉',
     image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80'
   }

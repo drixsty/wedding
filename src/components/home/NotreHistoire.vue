@@ -7,7 +7,7 @@
           Notre Histoire
         </h2>
         <p class="text-content-muted mt-3 text-body-sm sm:text-body">
-          Un voyage d'amour, de complicité et de découvertes
+          Un récit entre hasard, héritage, passion et promesse
         </p>
       </div>
       <!-- Story Card -->
@@ -32,7 +32,7 @@
               @click="showModal = true"
               class="flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-surface-strong text-content-inverse font-semibold rounded-xl hover:bg-marron-dark transition-all duration-300"
           >
-            Lire notre histoire complète
+            Découvrir le chapitre caché
           </button>
         </div>
       </div>
@@ -41,7 +41,7 @@
     <!-- Modal -->
     <StoryModal
         v-model="showModal"
-        title="Notre Histoire Complète"
+        title="Notre Histoire • Version Intégrale"
         :paragraphs="storyParagraphs"
     />
   </section>
@@ -59,14 +59,14 @@ const previewLimit = 3
 
 // Texte custom pour l’histoire
 const storyParagraphs = [
-  "Tout a commencé un après-midi ensoleillé, lors d’un marché local où nos regards se sont croisés pour la première fois. C’était un moment suspendu, comme si le monde autour de nous avait ralenti.",
-  "Au fil des mois, nos chemins se sont mêlés dans des rires, des aventures et des conversations interminables. Chaque rencontre renforçait cette connexion unique que nous ressentions l’un pour l’autre.",
-  "Nous avons voyagé ensemble, découvert des paysages à couper le souffle et partagé des souvenirs qui resteront gravés à jamais dans nos cœurs.",
-  "Malgré les défis et les moments de doute, notre complicité et notre confiance mutuelle nous ont permis de surmonter chaque obstacle.",
-  "Aujourd’hui, nous sommes prêts à franchir cette nouvelle étape de notre vie et à célébrer notre amour entourés de nos proches et de ceux qui comptent le plus pour nous.",
-  "Chaque instant passé ensemble nous a rapprochés et nous a appris que le vrai bonheur réside dans les petites choses partagées avec l’être aimé.",
-  "Notre histoire continue, riche de souvenirs et d’émotions, et nous avons hâte de créer encore plus de moments inoubliables ensemble.",
-  "C’est avec joie et gratitude que nous invitons chacun de vous à partager cette aventure et à être témoins de notre engagement et de notre amour."
+  "Tout a commencé par une énigme : un ticket oublié sur une table, un prénom griffonné au dos, et cette intuition inexplicable que nos chemins venaient de se reconnaître.",
+  "De café en promenade nocturne, nos conversations sont devenues des refuges. Nous avons appris à rire de tout, à débattre de rien et à nous comprendre dans les silences.",
+  "Très vite, nos familles, nos cultures et nos habitudes se sont entremêlées. Chaque rencontre a construit un pont entre nos univers, avec la certitude que nos différences seraient notre plus grande richesse.",
+  "Nous avons traversé des saisons intenses : les grands projets, les doutes discrets, les victoires improvisées. À chaque étape, nous avons choisi la tendresse plutôt que la peur.",
+  "Puis est venu ce voyage au Maroc, une terrasse au coucher du soleil, et cette question posée avec les mains qui tremblent : “Et si on écrivait la suite ensemble ?”.",
+  "Le “oui” n’était pas une fin heureuse, mais un commencement. Depuis, nous préparons ce mariage comme on compose une œuvre collective : avec nos proches, nos racines et nos rêves.",
+  "Le jour J sera une célébration de l’amour, oui, mais aussi de la transmission, de la fête, de la musique, et de tout ce qui nous relie.",
+  "Merci de faire partie de cette aventure. Votre présence donne encore plus de sens à cette promesse que nous nous apprêtons à prononcer."
 ]
 
 // Paragraphes affichés dans la preview
