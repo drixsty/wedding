@@ -1,37 +1,37 @@
 <template>
-  <div class="min-h-screen bg-neutral-950 text-white p-6">
+  <div class="admin-page min-h-screen p-6">
     <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-      <h1 class="text-3xl font-serif tracking-wide">{{ t('admin.dashboard.title') }}</h1>
+      <h1 class="text-3xl font-serif tracking-wide text-ivoire">{{ t('admin.dashboard.title') }}</h1>
       <div class="flex gap-4 items-center">
-        <router-link to="/" class="lux-link text-neutral-400 hover:text-white text-sm">{{ t('admin.dashboard.viewSite') }}</router-link>
-        <button @click="handleLogout" class="lux-button-sm text-red-500 hover:text-red-400">{{ t('admin.dashboard.logout') }}</button>
+        <router-link to="/" class="lux-link text-ivoire/70 hover:text-ivoire text-sm">{{ t('admin.dashboard.viewSite') }}</router-link>
+        <button @click="handleLogout" class="lux-button-sm lux-button-danger">{{ t('admin.dashboard.logout') }}</button>
       </div>
     </div>
 
     <div v-if="stats" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
       <div class="lux-card border-l-4 border-green-500">
-        <div class="text-xs text-neutral-400 uppercase">{{ t('admin.dashboard.yesConfirmations') }}</div>
+        <div class="text-xs text-ivoire/70 uppercase">{{ t('admin.dashboard.yesConfirmations') }}</div>
         <div class="text-2xl font-bold text-green-500">{{ stats.confirmations_oui }}</div>
-        <div class="text-xs text-neutral-500 mt-1">+ {{ stats.total_accompagnants }} {{ t('admin.dashboard.plusOnes') }}</div>
+        <div class="text-xs text-ivoire/60 mt-1">+ {{ stats.total_accompagnants }} {{ t('admin.dashboard.plusOnes') }}</div>
       </div>
       <div class="lux-card border-l-4 border-red-500">
-        <div class="text-xs text-neutral-400 uppercase">{{ t('admin.dashboard.noConfirmations') }}</div>
+        <div class="text-xs text-ivoire/70 uppercase">{{ t('admin.dashboard.noConfirmations') }}</div>
         <div class="text-2xl font-bold text-red-500">{{ stats.confirmations_non }}</div>
       </div>
       <div class="lux-card border-l-4 border-yellow-500">
-        <div class="text-xs text-neutral-400 uppercase">{{ t('admin.dashboard.pending') }}</div>
+        <div class="text-xs text-ivoire/70 uppercase">{{ t('admin.dashboard.pending') }}</div>
         <div class="text-2xl font-bold text-yellow-500">{{ stats.en_attente }}</div>
       </div>
-      <div class="lux-card border-l-4 border-blue-500">
-        <div class="text-xs text-neutral-400 uppercase">{{ t('admin.dashboard.totalGuests') }}</div>
-        <div class="text-2xl font-bold text-blue-500">{{ stats.total_invites }}</div>
+      <div class="lux-card border-l-4 border-dore">
+        <div class="text-xs text-ivoire/70 uppercase">{{ t('admin.dashboard.totalGuests') }}</div>
+        <div class="text-2xl font-bold text-dore">{{ stats.total_invites }}</div>
       </div>
     </div>
 
     <div class="lux-card mb-4">
       <div class="flex flex-col md:flex-row gap-4 items-end">
         <div>
-          <label class="text-xs text-neutral-400 uppercase mb-1 block">{{ t('admin.dashboard.status') }}</label>
+          <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.status') }}</label>
           <select v-model="filters.statut" class="lux-input w-full">
             <option value="">{{ t('admin.dashboard.all') }}</option>
             <option value="en_attente">{{ t('admin.dashboard.pending') }}</option>
@@ -40,42 +40,41 @@
           </select>
         </div>
         <div>
-          <label class="text-xs text-neutral-400 uppercase mb-1 block">{{ t('admin.dashboard.attendance') }}</label>
+          <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.attendance') }}</label>
           <select v-model="filters.presence" class="lux-input w-full">
             <option value="">{{ t('admin.dashboard.all') }}</option>
-            <option :value="true">✅ Oui</option>
-            <option :value="false">❌ Non</option>
+            <option :value="true">{{ t('admin.dashboard.yes') }}</option>
+            <option :value="false">{{ t('admin.dashboard.no') }}</option>
           </select>
         </div>
         <div class="flex-1">
-          <label class="text-xs text-neutral-400 uppercase mb-1 block">{{ t('admin.dashboard.search') }}</label>
+          <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.search') }}</label>
           <input v-model="filters.search" type="text" :placeholder="t('admin.dashboard.searchPlaceholder')" class="lux-input w-full" />
         </div>
         <div>
-          <button @click="loadGuests" class="lux-button-sm w-full">{{ t('admin.dashboard.searchAction') }}</button>
+          <button @click="loadGuests" class="lux-button-sm">{{ t('admin.dashboard.searchAction') }}</button>
         </div>
       </div>
     </div>
 
-    <!-- Theme configuration -->
     <div class="lux-card mb-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
         <div>
-          <h2 class="text-lg font-serif">Personnalisation des couleurs</h2>
-          <p class="text-sm text-neutral-400">La palette est centralisée et persistée en base (table <code>site_theme</code>).</p>
+          <h2 class="text-lg font-serif">{{ t('admin.dashboard.themeTitle') }}</h2>
+          <p class="text-sm text-ivoire/70">{{ t('admin.dashboard.themeDescription') }}</p>
         </div>
         <div class="flex gap-2">
-          <button @click="syncThemeDraft" class="lux-button-sm bg-neutral-700 text-white hover:bg-neutral-600">Réinitialiser</button>
+          <button @click="syncThemeDraft" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.resetTheme') }}</button>
           <button @click="persistTheme" :disabled="themeSaving" class="lux-button-sm">
-            {{ themeSaving ? 'Enregistrement...' : 'Sauvegarder la palette' }}
+            {{ themeSaving ? t('admin.dashboard.themeSaving') : t('admin.dashboard.themeSave') }}
           </button>
         </div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div v-for="colorKey in themeColorKeys" :key="colorKey" class="bg-white/5 border border-white/10 rounded-xl p-3">
-          <label :for="`theme-${colorKey}`" class="block text-xs uppercase text-neutral-400 mb-2">
-            {{ THEME_COLOR_LABELS[colorKey] }}
+          <label :for="`theme-${colorKey}`" class="block text-xs uppercase text-ivoire/70 mb-2">
+            {{ t(`admin.dashboard.themeColorLabels.${colorKey}`) }}
           </label>
           <div class="flex items-center gap-3">
             <input :id="`theme-${colorKey}`" v-model="themeDraft[colorKey]" type="color" class="h-10 w-14 rounded-lg border border-white/20 bg-transparent p-1" />
@@ -84,23 +83,22 @@
         </div>
       </div>
 
-      <p v-if="themeFeedback" class="mt-4 text-sm text-neutral-300">{{ themeFeedback }}</p>
+      <p v-if="themeFeedback" class="mt-4 text-sm text-ivoire/80">{{ themeFeedback }}</p>
     </div>
 
-    <!-- Group Actions -->
     <div v-if="selectedGuests.length > 0" class="flex gap-2 mb-4 flex-wrap">
       <button @click="groupValidate" class="lux-button-sm bg-green-500 text-black hover:bg-green-600">{{ t('admin.dashboard.bulkValidate') }}</button>
       <button @click="groupRefuse" class="lux-button-sm bg-red-500 text-black hover:bg-red-600">{{ t('admin.dashboard.bulkRefuse') }}</button>
-      <button @click="groupDelete" class="lux-button-sm bg-neutral-700 text-white hover:bg-neutral-600">{{ t('admin.dashboard.bulkDelete') }}</button>
-      <span class="ml-4 text-neutral-400 text-sm self-center">{{ t('admin.dashboard.selectedCount', { count: selectedGuests.length }) }}</span>
+      <button @click="groupDelete" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.bulkDelete') }}</button>
+      <span class="ml-4 text-ivoire/70 text-sm self-center">{{ t('admin.dashboard.selectedCount', { count: selectedGuests.length }) }}</span>
     </div>
 
     <div class="lux-card overflow-x-auto">
-      <div v-if="loading" class="p-8 text-center"><div class="inline-block w-8 h-8 border-4 border-yellow-500/30 border-t-yellow-500 rounded-full animate-spin"></div></div>
-      <div v-else-if="guests.length === 0" class="p-8 text-center text-neutral-400">{{ t('admin.dashboard.noneFound') }}</div>
+      <div v-if="loading" class="p-8 text-center"><div class="inline-block w-8 h-8 border-4 border-dore/30 border-t-dore rounded-full animate-spin"></div></div>
+      <div v-else-if="guests.length === 0" class="p-8 text-center text-ivoire/70">{{ t('admin.dashboard.noneFound') }}</div>
       <div v-else>
         <table class="w-full table-auto border-collapse">
-          <thead class="bg-white/10 text-neutral-300 uppercase text-xs tracking-wider">
+          <thead class="bg-white/10 text-ivoire/80 uppercase text-xs tracking-wider">
             <tr>
               <th class="px-4 py-3"><input type="checkbox" v-model="selectAll" /></th>
               <th class="px-4 py-3 text-left">{{ t('admin.dashboard.name') }}</th>
@@ -115,14 +113,14 @@
             <tr v-for="guest in filteredGuests" :key="guest.id" class="hover:bg-white/5 transition-colors">
               <td class="px-4 py-3 text-center"><input type="checkbox" :value="guest.id" v-model="selectedGuests" /></td>
               <td class="px-4 py-3">{{ guest.nom_complet }}</td>
-              <td class="px-4 py-3 text-sm text-neutral-400">{{ guest.email }}</td>
-              <td class="px-4 py-3"><span :class="guest.presence_confirmee ? 'text-green-500' : 'text-red-500'">{{ guest.presence_confirmee ? '✅ Oui' : '❌ Non' }}</span></td>
+              <td class="px-4 py-3 text-sm text-ivoire/60">{{ guest.email }}</td>
+              <td class="px-4 py-3"><span :class="guest.presence_confirmee ? 'text-green-500' : 'text-red-500'">{{ guest.presence_confirmee ? t('admin.dashboard.yes') : t('admin.dashboard.no') }}</span></td>
               <td class="px-4 py-3 text-center">{{ guest.nombre_accompagnants }}</td>
-              <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium" :class="{ 'bg-yellow-100 text-yellow-800': guest.statut === 'en_attente', 'bg-green-100 text-green-800': guest.statut === 'validé', 'bg-red-100 text-red-800': guest.statut === 'refusé' }">{{ guest.statut }}</span></td>
+              <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium" :class="statusClassMap[guest.statut]">{{ t(`admin.dashboard.statuses.${guest.statut}`) }}</span></td>
               <td class="px-4 py-3 flex gap-2">
                 <button v-if="guest.statut !== 'validé'" @click="validateGuest(guest.id)" class="text-green-500 hover:text-green-400 text-sm" :title="t('admin.dashboard.validated')">✅</button>
                 <button v-if="guest.statut !== 'refusé'" @click="refuseGuest(guest.id)" class="text-red-500 hover:text-red-400 text-sm" :title="t('admin.dashboard.refused')">❌</button>
-                <button @click="deleteGuestConfirm(guest.id)" class="text-neutral-400 hover:text-neutral-200 text-sm" :title="t('admin.dashboard.bulkDelete')">🗑️</button>
+                <button @click="deleteGuestConfirm(guest.id)" class="text-ivoire/70 hover:text-ivoire text-sm" :title="t('admin.dashboard.bulkDelete')">🗑️</button>
               </td>
             </tr>
           </tbody>
@@ -138,7 +136,8 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { useGuests } from '@/composables/useGuests'
 import { useTheme } from '@/composables/useTheme'
-import { THEME_COLOR_KEYS, THEME_COLOR_LABELS } from '@/constants/theme'
+import { THEME_COLOR_KEYS } from '@/constants/theme'
+import { t } from '@/i18n'
 
 const router = useRouter()
 const { signOut } = useAuth()
@@ -153,6 +152,12 @@ const themeDraft = ref(sanitizeTheme(theme.value))
 const themeSaving = ref(false)
 const themeFeedback = ref<string | null>(null)
 
+const statusClassMap: Record<string, string> = {
+  en_attente: 'bg-yellow-100 text-yellow-800',
+  validé: 'bg-green-100 text-green-800',
+  refusé: 'bg-red-100 text-red-800'
+}
+
 function syncThemeDraft() {
   themeDraft.value = sanitizeTheme(theme.value)
 }
@@ -163,11 +168,9 @@ async function persistTheme() {
 
   const { error } = await saveTheme(themeDraft.value)
 
-  if (error) {
-    themeFeedback.value = `Impossible d'enregistrer le thème : ${error}`
-  } else {
-    themeFeedback.value = 'Palette enregistrée avec succès.'
-  }
+  themeFeedback.value = error
+    ? t('admin.dashboard.themeSaveError', { error })
+    : t('admin.dashboard.themeSaveSuccess')
 
   themeSaving.value = false
 }
@@ -175,29 +178,65 @@ async function persistTheme() {
 const filteredGuests = computed(() => guests.value.filter(g => {
   const statusMatch = filters.statut ? g.statut === filters.statut : true
   const presenceMatch = filters.presence !== '' ? g.presence_confirmee === filters.presence : true
-  const searchMatch = filters.search ? g.nom_complet.toLowerCase().includes(filters.search.toLowerCase()) || g.email.toLowerCase().includes(filters.search.toLowerCase()) : true
+  const searchMatch = filters.search
+    ? g.nom_complet.toLowerCase().includes(filters.search.toLowerCase()) || g.email.toLowerCase().includes(filters.search.toLowerCase())
+    : true
   return statusMatch && presenceMatch && searchMatch
 }))
 
-async function loadGuests() { await fetchGuests(filters); await fetchStats(); selectedGuests.value = []; selectAll.value = false }
-async function validateGuest(id: string) { await updateGuestStatus(id, 'validé'); loadGuests() }
-async function refuseGuest(id: string) { await updateGuestStatus(id, 'refusé'); loadGuests() }
-async function deleteGuestConfirm(id: string) { if(confirm(t('admin.dashboard.confirmDeleteGuest'))) { await deleteGuest(id); loadGuests() } }
-async function groupValidate() { for(const id of selectedGuests.value) await updateGuestStatus(id, 'validé'); loadGuests() }
-async function groupRefuse() { for(const id of selectedGuests.value) await updateGuestStatus(id, 'refusé'); loadGuests() }
-async function groupDelete() { if(confirm(`Supprimer ${selectedGuests.value.length} invités ?`)) { for(const id of selectedGuests.value) await deleteGuest(id); loadGuests() } }
+async function loadGuests() {
+  await fetchGuests(filters)
+  await fetchStats()
+  selectedGuests.value = []
+  selectAll.value = false
+}
+
+async function validateGuest(id: string) {
+  await updateGuestStatus(id, 'validé')
+  loadGuests()
+}
+
+async function refuseGuest(id: string) {
+  await updateGuestStatus(id, 'refusé')
+  loadGuests()
+}
+
+async function deleteGuestConfirm(id: string) {
+  if (confirm(t('admin.dashboard.confirmDeleteGuest'))) {
+    await deleteGuest(id)
+    loadGuests()
+  }
+}
+
+async function groupValidate() {
+  for (const id of selectedGuests.value) await updateGuestStatus(id, 'validé')
+  loadGuests()
+}
+
+async function groupRefuse() {
+  for (const id of selectedGuests.value) await updateGuestStatus(id, 'refusé')
+  loadGuests()
+}
+
+async function groupDelete() {
+  if (confirm(t('admin.dashboard.confirmDeleteGuests', { count: selectedGuests.value.length }))) {
+    for (const id of selectedGuests.value) await deleteGuest(id)
+    loadGuests()
+  }
+}
 
 watch(theme, () => {
   syncThemeDraft()
 }, { deep: true })
 
 watch(selectAll, val => {
-  if(val) selectedGuests.value = filteredGuests.value.map(g => g.id)
-  else selectedGuests.value = []
+  selectedGuests.value = val ? filteredGuests.value.map(g => g.id) : []
 })
 
-watch(selectAll, val => { selectedGuests.value = val ? filteredGuests.value.map(g => g.id) : [] })
-async function handleLogout() { await signOut(); router.push('/admin/login') }
+async function handleLogout() {
+  await signOut()
+  router.push('/admin/login')
+}
 
 onMounted(async () => {
   await loadGuests()
@@ -206,13 +245,54 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.lux-card { background: rgba(255,255,255,0.03); backdrop-blur: 12px; border-radius: 1rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
-.lux-card:hover { border-color: rgba(255,255,255,0.2); }
-.lux-input { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 0.6rem 0.8rem; color: white; font-size: 0.9rem; transition: all 0.3s ease; }
-.lux-input::placeholder { color: rgba(255,255,255,0.3); }
-.lux-input:focus { outline: none; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.07); }
-.lux-button-sm { background: white; color: black; border-radius: 9999px; padding: 0.55rem 1rem; font-size: 0.8rem; font-weight: 600; transition: all 0.3s ease; }
-.lux-button-sm:hover { transform: translateY(-1px); }
+.admin-page {
+  background: radial-gradient(circle at top, rgba(var(--color-dore-rgb), 0.2), transparent 50%),
+  linear-gradient(180deg, var(--color-marron-dark) 0%, #1b1511 100%);
+}
+
+.lux-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--color-dore-rgb), 0.25);
+  transition: all 0.3s ease;
+}
+
+.lux-card:hover { border-color: rgba(var(--color-dore-rgb), 0.45); }
+
+.lux-input {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(var(--color-dore-rgb), 0.25);
+  border-radius: 12px;
+  padding: 0.6rem 0.8rem;
+  color: white;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.lux-input::placeholder { color: rgba(255,255,255,0.5); }
+.lux-input:focus { outline: none; border-color: rgba(var(--color-dore-rgb), 0.65); background: rgba(255,255,255,0.1); }
+
+.lux-button-sm {
+  background: var(--color-dore);
+  color: #1f1a16;
+  border-radius: 9999px;
+  padding: 0.55rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.lux-button-sm:hover:not(:disabled) { transform: translateY(-1px); background: var(--color-dore-dark); color: white; }
+.lux-button-sm:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.lux-button-muted { background: rgba(255,255,255,0.15); color: white; }
+.lux-button-muted:hover:not(:disabled) { background: rgba(255,255,255,0.25); }
+
+.lux-button-danger { background: rgba(220,38,38,0.15); color: #fecaca; }
+.lux-button-danger:hover:not(:disabled) { background: rgba(220,38,38,0.25); color: #fee2e2; }
+
 .lux-link { position: relative; }
 .lux-link::after { content: ''; position: absolute; left: 0; bottom: -3px; width: 0; height: 1px; background: currentColor; transition: width .2s ease; }
 .lux-link:hover::after { width: 100%; }
