@@ -95,14 +95,51 @@
         <button @click="loadAdminPhotos" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.refreshGallery') }}</button>
       </div>
 
+      <form class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4" @submit.prevent="handleAdminUpload">
+        <div>
+          <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.adminUploadTitle') }}</label>
+          <input v-model="adminUploadForm.titre" type="text" class="lux-input w-full" :placeholder="t('admin.dashboard.adminUploadTitlePlaceholder')" required />
+        </div>
+        <div>
+          <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.adminUploadCategory') }}</label>
+          <select v-model="adminUploadForm.categorie" class="lux-input w-full" required>
+            <option v-for="category in uploadableCategories" :key="category" :value="category">{{ t(`gallery.categories.${category}`) }}</option>
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.adminUploadDescription') }}</label>
+          <textarea v-model="adminUploadForm.description" class="lux-input w-full" rows="3" :placeholder="t('admin.dashboard.adminUploadDescriptionPlaceholder')"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.adminUploadImages') }}</label>
+          <input ref="adminFileInput" type="file" multiple accept="image/*" class="lux-input w-full" @change="onAdminFilesChange" required />
+          <p v-if="adminUploadFiles.length" class="text-xs text-ivoire/70 mt-2">{{ t('admin.dashboard.adminUploadSelected', { count: adminUploadFiles.length }) }}</p>
+        </div>
+        <div class="md:col-span-2 flex items-center gap-2">
+          <button type="submit" class="lux-button-sm" :disabled="galleryUploading">{{ galleryUploading ? t('admin.dashboard.adminUploadInProgress') : t('admin.dashboard.adminUploadSubmit') }}</button>
+          <p v-if="adminGalleryFeedback" class="text-sm" :class="adminGallerySuccess ? 'text-green-300' : 'text-red-300'">{{ adminGalleryFeedback }}</p>
+        </div>
+      </form>
+
+      <div v-if="selectedPhotos.length > 0" class="flex flex-wrap items-center gap-2 mb-4">
+        <button @click="bulkSetPhotoVisibility(true)" class="lux-button-sm bg-green-500 text-black hover:bg-green-600">{{ t('admin.dashboard.bulkPublishPhotos') }}</button>
+        <button @click="bulkSetPhotoVisibility(false)" class="lux-button-sm bg-yellow-500 text-black hover:bg-yellow-600">{{ t('admin.dashboard.bulkHidePhotos') }}</button>
+        <button @click="bulkDeletePhotos" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.bulkDeletePhotos') }}</button>
+        <span class="text-ivoire/70 text-sm">{{ t('admin.dashboard.selectedPhotosCount', { count: selectedPhotos.length }) }}</span>
+      </div>
+
       <div v-if="galleryLoading" class="p-8 text-center">
         <div class="inline-block w-8 h-8 border-4 border-dore/30 border-t-dore rounded-full animate-spin"></div>
       </div>
-      <div v-else-if="adminPhotos.length === 0" class="p-6 text-center text-ivoire/70 border border-white/10 rounded-xl">
-        {{ t('admin.dashboard.galleryEmpty') }}
-      </div>
+      <EmptyState v-else-if="adminPhotos.length === 0" :description="t('admin.dashboard.galleryEmpty')" dark compact />
       <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         <article v-for="photo in adminPhotos" :key="photo.id" class="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+          <div class="p-3 pb-0">
+            <label class="inline-flex items-center gap-2 text-xs text-ivoire/70">
+              <input type="checkbox" :value="photo.id" v-model="selectedPhotos" />
+              {{ t('admin.dashboard.selectPhoto') }}
+            </label>
+          </div>
           <img :src="photo.url" :alt="photo.titre || 'Photo'" class="w-full h-44 object-cover" />
           <div class="p-4 space-y-2">
             <div class="flex items-start justify-between gap-2">
@@ -140,7 +177,7 @@
 
     <div class="lux-card overflow-x-auto">
       <div v-if="loading" class="p-8 text-center"><div class="inline-block w-8 h-8 border-4 border-dore/30 border-t-dore rounded-full animate-spin"></div></div>
-      <div v-else-if="guests.length === 0" class="p-8 text-center text-ivoire/70">{{ t('admin.dashboard.noneFound') }}</div>
+      <EmptyState v-else-if="guests.length === 0" :description="t('admin.dashboard.noneFound')" dark />
       <div v-else>
         <table class="w-full table-auto border-collapse">
           <thead class="bg-white/10 text-ivoire/80 uppercase text-xs tracking-wider">
@@ -182,6 +219,7 @@ import { useAuth } from '@/composables/useAuth'
 import { useGuests } from '@/composables/useGuests'
 import { useTheme } from '@/composables/useTheme'
 import { useGallery } from '@/composables/useGallery'
+import EmptyState from '@/components/common/EmptyState.vue'
 import { THEME_COLOR_KEYS } from '@/constants/theme'
 import { t } from '@/i18n'
 
@@ -193,8 +231,12 @@ const {
   photos: adminPhotos,
   loading: galleryLoading,
   fetchAdminPhotos,
+  uploadAdminPhotos,
   setPhotoVisibility,
-  deletePhoto
+  setPhotosVisibility,
+  deletePhoto,
+  deletePhotos,
+  uploading: galleryUploading
 } = useGallery()
 
 const filters = reactive<{ statut: string; presence: boolean | ''; search: string }>({ statut: '', presence: '', search: '' })
@@ -204,6 +246,17 @@ const themeColorKeys = THEME_COLOR_KEYS
 const themeDraft = ref(sanitizeTheme(theme.value))
 const themeSaving = ref(false)
 const themeFeedback = ref<string | null>(null)
+const uploadableCategories = ['couple', 'family', 'friends', 'ceremony', 'reception']
+const selectedPhotos = ref<string[]>([])
+const adminFileInput = ref<HTMLInputElement | null>(null)
+const adminUploadFiles = ref<File[]>([])
+const adminUploadForm = ref({
+  titre: '',
+  description: '',
+  categorie: 'couple'
+})
+const adminGalleryFeedback = ref<string | null>(null)
+const adminGallerySuccess = ref(false)
 
 const statusClassMap: Record<string, string> = {
   en_attente: 'bg-yellow-100 text-yellow-800',
@@ -246,15 +299,81 @@ async function loadGuests() {
 
 async function loadAdminPhotos() {
   await fetchAdminPhotos()
+  selectedPhotos.value = []
 }
 
 async function togglePhotoVisibility(photoId: string, visible: boolean) {
   await setPhotoVisibility(photoId, visible)
 }
 
+function onAdminFilesChange(event: Event) {
+  const target = event.target as HTMLInputElement
+  adminUploadFiles.value = Array.from(target.files || [])
+}
+
+function resetAdminUploadForm() {
+  adminUploadForm.value = { titre: '', description: '', categorie: 'couple' }
+  adminUploadFiles.value = []
+  if (adminFileInput.value) {
+    adminFileInput.value.value = ''
+  }
+}
+
+async function handleAdminUpload() {
+  adminGalleryFeedback.value = null
+
+  if (adminUploadFiles.value.length === 0) {
+    adminGallerySuccess.value = false
+    adminGalleryFeedback.value = t('admin.dashboard.adminUploadFileRequired')
+    return
+  }
+
+  const { error, data } = await uploadAdminPhotos(adminUploadFiles.value, adminUploadForm.value)
+
+  adminGallerySuccess.value = !error
+  adminGalleryFeedback.value = error
+    ? t('admin.dashboard.adminUploadError', { error })
+    : t('admin.dashboard.adminUploadSuccess', { count: data?.length || 0 })
+
+  if (!error) {
+    resetAdminUploadForm()
+  }
+}
+
+async function bulkSetPhotoVisibility(visible: boolean) {
+  if (selectedPhotos.value.length === 0) return
+  const selectedCount = selectedPhotos.value.length
+  const { error } = await setPhotosVisibility(selectedPhotos.value, visible)
+
+  adminGallerySuccess.value = !error
+  adminGalleryFeedback.value = error
+    ? t('admin.dashboard.adminUploadError', { error })
+    : t('admin.dashboard.bulkPhotosUpdated', { count: selectedCount })
+
+  selectedPhotos.value = []
+}
+
+async function bulkDeletePhotos() {
+  if (selectedPhotos.value.length === 0) return
+
+  const selectedCount = selectedPhotos.value.length
+
+  if (confirm(t('admin.dashboard.confirmDeletePhotos', { count: selectedCount }))) {
+    const { error } = await deletePhotos(selectedPhotos.value)
+
+    adminGallerySuccess.value = !error
+    adminGalleryFeedback.value = error
+      ? t('admin.dashboard.adminUploadError', { error })
+      : t('admin.dashboard.bulkPhotosDeleted', { count: selectedCount })
+
+    selectedPhotos.value = []
+  }
+}
+
 async function removePhoto(photoId: string) {
   if (confirm(t('admin.dashboard.confirmDeletePhoto'))) {
     await deletePhoto(photoId)
+    selectedPhotos.value = selectedPhotos.value.filter(id => id !== photoId)
   }
 }
 
