@@ -60,3 +60,10 @@ export interface InvitationData {
   template?: string
   message_personnalise?: string
 }
+
+export interface SiteTheme {
+  id: number
+  colors: Record<string, string>
+  created_at: string
+  updated_at: string
+}

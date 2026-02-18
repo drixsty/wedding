@@ -130,36 +130,36 @@
   }
   
   .gradient-gold {
-    background: linear-gradient(135deg, #C9A87C 0%, #E5D4B8 50%, #A68B5B 100%);
+    background: var(--gradient-gold);
   }
   
   .gradient-marron {
-    background: linear-gradient(135deg, #B89F91 0%, #8B7A6A 50%, #B89F91 100%);
+    background: var(--gradient-earth);
   }
   
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background: linear-gradient(135deg, #C9A87C 0%, #BEA5B8 50%, #A4B8A4 100%);
+    background: linear-gradient(135deg, var(--color-dore) 0%, var(--color-mauve) 50%, var(--color-sage) 100%);
   }
   
   .gradient-warm {
-    background: linear-gradient(135deg, #FCFAF7 0%, #F0E6D8 30%, #C9A87C 70%, #B89F91 100%);
+    background: var(--gradient-warm);
   }
   
   .gradient-cool {
-    background: linear-gradient(135deg, #D8E3E0 0%, #A4B8A4 50%, #9BA5AF 100%);
+    background: var(--gradient-cool);
   }
   
   .gradient-neutral {
-    background: linear-gradient(135deg, #F5F2ED 0%, #D4C4B7 50%, #B89F91 100%);
+    background: var(--gradient-neutral);
   }
   
   .gradient-elegant {
-    background: linear-gradient(135deg, #BEA5B8 0%, #C4A29E 33%, #C9A87C 66%, #A4B8A4 100%);
+    background: var(--gradient-elegant);
   }
   
   .gradient-earth {
-    background: linear-gradient(135deg, #B89F91 0%, #8B7A6A 50%, #6B5A4A 100%);
+    background: var(--gradient-earth);
   }
 }
 
@@ -293,7 +293,7 @@
 ::-webkit-scrollbar-track { @apply bg-ivoire; }
 ::-webkit-scrollbar-thumb {
   @apply rounded-full;
-  background: linear-gradient(135deg, #C9A87C 0%, #E5D4B8 50%, #A68B5B 100%);
+  background: var(--gradient-gold);
 }
 ::-webkit-scrollbar-thumb:hover { @apply bg-dore-dark; }
 
