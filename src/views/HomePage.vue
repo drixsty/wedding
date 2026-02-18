@@ -26,7 +26,7 @@
 
         <!-- Subtitle -->
         <p class="text-lg sm:text-xl text-white/80 italic animate-fade-in-up delay-300">
-          Ensemble pour la vie
+          {{ t('home.subtitle') }}
         </p>
 
         <p class="text-lg sm:text-xl text-white/90 animate-fade-in-up delay-400">
@@ -41,7 +41,7 @@
             to="/rsvp"
             class="mt-8 inline-block bg-white text-gray-900 font-semibold px-8 py-3 rounded-xl hover:bg-white/90 transition transform hover:scale-105 duration-300 animate-fade-in-up delay-500"
         >
-          Confirmer votre présence
+          {{ t('home.cta') }}
         </router-link>
       </div>
     </section>
@@ -57,10 +57,10 @@
       <!-- Section Header -->
       <div class="text-center mb-12 sm:mb-16">
         <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900">
-          Nos Plus Beaux Moments
+          {{ t('home.momentsTitle') }}
         </h2>
         <p class="text-neutral-500 mt-3 text-sm sm:text-base">
-          Une histoire d'amour en images
+          {{ t('home.momentsSubtitle') }}
         </p>
       </div>
 
@@ -99,15 +99,16 @@ import FAQ from '@/components/home/FAQ.vue'
 import { formatDate } from '@/utils/formatters'
 import NotreHistoire from "@/components/home/NotreHistoire.vue";
 import RSVP from "@/components/home/RSVP.vue";
+import { t } from '@/i18n'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 
 dayjs.extend(duration)
 
 
-const coupleName = import.meta.env.VITE_COUPLE_NAMES || 'Marie & Jean'
-const weddingLocation = import.meta.env.VITE_WEDDING_LOCATION || 'Paris, France'
-const weddingDateRaw = import.meta.env.VITE_WEDDING_DATE || '2025-08-15T14:00:00'
+const coupleName = import.meta.env.VITE_COUPLE_NAMES || t('defaults.coupleName')
+const weddingLocation = import.meta.env.VITE_WEDDING_LOCATION || t('defaults.weddingLocation')
+const weddingDateRaw = import.meta.env.VITE_WEDDING_DATE || t('defaults.weddingDate')
 
 const weddingDateFormatted = computed(() => 
   formatDate(weddingDateRaw, 'DD MMMM YYYY [à] HH[h]mm')
