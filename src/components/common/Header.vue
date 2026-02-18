@@ -14,8 +14,6 @@
       ]"
     >
       <nav class="px-6 py-4 flex items-center justify-between">
-
-        <!-- Logo -->
         <router-link
             to="/"
             class="font-serif tracking-wide transition-all duration-300"
@@ -24,7 +22,6 @@
           {{ coupleName }}
         </router-link>
 
-        <!-- Desktop -->
         <div class="hidden md:flex items-center space-x-10">
           <router-link
               v-for="link in navLinks"
@@ -37,7 +34,6 @@
           </router-link>
         </div>
 
-        <!-- Mobile Button -->
         <button
             @click="mobileMenuOpen = !mobileMenuOpen"
             class="md:hidden text-neutral-800"
@@ -67,7 +63,6 @@
         </button>
       </nav>
 
-      <!-- Mobile Menu -->
       <transition name="mobile">
         <div
             v-if="mobileMenuOpen"
@@ -91,16 +86,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { t } from '@/i18n'
 
 const mobileMenuOpen = ref(false)
 const scrolled = ref(false)
 
-const coupleName = import.meta.env.VITE_COUPLE_NAMES || 'Marie & Jean'
+const coupleName = import.meta.env.VITE_COUPLE_NAMES || t('defaults.coupleName')
 
 const navLinks = [
-  { to: '/', label: 'Accueil' },
-  { to: '/galerie', label: 'Galerie' },
-  { to: '/rsvp', label: 'RSVP' }
+  { to: '/', label: t('nav.home') },
+  { to: '/galerie', label: t('nav.gallery') },
+  { to: '/rsvp', label: t('nav.rsvp') }
 ]
 
 const handleScroll = () => {
@@ -117,55 +113,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-
-/* Nav item base */
-.nav-item {
-  position: relative;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #525252;
-  transition: color 0.3s ease;
-}
-
-/* Hover micro-interaction */
-.nav-item::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 0%;
-  height: 1.5px;
-  background: #171717;
-  transition: width 0.3s ease;
-}
-
-.nav-item:hover {
-  color: #171717;
-}
-
-.nav-item:hover::after {
-  width: 100%;
-}
-
-/* Active link indicator */
-.active-link {
-  color: #171717;
-  font-weight: 600;
-}
-
-.active-link::after {
-  width: 100%;
-}
-
-/* Mobile animation */
-.mobile-enter-active,
-.mobile-leave-active {
-  transition: all 0.3s ease;
-}
-
-.mobile-enter-from,
-.mobile-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
+.nav-item { position: relative; font-size: 0.9rem; font-weight: 500; color: #525252; transition: color 0.3s ease; }
+.nav-item::after { content: ''; position: absolute; left: 0; bottom: -6px; width: 0%; height: 1.5px; background: #171717; transition: width 0.3s ease; }
+.nav-item:hover { color: #171717; }
+.nav-item:hover::after { width: 100%; }
+.active-link { color: #171717; font-weight: 600; }
+.active-link::after { width: 100%; }
+.mobile-enter-active,.mobile-leave-active { transition: all 0.3s ease; }
+.mobile-enter-from,.mobile-leave-to { opacity: 0; transform: translateY(-10px); }
 </style>

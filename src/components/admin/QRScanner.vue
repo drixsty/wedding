@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="bg-gradient-elegant p-6 text-white">
       <div class="flex items-center justify-between max-w-4xl mx-auto">
-        <h1 class="text-2xl font-serif font-bold">📱 Scanner d'Entrée</h1>
+        <h1 class="text-2xl font-serif font-bold">{{ t('admin.scanner.title') }}</h1>
         <button
           @click="$emit('close')"
           class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
@@ -52,8 +52,8 @@
       <div class="max-w-4xl mx-auto">
         <div v-if="!scanning" class="text-center">
           <div class="animate-pulse text-6xl mb-4">📸</div>
-          <p class="text-xl text-marron font-semibold mb-2">Prêt à scanner</p>
-          <p class="text-marron-light">Placez le QR code devant la caméra</p>
+          <p class="text-xl text-marron font-semibold mb-2">{{ t('admin.scanner.ready') }}</p>
+          <p class="text-marron-light">{{ t('admin.scanner.instruction') }}</p>
         </div>
 
         <div v-else-if="lastScan" class="space-y-4">
@@ -65,8 +65,8 @@
                 </svg>
               </div>
               <div class="flex-1">
-                <h3 class="text-xl font-bold text-green-800 mb-2">✅ Invité vérifié !</h3>
-                <p class="text-lg text-green-700"><strong>Nom:</strong> {{ lastScan.name }}</p>
+                <h3 class="text-xl font-bold text-green-800 mb-2">{{ t('admin.scanner.verified') }}</h3>
+                <p class="text-lg text-green-700"><strong>{{ t('admin.scanner.guestName') }}</strong> {{ lastScan.name }}</p>
                 <p class="text-sm text-green-600 mt-1">{{ lastScan.email }}</p>
               </div>
             </div>
@@ -77,13 +77,13 @@
               @click="checkInGuest"
               class="flex-1 btn-primary py-4 text-lg"
             >
-              ✓ Valider l'entrée
+              {{ t('admin.scanner.validateEntry') }}
             </button>
             <button
               @click="lastScan = null"
               class="flex-1 btn-outline py-4 text-lg"
             >
-              Annuler
+              {{ t('admin.scanner.cancel') }}
             </button>
           </div>
         </div>
@@ -101,15 +101,15 @@
         <div class="mt-6 grid grid-cols-3 gap-4">
           <div class="text-center p-4 bg-gradient-to-br from-ivoire to-ivoire-dark rounded-xl">
             <div class="text-3xl font-bold text-dore">{{ stats.scanned }}</div>
-            <div class="text-sm text-marron-light mt-1">Scannés</div>
+            <div class="text-sm text-marron-light mt-1">{{ t('admin.scanner.scanned') }}</div>
           </div>
           <div class="text-center p-4 bg-gradient-to-br from-ivoire to-ivoire-dark rounded-xl">
             <div class="text-3xl font-bold text-green-600">{{ stats.checkedIn }}</div>
-            <div class="text-sm text-marron-light mt-1">Validés</div>
+            <div class="text-sm text-marron-light mt-1">{{ t('admin.scanner.validated') }}</div>
           </div>
           <div class="text-center p-4 bg-gradient-to-br from-ivoire to-ivoire-dark rounded-xl">
             <div class="text-3xl font-bold text-marron">{{ stats.remaining }}</div>
-            <div class="text-sm text-marron-light mt-1">Restants</div>
+            <div class="text-sm text-marron-light mt-1">{{ t('admin.scanner.remaining') }}</div>
           </div>
         </div>
       </div>
@@ -121,6 +121,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { decodeQRCodeData } from '@/utils/qrcode'
 import jsQR from 'jsqr'
+import { t } from '@/i18n'
 
 defineEmits(['close'])
 
@@ -148,7 +149,7 @@ async function startCamera() {
       startScanning()
     }
   } catch (err) {
-    error.value = 'Impossible d\'accéder à la caméra'
+    error.value = t('admin.scanner.cameraError')
     console.error(err)
   }
 }
@@ -185,7 +186,7 @@ function scanQRCode() {
       // Pause scanning when code detected
       scanning.value = false
     } else {
-      error.value = 'QR code invalide'
+      error.value = t('admin.scanner.invalidQr')
       setTimeout(() => error.value = '', 3000)
     }
   }
@@ -212,7 +213,7 @@ async function checkInGuest() {
       scanQRCode()
     }, 2000)
   } catch (err) {
-    error.value = 'Erreur lors de la validation'
+    error.value = t('admin.scanner.validationError')
     console.error(err)
   }
 }

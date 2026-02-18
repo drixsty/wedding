@@ -12,10 +12,10 @@
       <!-- Header -->
       <div class="text-center mb-10">
         <h1 class="text-3xl font-serif text-white tracking-wide">
-          Administration
+          {{ t('admin.login.title') }}
         </h1>
         <p class="text-neutral-400 text-sm mt-3">
-          Accès réservé à l’espace privé
+          {{ t('admin.login.subtitle') }}
         </p>
       </div>
 
@@ -40,7 +40,7 @@
         <!-- Password -->
         <div class="space-y-2">
           <label class="text-xs uppercase tracking-widest text-neutral-500">
-            Mot de passe
+            {{ t('admin.login.password') }}
           </label>
 
           <input
@@ -58,7 +58,7 @@
               v-if="error"
               class="bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-xl p-4"
           >
-            <p class="font-medium mb-1">Erreur de connexion</p>
+            <p class="font-medium mb-1">{{ t('admin.login.loginError') }}</p>
             <p class="opacity-80">{{ error }}</p>
           </div>
         </transition>
@@ -69,8 +69,8 @@
             :disabled="loading"
             class="lux-button w-full"
         >
-          <span v-if="loading" class="opacity-70">Connexion...</span>
-          <span v-else>Se connecter</span>
+          <span v-if="loading" class="opacity-70">{{ t('admin.login.loading') }}</span>
+          <span v-else>{{ t('admin.login.submit') }}</span>
         </button>
 
       </form>
@@ -81,7 +81,7 @@
             to="/"
             class="lux-link text-sm"
         >
-          ← Retour au site
+          {{ t('admin.login.back') }}
         </router-link>
       </div>
     </div>
@@ -92,6 +92,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
+import { t } from '@/i18n'
 
 const router = useRouter()
 const { signIn, loading, error } = useAuth()

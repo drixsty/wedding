@@ -6,10 +6,10 @@
       <!-- Header -->
       <div class="mb-8">
         <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-neutral-900">
-          Confirmez votre présence
+          {{ t('rsvp.title') }}
         </h2>
         <p class="text-neutral-500 text-sm sm:text-base mt-2">
-          Merci de répondre avant le
+          {{ t('rsvp.deadlinePrefix') }}
           <span class="font-medium text-neutral-700">{{ deadline }}</span>
         </p>
       </div>
@@ -18,13 +18,13 @@
         <!-- Nom complet -->
         <div>
           <label class="block text-sm font-medium text-neutral-700 mb-2">
-            Nom complet <span class="text-red-500">*</span>
+            {{ t('rsvp.fullName') }} <span class="text-red-500">*</span>
           </label>
           <input
               v-model="form.nom_complet"
               type="text"
               required
-              placeholder="Votre nom complet"
+              :placeholder="t('rsvp.fullNamePlaceholder')"
               class="input"
           />
         </div>
@@ -38,15 +38,15 @@
               v-model="form.email"
               type="email"
               required
-              placeholder="votre@email.com"
+              :placeholder="t('rsvp.emailPlaceholder')"
               class="input"
           />
         </div>
 
-        <!-- Téléphone -->
+        <!-- {{ t('rsvp.phone') }} -->
         <div>
           <label class="block text-sm font-medium text-neutral-700 mb-2">
-            Téléphone
+            {{ t('rsvp.phone') }}
           </label>
           <input
               v-model="form.telephone"
@@ -59,7 +59,7 @@
         <!-- Présence -->
         <div>
           <label class="block text-sm font-medium text-neutral-700 mb-3">
-            Serez-vous présent(e) ? <span class="text-red-500">*</span>
+            {{ t('rsvp.presenceQuestion') }} <span class="text-red-500">*</span>
           </label>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -68,7 +68,7 @@
                 @click="form.presence_confirmee = true"
                 :class="presenceClass(true)"
             >
-              Oui, avec plaisir
+              {{ t('rsvp.yes') }}
             </button>
 
             <button
@@ -76,7 +76,7 @@
                 @click="form.presence_confirmee = false"
                 :class="presenceClass(false)"
             >
-              Non, malheureusement
+              {{ t('rsvp.no') }}
             </button>
           </div>
         </div>
@@ -86,7 +86,7 @@
           <div v-if="form.presence_confirmee" class="space-y-6">
             <div>
               <label class="block text-sm font-medium text-neutral-700 mb-2">
-                Nombre d'accompagnants
+                {{ t('rsvp.plusOnes') }}
               </label>
               <input
                   v-model.number="form.nombre_accompagnants"
@@ -96,18 +96,18 @@
                   class="input"
               />
               <p class="text-xs text-neutral-400 mt-1">
-                Ne vous comptez pas
+                {{ t('rsvp.plusOnesHint') }}
               </p>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-neutral-700 mb-2">
-                Restrictions alimentaires
+                {{ t('rsvp.foodRestrictions') }}
               </label>
               <textarea
                   v-model="form.restrictions_alimentaires"
                   rows="3"
-                  placeholder="Allergies, préférences..."
+                  :placeholder="t('rsvp.foodRestrictionsPlaceholder')"
                   class="input resize-none"
               ></textarea>
             </div>
@@ -117,12 +117,12 @@
         <!-- Message -->
         <div>
           <label class="block text-sm font-medium text-neutral-700 mb-2">
-            Message pour les mariés
+            {{ t('rsvp.messageForCouple') }}
           </label>
           <textarea
               v-model="form.message"
               rows="4"
-              placeholder="Un mot doux..."
+              :placeholder="t('rsvp.messagePlaceholder')"
               class="input resize-none"
           ></textarea>
         </div>
@@ -143,7 +143,7 @@
               v-if="success"
               class="bg-green-50 border border-green-200 text-green-600 text-sm p-4 rounded-xl"
           >
-            Merci ❤️ Votre confirmation a été enregistrée.
+            {{ t('rsvp.success') }}
           </div>
         </Transition>
 
@@ -153,12 +153,12 @@
             :disabled="loading || !formValid"
             class="w-full h-12 rounded-xl bg-neutral-900 text-white font-medium transition-all duration-300 hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <span v-if="loading">Envoi en cours...</span>
-          <span v-else>Confirmer ma présence</span>
+          <span v-if="loading">{{ t('rsvp.submitLoading') }}</span>
+          <span v-else>{{ t('rsvp.submit') }}</span>
         </button>
 
         <p class="text-xs text-neutral-400 text-center">
-          * Champs obligatoires
+          {{ t('rsvp.required') }}
         </p>
       </form>
     </div>
@@ -171,6 +171,7 @@ import { useGuests } from '@/composables/useGuests'
 import { validateEmail } from '@/utils/validators'
 import { formatDate } from '@/utils/formatters'
 import type { RsvpFormData } from '@/types/models'
+import { t } from '@/i18n'
 
 const { submitRsvp, loading } = useGuests()
 
