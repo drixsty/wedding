@@ -22,9 +22,7 @@
           <div class="inline-block w-8 h-8 border-4 border-dore/30 border-t-dore rounded-full animate-spin"></div>
         </div>
 
-        <div v-else-if="filteredPhotos.length === 0" class="text-center py-12 bg-white/70 rounded-2xl border border-dore/20">
-          <p class="text-marron/80">{{ t('gallery.empty') }}</p>
-        </div>
+        <EmptyState v-else-if="filteredPhotos.length === 0" :description="t('gallery.empty')" />
 
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <div
@@ -69,7 +67,10 @@
 
           <div>
             <label class="block text-sm mb-1 text-marron">{{ t('gallery.form.file') }}</label>
-            <input type="file" accept="image/*" @change="onFileChange" class="field file:px-2 file:py-1.5 file:rounded-lg file:border-0 file:bg-dore/20 file:text-marron" required />
+            <input ref="visitorFileInput" type="file" accept="image/*" multiple @change="onFileChange" class="field file:px-2 file:py-1.5 file:rounded-lg file:border-0 file:bg-dore/20 file:text-marron" required />
+            <p v-if="selectedFiles.length" class="mt-1 text-xs text-marron/70">
+              {{ t('gallery.form.selectedFiles', { count: selectedFiles.length }) }}
+            </p>
           </div>
 
           <p v-if="uploadFeedback" class="text-sm" :class="uploadSuccess ? 'text-green-700' : 'text-red-700'">{{ uploadFeedback }}</p>
@@ -118,19 +119,21 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useGallery } from '@/composables/useGallery'
+import EmptyState from '@/components/common/EmptyState.vue'
 import { t } from '@/i18n'
 
 const selectedCategory = ref('all')
 const lightboxOpen = ref(false)
 const currentIndex = ref(0)
-const selectedFile = ref<File | null>(null)
+const selectedFiles = ref<File[]>([])
+const visitorFileInput = ref<HTMLInputElement | null>(null)
 const uploadFeedback = ref('')
 const uploadSuccess = ref(false)
 
 const categories = ['all', 'couple', 'family', 'friends', 'ceremony', 'reception']
 const uploadableCategories = categories.filter(category => category !== 'all')
 
-const { photos, loading, uploading, fetchPublicPhotos, uploadVisitorPhoto } = useGallery()
+const { photos, loading, uploading, fetchPublicPhotos, uploadVisitorPhotos } = useGallery()
 
 const uploadForm = ref({
   titre: '',
@@ -166,27 +169,30 @@ function prevPhoto() {
 
 function onFileChange(event: Event) {
   const target = event.target as HTMLInputElement
-  selectedFile.value = target.files?.[0] ?? null
+  selectedFiles.value = Array.from(target.files || [])
 }
 
 function resetUploadForm() {
   uploadForm.value = { titre: '', description: '', categorie: 'couple' }
-  selectedFile.value = null
+  selectedFiles.value = []
+  if (visitorFileInput.value) {
+    visitorFileInput.value.value = ''
+  }
 }
 
 async function handleUpload() {
-  if (!selectedFile.value) {
+  if (selectedFiles.value.length === 0) {
     uploadSuccess.value = false
     uploadFeedback.value = t('gallery.form.fileRequired')
     return
   }
 
-  const { error } = await uploadVisitorPhoto(selectedFile.value, uploadForm.value)
+  const { error, data } = await uploadVisitorPhotos(selectedFiles.value, uploadForm.value)
 
   uploadSuccess.value = !error
   uploadFeedback.value = error
     ? t('gallery.form.error', { error })
-    : t('gallery.form.success')
+    : t('gallery.form.success', { count: data?.length || 0 })
 
   if (!error) {
     resetUploadForm()

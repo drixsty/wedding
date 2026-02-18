@@ -96,7 +96,8 @@ const coupleName = import.meta.env.VITE_COUPLE_NAMES || t('defaults.coupleName')
 const navLinks = [
   { to: '/', label: t('nav.home') },
   { to: '/galerie', label: t('nav.gallery') },
-  { to: '/rsvp', label: t('nav.rsvp') }
+  { to: '/rsvp', label: t('nav.rsvp') },
+  { to: '/admin/login', label: t('nav.adminLogin') }
 ]
 
 const handleScroll = () => {

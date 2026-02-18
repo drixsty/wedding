@@ -41,6 +41,11 @@ interface UploadPhotoPayload {
   categorie: string
 }
 
+interface UploadPhotoOptions {
+  visible: boolean
+  uploadedByGuest: boolean
+}
+
 function normalizePhoto(photo: Partial<Photo>): Photo {
   return {
     id: photo.id || crypto.randomUUID(),
@@ -112,46 +117,74 @@ export function useGallery() {
     }
   }
 
-  async function uploadVisitorPhoto(file: File, payload: UploadPhotoPayload) {
+  async function uploadSinglePhoto(file: File, payload: UploadPhotoPayload, options: UploadPhotoOptions) {
+    const fileExt = file.name.split('.').pop() || 'jpg'
+    const basePath = options.uploadedByGuest ? 'visitors' : 'admin'
+    const filePath = `${basePath}/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
+
+    const { error: storageError } = await supabase.storage
+      .from('gallery')
+      .upload(filePath, file, { cacheControl: '3600', upsert: false })
+
+    if (storageError) throw storageError
+
+    const { data: publicData } = supabase.storage
+      .from('gallery')
+      .getPublicUrl(filePath)
+
+    const { data, error: insertError } = await supabase
+      .from('photos')
+      .insert([{
+        url: publicData.publicUrl,
+        titre: payload.titre,
+        description: payload.description,
+        categorie: payload.categorie,
+        visible: options.visible,
+        uploaded_by_guest: options.uploadedByGuest
+      }])
+      .select()
+      .single()
+
+    if (insertError) throw insertError
+
+    return normalizePhoto(data)
+  }
+
+  async function uploadPhotos(files: File[], payload: UploadPhotoPayload, options: UploadPhotoOptions) {
     uploading.value = true
     error.value = null
 
     try {
-      const fileExt = file.name.split('.').pop() || 'jpg'
-      const filePath = `visitors/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`
+      if (files.length === 0) {
+        throw new Error('Aucun fichier sélectionné.')
+      }
 
-      const { error: storageError } = await supabase.storage
-        .from('gallery')
-        .upload(filePath, file, { cacheControl: '3600', upsert: false })
+      const uploadedPhotos: Photo[] = []
 
-      if (storageError) throw storageError
+      for (const file of files) {
+        const photo = await uploadSinglePhoto(file, payload, options)
+        uploadedPhotos.push(photo)
+      }
 
-      const { data: publicData } = supabase.storage
-        .from('gallery')
-        .getPublicUrl(filePath)
+      if (!options.uploadedByGuest) {
+        photos.value = [...uploadedPhotos, ...photos.value]
+      }
 
-      const { data, error: insertError } = await supabase
-        .from('photos')
-        .insert([{
-          url: publicData.publicUrl,
-          titre: payload.titre,
-          description: payload.description,
-          categorie: payload.categorie,
-          visible: false,
-          uploaded_by_guest: true
-        }])
-        .select()
-        .single()
-
-      if (insertError) throw insertError
-
-      return { data: normalizePhoto(data), error: null }
+      return { data: uploadedPhotos, error: null }
     } catch (err: any) {
       error.value = err.message
       return { data: null, error: err.message }
     } finally {
       uploading.value = false
     }
+  }
+
+  async function uploadVisitorPhotos(files: File[], payload: UploadPhotoPayload) {
+    return uploadPhotos(files, payload, { visible: false, uploadedByGuest: true })
+  }
+
+  async function uploadAdminPhotos(files: File[], payload: UploadPhotoPayload) {
+    return uploadPhotos(files, payload, { visible: true, uploadedByGuest: false })
   }
 
   async function setPhotoVisibility(photoId: string, visible: boolean) {
@@ -171,6 +204,37 @@ export function useGallery() {
       photos.value = photos.value.map(photo => (photo.id === photoId ? normalizePhoto(data) : photo))
 
       return { data: normalizePhoto(data), error: null }
+    } catch (err: any) {
+      error.value = err.message
+      return { data: null, error: err.message }
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function setPhotosVisibility(photoIds: string[], visible: boolean) {
+    loading.value = true
+    error.value = null
+
+    try {
+      if (photoIds.length === 0) {
+        return { data: [], error: null }
+      }
+
+      const { data, error: updateError } = await supabase
+        .from('photos')
+        .update({ visible })
+        .in('id', photoIds)
+        .select()
+
+      if (updateError) throw updateError
+
+      const updatedPhotos = (data || []).map(normalizePhoto)
+      const updatedById = new Map(updatedPhotos.map(photo => [photo.id, photo]))
+
+      photos.value = photos.value.map(photo => updatedById.get(photo.id) ?? photo)
+
+      return { data: updatedPhotos, error: null }
     } catch (err: any) {
       error.value = err.message
       return { data: null, error: err.message }
@@ -202,6 +266,33 @@ export function useGallery() {
     }
   }
 
+  async function deletePhotos(photoIds: string[]) {
+    loading.value = true
+    error.value = null
+
+    try {
+      if (photoIds.length === 0) {
+        return { error: null }
+      }
+
+      const { error: deleteError } = await supabase
+        .from('photos')
+        .delete()
+        .in('id', photoIds)
+
+      if (deleteError) throw deleteError
+
+      photos.value = photos.value.filter(photo => !photoIds.includes(photo.id))
+
+      return { error: null }
+    } catch (err: any) {
+      error.value = err.message
+      return { error: err.message }
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     photos,
     loading,
@@ -209,8 +300,11 @@ export function useGallery() {
     error,
     fetchPublicPhotos,
     fetchAdminPhotos,
-    uploadVisitorPhoto,
+    uploadVisitorPhotos,
+    uploadAdminPhotos,
     setPhotoVisibility,
-    deletePhoto
+    setPhotosVisibility,
+    deletePhoto,
+    deletePhotos
   }
 }
