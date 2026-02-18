@@ -4,11 +4,11 @@
     <header class="relative bg-neutral-900 text-white">
       <div class="container mx-auto px-4 py-16 sm:py-20 text-center">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold tracking-wide animate-fade-in-down">
-          Galerie Photos
+          {{ t('galleryPage.title') }}
         </h1>
 
         <p class="mt-4 text-sm sm:text-base text-white/70 max-w-xl mx-auto animate-fade-in-up">
-          Revivez nos plus beaux moments à travers ces images
+          {{ t('galleryPage.subtitle') }}
         </p>
       </div>
 
@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import Gallery from '@/components/gallery/Gallery.vue'
+import { t } from '@/i18n'
 </script>
 
 <style scoped>

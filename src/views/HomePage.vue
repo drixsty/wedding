@@ -117,27 +117,27 @@ const weddingDateFormatted = computed(() =>
 const carouselImages = [
   {
     url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200&q=80',
-    alt: 'Notre rencontre',
-    title: 'La Rencontre Magique',
-    caption: 'Paris, Festival Afrobeat - Le jour où tout a commencé'
+    alt: t('home.carousel.1.alt'),
+    title: t('home.carousel.1.title'),
+    caption: t('home.carousel.1.caption')
   },
   {
     url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80',
-    alt: 'Notre voyage',
-    title: 'Découverte de l\'Afrique',
-    caption: 'Un voyage inoubliable sur les terres de nos ancêtres'
+    alt: t('home.carousel.2.alt'),
+    title: t('home.carousel.2.title'),
+    caption: t('home.carousel.2.caption')
   },
   {
     url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&q=80',
-    alt: 'La demande',
-    title: 'La Grande Question',
-    caption: 'Marrakech - Un coucher de soleil, une question, un OUI éternel'
+    alt: t('home.carousel.3.alt'),
+    title: t('home.carousel.3.title'),
+    caption: t('home.carousel.3.caption')
   },
   {
     url: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1200&q=80',
-    alt: 'Nos fiançailles',
-    title: 'Les Fiançailles',
-    caption: 'Entourés de nos proches, prêts pour la grande aventure'
+    alt: t('home.carousel.4.alt'),
+    title: t('home.carousel.4.title'),
+    caption: t('home.carousel.4.caption')
   }
 ]
 </script>

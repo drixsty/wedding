@@ -5,11 +5,11 @@
     <header class="relative bg-neutral-900 text-white">
       <div class="container mx-auto px-4 py-16 sm:py-20 text-center">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold tracking-wide animate-fade-in-down">
-          Confirmez votre présence
+          {{ t('rsvpPage.title') }}
         </h1>
 
         <p class="mt-4 text-sm sm:text-base text-white/70 max-w-xl mx-auto animate-fade-in-up">
-          Nous serions ravis de vous compter parmi nous
+          {{ t('rsvpPage.subtitle') }}
         </p>
       </div>
 
@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import RsvpForm from '@/components/rsvp/RsvpForm.vue'
+import { t } from '@/i18n'
 </script>
 
 <style scoped>

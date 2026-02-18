@@ -21,7 +21,55 @@ export const messages = {
       subtitle: 'Ensemble pour la vie',
       cta: 'Confirmer votre présence',
       momentsTitle: 'Nos Plus Beaux Moments',
-      momentsSubtitle: "Une histoire d'amour en images"
+      momentsSubtitle: "Une histoire d'amour en images",
+      carousel: {
+        1: {
+          alt: 'Notre rencontre',
+          title: 'La Rencontre Magique',
+          caption: 'Paris, Festival Afrobeat - Le jour où tout a commencé'
+        },
+        2: {
+          alt: 'Notre voyage',
+          title: 'Découverte de l\'Afrique',
+          caption: 'Un voyage inoubliable sur les terres de nos ancêtres'
+        },
+        3: {
+          alt: 'La demande',
+          title: 'La Grande Question',
+          caption: 'Marrakech - Un coucher de soleil, une question, un OUI éternel'
+        },
+        4: {
+          alt: 'Nos fiançailles',
+          title: 'Les Fiançailles',
+          caption: 'Entourés de nos proches, prêts pour la grande aventure'
+        }
+      }
+    },
+    galleryPage: {
+      title: 'Galerie Photos',
+      subtitle: 'Revivez nos plus beaux moments à travers ces images'
+    },
+    gallery: {
+      categories: {
+        all: 'Tous',
+        couple: 'Couple',
+        family: 'Famille',
+        friends: 'Amis',
+        ceremony: 'Cérémonie',
+        reception: 'Réception'
+      },
+      photos: {
+        1: { title: 'Notre Rencontre', description: 'Le jour où tout a commencé' },
+        2: { title: 'Voyage en Afrique', description: 'Safari inoubliable au Kenya' },
+        3: { title: 'Famille Réunie', description: 'Nos deux familles ensemble' },
+        4: { title: 'Soirée entre Amis', description: 'Célébration avec nos proches' },
+        5: { title: 'La Demande', description: 'Moment magique à Marrakech' },
+        6: { title: 'Fiançailles', description: 'Entourés de nos familles' }
+      }
+    },
+    rsvpPage: {
+      title: 'Confirmez votre présence',
+      subtitle: 'Nous serions ravis de vous compter parmi nous'
     },
     rsvp: {
       title: 'Confirmez votre présence',
@@ -48,6 +96,8 @@ export const messages = {
       login: {
         title: 'Administration',
         subtitle: 'Accès réservé à l’espace privé',
+        email: 'Email',
+        emailPlaceholder: 'admin@exemple.com',
         password: 'Mot de passe',
         loginError: 'Erreur de connexion',
         loading: 'Connexion...',
@@ -65,10 +115,17 @@ export const messages = {
         plusOnes: 'accompagnants',
         status: 'Statut',
         attendance: 'Présence',
+        yes: '✅ Oui',
+        no: '❌ Non',
         search: 'Recherche',
         all: 'Tous',
         validated: 'Validé',
         refused: 'Refusé',
+        statuses: {
+          en_attente: 'En attente',
+          validé: 'Validé',
+          refusé: 'Refusé'
+        },
         searchPlaceholder: 'Nom ou email...',
         searchAction: '🔍 Rechercher',
         bulkValidate: '✅ Valider',
@@ -80,6 +137,29 @@ export const messages = {
         email: 'Email',
         attendants: 'Accompagnants',
         actions: 'Actions',
+        themeTitle: 'Personnalisation des couleurs',
+        themeDescription: 'La palette est centralisée et persistée en base (table site_theme).',
+        resetTheme: 'Réinitialiser',
+        themeSave: 'Sauvegarder la palette',
+        themeSaving: 'Enregistrement...',
+        themeSaveSuccess: 'Palette enregistrée avec succès.',
+        themeSaveError: 'Impossible d’enregistrer le thème : {error}',
+        themeColorLabels: {
+          marron: 'Marron principal',
+          marronLight: 'Marron clair',
+          marronDark: 'Marron foncé',
+          ivoire: 'Ivoire',
+          ivoireDark: 'Ivoire foncé',
+          dore: 'Doré principal',
+          doreLight: 'Doré clair',
+          doreDark: 'Doré foncé',
+          sage: 'Accent Sage',
+          mauve: 'Accent Mauve',
+          clay: 'Accent Clay',
+          slate: 'Accent Slate',
+          cream: 'Accent Cream',
+          mist: 'Accent Mist'
+        },
         confirmDeleteGuest: 'Supprimer cet invité ?',
         confirmDeleteGuests: 'Supprimer {count} invités ?'
       },

@@ -1,6 +1,6 @@
 <template>
   <div
-      class="min-h-screen flex items-center justify-center px-6 py-24 bg-neutral-950 relative overflow-hidden"
+      class="admin-login min-h-screen flex items-center justify-center px-6 py-24 relative overflow-hidden"
   >
     <!-- Soft radial glow background -->
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.04),transparent_60%)]"></div>
@@ -25,14 +25,14 @@
         <!-- Email -->
         <div class="space-y-2">
           <label class="text-xs uppercase tracking-widest text-neutral-500">
-            Email
+            {{ t('admin.login.email') }}
           </label>
 
           <input
               v-model="email"
               type="email"
               required
-              placeholder="admin@exemple.com"
+              :placeholder="t('admin.login.emailPlaceholder')"
               class="lux-input"
           />
         </div>
@@ -146,8 +146,8 @@ async function handleLogin() {
 
 /* Button luxe */
 .lux-button {
-  background: white;
-  color: black;
+  background: var(--color-dore);
+  color: #1f1a16;
   border-radius: 9999px;
   padding: 14px;
   font-size: 0.95rem;
@@ -158,7 +158,7 @@ async function handleLogin() {
 
 .lux-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(var(--color-dore-rgb), 0.35);
 }
 
 .lux-button:disabled {
@@ -169,7 +169,7 @@ async function handleLogin() {
 /* Back link micro interaction */
 .lux-link {
   position: relative;
-  color: #a3a3a3;
+  color: rgba(255, 255, 255, 0.7);
   transition: color 0.3s ease;
 }
 
@@ -180,7 +180,7 @@ async function handleLogin() {
   bottom: -4px;
   width: 0%;
   height: 1px;
-  background: white;
+  background: var(--color-dore);
   transition: width 0.3s ease;
 }
 
@@ -192,4 +192,9 @@ async function handleLogin() {
   width: 100%;
 }
 
+
+.admin-login {
+  background: radial-gradient(circle at top, rgba(var(--color-dore-rgb), 0.2), transparent 55%),
+  linear-gradient(180deg, var(--color-marron-dark) 0%, #1b1511 100%);
+}
 </style>
