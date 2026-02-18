@@ -2,15 +2,23 @@
   <div class="min-h-screen">
     <!-- Hero Section Ultra-Moderne -->
 
-    <section class="relative min-h-screen flex flex-col justify-center items-center overflow-hidden bg-gray-900">
+    <section class="relative h-[72svh] min-h-[34rem] max-h-[52rem] md:h-[82vh] md:min-h-[40rem] flex flex-col justify-center items-center overflow-hidden bg-surface-strong">
       <!-- Background Image + Overlay -->
       <div class="absolute inset-0 z-0">
         <img
-            src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=1920&q=80"
+            src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2560&q=80"
+            srcset="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1200&q=80 1200w,
+                    https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1920&q=80 1920w,
+                    https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2560&q=80 2560w,
+                    https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=3200&q=80 3200w"
+            sizes="100vw"
             alt="Mariage"
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover object-center"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
         />
-        <div class="absolute inset-0 bg-black/25"></div>
+        <div class="absolute inset-0 bg-surface-strong/35"></div>
       </div>
 
       <!-- Content -->
@@ -39,7 +47,7 @@
         <!-- CTA Button -->
         <router-link
             to="/rsvp"
-            class="mt-8 inline-block bg-white text-gray-900 font-semibold px-8 py-3 rounded-xl hover:bg-white/90 transition transform hover:scale-105 duration-300 animate-fade-in-up delay-500"
+            class="mt-8 inline-block bg-surface-elevated text-content-primary font-semibold px-8 py-3 rounded-xl hover:bg-surface-elevated/90 transition transform hover:scale-105 duration-300 animate-fade-in-up delay-500"
         >
           {{ t('home.cta') }}
         </router-link>
@@ -50,16 +58,16 @@
     <NotreHistoire/>
 
     <!-- Carousel Section with better design -->
-    <section class="relative py-24 bg-white overflow-hidden w-full">
+    <section class="relative py-24 bg-surface-elevated overflow-hidden w-full">
       <!-- Top Gradient Accent -->
-      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-dore to-transparent"></div>
 
       <!-- Section Header -->
       <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900">
+        <h2 class="text-title-md sm:text-title-lg font-semibold tracking-tight text-content-primary">
           {{ t('home.momentsTitle') }}
         </h2>
-        <p class="text-neutral-500 mt-3 text-sm sm:text-base">
+        <p class="text-content-muted mt-3 text-body-sm sm:text-body">
           {{ t('home.momentsSubtitle') }}
         </p>
       </div>

@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-ivoire via-white to-ivoire-dark">
+  <div class="min-h-screen bg-gradient-to-b from-surface-base via-surface-elevated to-surface-subtle">
     <!-- Header Section -->
-    <header class="relative bg-neutral-900 text-white">
+    <header class="relative bg-surface-strong text-content-inverse">
       <div class="container mx-auto px-4 py-16 sm:py-20 text-center">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold tracking-wide animate-fade-in-down">
           {{ t('galleryPage.title') }}
         </h1>
 
-        <p class="mt-4 text-sm sm:text-base text-white/70 max-w-xl mx-auto animate-fade-in-up">
+        <p class="mt-4 text-sm sm:text-base text-content-inverse/75 max-w-xl mx-auto animate-fade-in-up">
           {{ t('galleryPage.subtitle') }}
         </p>
       </div>
 
       <!-- Séparateur subtil -->
-      <div class="absolute bottom-0 left-0 w-full h-px bg-white/10"></div>
+      <div class="absolute bottom-0 left-0 w-full h-px bg-content-inverse/10"></div>
     </header>
 
     <!-- Gallery Component -->
@@ -51,6 +51,6 @@ import { t } from '@/i18n'
 
 /* Gradient Header Background (optional elegant gradient) */
 .bg-gradient-elegant {
-  background: linear-gradient(135deg, #fef9f4 0%, #fff 50%, #f5f0e5 100%);
+  background: var(--gradient-warm);
 }
 </style>

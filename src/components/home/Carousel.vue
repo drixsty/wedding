@@ -35,7 +35,7 @@
     <!-- Navigation Arrows -->
     <button
         @click="prev"
-        class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-gray-800 hover:text-gold transition-all duration-300"
+        class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-surface-elevated/90 hover:bg-surface-elevated flex items-center justify-center text-content-primary hover:text-dore transition-all duration-300"
         aria-label="Image précédente"
     >
       <svg class="w-5 sm:w-6 h-5 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@
 
     <button
         @click="next"
-        class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-gray-800 hover:text-gold transition-all duration-300"
+        class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-surface-elevated/90 hover:bg-surface-elevated flex items-center justify-center text-content-primary hover:text-dore transition-all duration-300"
         aria-label="Image suivante"
     >
       <svg class="w-5 sm:w-6 h-5 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +60,7 @@
           :key="idx"
           @click="goTo(idx)"
           class="transition-all duration-300 rounded-full"
-          :class="currentIndex === idx ? 'bg-gold w-6 h-2 sm:w-8 sm:h-2' : 'bg-white/60 hover:bg-white/80 w-3 h-3'"
+          :class="currentIndex === idx ? 'bg-dore w-6 h-2 sm:w-8 sm:h-2' : 'bg-surface-elevated/60 hover:bg-surface-elevated/80 w-3 h-3'"
           :aria-label="`Aller à l'image ${idx + 1}`"
       ></button>
     </div>
@@ -69,7 +69,7 @@
     <button
         v-if="autoplay"
         @click="toggleAutoplay"
-        class="absolute top-4 right-4 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-gray-800 hover:text-gold transition-all duration-300"
+        class="absolute top-4 right-4 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-surface-elevated/90 hover:bg-surface-elevated flex items-center justify-center text-content-primary hover:text-dore transition-all duration-300"
         :aria-label="isPlaying ? 'Pause' : 'Play'"
     >
       <svg v-if="isPlaying" class="w-5 sm:w-6 h-5 sm:h-6" fill="currentColor" viewBox="0 0 24 24">

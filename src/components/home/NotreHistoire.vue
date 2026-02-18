@@ -1,22 +1,22 @@
 <template>
-  <section class="relative py-16 bg-neutral-50 overflow-hidden">
+  <section class="relative py-16 bg-surface-subtle overflow-hidden">
     <div class="max-w-4xl mx-auto px-5 sm:px-6 text-center">
       <!-- Header -->
       <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900">
+        <h2 class="text-title-md sm:text-title-lg font-semibold tracking-tight text-content-primary">
           Notre Histoire
         </h2>
-        <p class="text-neutral-500 mt-3 text-sm sm:text-base">
+        <p class="text-content-muted mt-3 text-body-sm sm:text-body">
           Un voyage d'amour, de complicité et de découvertes
         </p>
       </div>
       <!-- Story Card -->
-      <div class="bg-white rounded-4xl border-2 border-gradient-to-r from-gold/40 via-gold/20 to-gold/40 p-6 sm:p-10 relative overflow-hidden">
+      <div class="bg-surface-elevated rounded-4xl border-2 border-gradient-to-r from-dore/40 via-dore/20 to-dore/40 p-6 sm:p-10 relative overflow-hidden">
         <!-- Subtle decorative overlay -->
-        <div class="absolute -top-10 -left-10 w-72 h-72 bg-gradient-to-r from-gold/10 to-gold/5 rounded-full pointer-events-none"></div>
+        <div class="absolute -top-10 -left-10 w-72 h-72 bg-gradient-to-r from-dore/10 to-dore/5 rounded-full pointer-events-none"></div>
 
         <!-- Story content preview -->
-        <div class="text-left text-neutral-800 space-y-4">
+        <div class="text-left text-content-primary space-y-4">
           <p
               v-for="(paragraph, idx) in previewParagraphs"
               :key="idx"
@@ -30,7 +30,7 @@
         <div class="flex justify-center mt-6">
           <button
               @click="showModal = true"
-              class="flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-neutral-900 text-white font-semibold rounded-xl hover:bg-neutral-800 transition-all duration-300"
+              class="flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-surface-strong text-content-inverse font-semibold rounded-xl hover:bg-marron-dark transition-all duration-300"
           >
             Lire notre histoire complète
           </button>
