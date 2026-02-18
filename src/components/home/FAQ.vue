@@ -4,10 +4,10 @@
       <!-- Header -->
       <div class="text-center mb-12 sm:mb-16">
         <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900">
-          Questions Fréquentes
+          {{ t('faq.title') }}
         </h2>
         <p class="text-neutral-500 mt-3 text-sm sm:text-base">
-          Tout ce que vous devez savoir
+          {{ t('faq.subtitle') }}
         </p>
       </div>
 
@@ -72,6 +72,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { t } from '@/i18n'
 
 interface FAQ {
   question: string
