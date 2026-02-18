@@ -1,7 +1,6 @@
 <template>
   <section class="py-20 bg-surface-subtle">
     <div class="container mx-auto px-4">
-      <!-- Header -->
       <div class="text-center mb-12 sm:mb-16">
         <h2 class="text-title-md sm:text-title-lg font-semibold tracking-tight text-content-primary">
           {{ t('faq.title') }}
@@ -11,14 +10,12 @@
         </p>
       </div>
 
-      <!-- FAQ Items -->
       <div class="max-w-4xl mx-auto space-y-4">
         <div
             v-for="(faq, index) in faqs"
             :key="index"
             class="rounded-3xl border border-border-soft bg-surface-elevated overflow-hidden transition-all duration-300 relative group"
         >
-          <!-- Question -->
           <button
               @click="toggleFaq(index)"
               class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-surface-subtle transition-colors duration-200 relative z-10"
@@ -39,7 +36,6 @@
             </svg>
           </button>
 
-          <!-- Answer -->
           <transition
               enter-active-class="transition-all duration-300 ease-out"
               leave-active-class="transition-all duration-200 ease-in"
@@ -54,7 +50,6 @@
                   {{ faq.answer }}
                 </p>
 
-                <!-- Image (optionnelle) -->
                 <img
                     v-if="faq.image"
                     :src="faq.image"
@@ -80,31 +75,33 @@ interface FAQ {
   image?: string
 }
 
-// Etat de la FAQ ouverte
 const openIndex = ref<number | null>(null)
 
-// Liste des FAQs
 const faqs: FAQ[] = [
   {
-    question: "Puis-je amener mes enfants ?",
-    answer: "Oui, les enfants sont les bienvenus ! Merci de nous indiquer leur nombre dans le formulaire RSVP afin que nous puissions prévoir des activités adaptées et des menus spéciaux pour eux.",
+    question: 'Quel est le dress code exact ? ',
+    answer: 'Le thème est “Élégance Afro-chic de soirée” : tons terre, doré, ivoire et touches profondes (vert sauge, bordeaux, bleu nuit). Les tenues traditionnelles et créations contemporaines sont les bienvenues.'
   },
   {
-    question: "Y aura-t-il un menu végétarien ou vegan ?",
-    answer: "Absolument ! Nous proposons des options végétariennes, véganes et sans gluten. Merci d'indiquer vos restrictions alimentaires dans le formulaire RSVP pour que nous puissions vous préparer un menu adapté.",
-    image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=800&q=80"
+    question: 'Puis-je venir avec mes enfants ?',
+    answer: 'Oui, un espace kids supervisé sera disponible pendant le cocktail et le dîner (jeux calmes, mini-atelier créatif et menu adapté). Merci d’indiquer les âges dans le RSVP pour une meilleure organisation.',
+    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&q=80'
   },
   {
-    question: "Quelle est la tenue recommandée ?",
-    answer: "Nous recommandons une tenue élégante avec une touche afrochic. N'hésitez pas à porter des tenues traditionnelles africaines, des accessoires wax, ou simplement une belle tenue de soirée aux couleurs marron, doré ou ivoire."
+    question: 'Comment se passent les transports et le retour de nuit ?',
+    answer: 'Des navettes sont prévues entre le lieu de réception, deux hôtels partenaires et un point central à Paris. Les horaires détaillés vous seront envoyés après validation de votre RSVP.'
   },
   {
-    question: "Y a-t-il un parking sur place ?",
-    answer: "Oui, un parking gratuit de 200 places est disponible sur le lieu de réception. Des navettes seront également organisées depuis les hôtels partenaires."
+    question: 'Y aura-t-il des options alimentaires spécifiques ?',
+    answer: 'Oui : végétarien, vegan, sans gluten, sans lactose et allergies spécifiques. Notre chef adaptera chaque menu sur demande si vous le signalez avant la date limite.'
   },
   {
-    question: "Puis-je prendre des photos pendant la cérémonie ?",
-    answer: "Oui, mais nous vous demandons de rester discrets pendant les moments clés de la cérémonie. Un photographe professionnel sera présent et vous pourrez obtenir toutes les photos officielles par la suite."
+    question: 'Peut-on prendre des photos pendant la cérémonie ?',
+    answer: 'Nous vous inviterons à vivre la cérémonie pleinement pendant les vœux (sans téléphones levés). Une fois ce moment passé, place aux photos ! Un album partagé sera ouvert pour vos clichés préférés.'
+  },
+  {
+    question: 'Et si je veux vous laisser un message surprise ?',
+    answer: 'Excellente idée : un espace “mots secrets” sera disponible sur place et dans le formulaire RSVP. Vos messages feront partie d’un souvenir que nous découvrirons après le mariage.'
   }
 ]
 
