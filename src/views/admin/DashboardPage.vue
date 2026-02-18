@@ -86,6 +86,51 @@
       <p v-if="themeFeedback" class="mt-4 text-sm text-ivoire/80">{{ themeFeedback }}</p>
     </div>
 
+    <div class="lux-card mb-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+        <div>
+          <h2 class="text-lg font-serif">{{ t('admin.dashboard.galleryTitle') }}</h2>
+          <p class="text-sm text-ivoire/70">{{ t('admin.dashboard.galleryDescription') }}</p>
+        </div>
+        <button @click="loadAdminPhotos" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.refreshGallery') }}</button>
+      </div>
+
+      <div v-if="galleryLoading" class="p-8 text-center">
+        <div class="inline-block w-8 h-8 border-4 border-dore/30 border-t-dore rounded-full animate-spin"></div>
+      </div>
+      <div v-else-if="adminPhotos.length === 0" class="p-6 text-center text-ivoire/70 border border-white/10 rounded-xl">
+        {{ t('admin.dashboard.galleryEmpty') }}
+      </div>
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <article v-for="photo in adminPhotos" :key="photo.id" class="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+          <img :src="photo.url" :alt="photo.titre || 'Photo'" class="w-full h-44 object-cover" />
+          <div class="p-4 space-y-2">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h3 class="font-semibold">{{ photo.titre || t('admin.dashboard.noTitle') }}</h3>
+                <p class="text-xs text-ivoire/70">{{ photo.categorie }}</p>
+              </div>
+              <span class="text-[11px] px-2 py-1 rounded-full" :class="photo.uploaded_by_guest ? 'bg-dore/20 text-dore' : 'bg-ivoire/20 text-ivoire'">
+                {{ photo.uploaded_by_guest ? t('admin.dashboard.guestUpload') : t('admin.dashboard.coupleUpload') }}
+              </span>
+            </div>
+            <p class="text-sm text-ivoire/70 line-clamp-2">{{ photo.description }}</p>
+
+            <div class="flex items-center justify-between pt-2">
+              <button
+                @click="togglePhotoVisibility(photo.id, !(photo.visible ?? true))"
+                class="lux-button-sm"
+                :class="photo.visible ? 'bg-green-500 text-black hover:bg-green-600' : 'bg-yellow-500 text-black hover:bg-yellow-600'"
+              >
+                {{ photo.visible ? t('admin.dashboard.hidePhoto') : t('admin.dashboard.showPhoto') }}
+              </button>
+              <button @click="removePhoto(photo.id)" class="text-red-300 hover:text-red-200 text-sm">{{ t('admin.dashboard.deletePhoto') }}</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
     <div v-if="selectedGuests.length > 0" class="flex gap-2 mb-4 flex-wrap">
       <button @click="groupValidate" class="lux-button-sm bg-green-500 text-black hover:bg-green-600">{{ t('admin.dashboard.bulkValidate') }}</button>
       <button @click="groupRefuse" class="lux-button-sm bg-red-500 text-black hover:bg-red-600">{{ t('admin.dashboard.bulkRefuse') }}</button>
@@ -136,6 +181,7 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { useGuests } from '@/composables/useGuests'
 import { useTheme } from '@/composables/useTheme'
+import { useGallery } from '@/composables/useGallery'
 import { THEME_COLOR_KEYS } from '@/constants/theme'
 import { t } from '@/i18n'
 
@@ -143,6 +189,13 @@ const router = useRouter()
 const { signOut } = useAuth()
 const { guests, stats, loading, fetchGuests, fetchStats, updateGuestStatus, deleteGuest } = useGuests()
 const { theme, saveTheme, sanitizeTheme } = useTheme()
+const {
+  photos: adminPhotos,
+  loading: galleryLoading,
+  fetchAdminPhotos,
+  setPhotoVisibility,
+  deletePhoto
+} = useGallery()
 
 const filters = reactive<{ statut: string; presence: boolean | ''; search: string }>({ statut: '', presence: '', search: '' })
 const selectedGuests = ref<string[]>([])
@@ -189,6 +242,20 @@ async function loadGuests() {
   await fetchStats()
   selectedGuests.value = []
   selectAll.value = false
+}
+
+async function loadAdminPhotos() {
+  await fetchAdminPhotos()
+}
+
+async function togglePhotoVisibility(photoId: string, visible: boolean) {
+  await setPhotoVisibility(photoId, visible)
+}
+
+async function removePhoto(photoId: string) {
+  if (confirm(t('admin.dashboard.confirmDeletePhoto'))) {
+    await deletePhoto(photoId)
+  }
 }
 
 async function validateGuest(id: string) {
@@ -240,6 +307,7 @@ async function handleLogout() {
 
 onMounted(async () => {
   await loadGuests()
+  await loadAdminPhotos()
   syncThemeDraft()
 })
 </script>
