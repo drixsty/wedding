@@ -27,7 +27,15 @@
     </div>
 
     <div class="admin-panel">
-      <h2 class="admin-section-title">Filtrer les réponses</h2>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="admin-section-title">Filtrer les réponses</h2>
+        <div class="flex flex-wrap gap-2">
+          <button class="admin-btn-soft" @click="applyPreset('pending')">En attente</button>
+          <button class="admin-btn-soft" @click="applyPreset('confirmed')">Confirmés</button>
+          <button class="admin-btn-soft" @click="applyPreset('declined')">Refus</button>
+          <button class="admin-btn-soft" @click="applyPreset('reset')">Réinitialiser</button>
+        </div>
+      </div>
       <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-4">
         <div>
           <label class="admin-field-label">{{ t('admin.dashboard.status') }}</label>
@@ -45,8 +53,8 @@
     </div>
 
     <div v-if="selectedGuests.length > 0" class="admin-panel !p-4 flex gap-2 flex-wrap items-center">
-      <button @click="groupValidate" class="admin-btn bg-emerald-500 text-white" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkValidate') }}</button>
-      <button @click="groupRefuse" class="admin-btn bg-rose-500 text-white" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkRefuse') }}</button>
+      <button @click="groupValidate" class="admin-btn" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkValidate') }}</button>
+      <button @click="groupRefuse" class="admin-btn admin-btn-muted" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkRefuse') }}</button>
       <button @click="groupDelete" class="admin-btn admin-btn-muted" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkDelete') }}</button>
       <span class="text-sm text-slate-600">{{ t('admin.dashboard.selectedCount', { count: selectedGuests.length }) }}</span>
     </div>
@@ -63,7 +71,11 @@
             <td class="px-3 py-3"><span :class="guest.presence_confirmee ? 'text-emerald-600' : 'text-rose-600'">{{ guest.presence_confirmee ? t('admin.dashboard.yes') : t('admin.dashboard.no') }}</span></td>
             <td class="px-3 py-3 text-center text-slate-700">{{ guest.nombre_accompagnants }}</td>
             <td class="px-3 py-3"><span class="px-2 py-1 rounded-full text-xs font-semibold" :class="statusClassMap[guest.statut]">{{ t(`admin.dashboard.statuses.${guest.statut}`) }}</span></td>
-            <td class="px-3 py-3 flex gap-2"><button v-if="guest.statut !== 'validé'" @click="validateGuest(guest.id)">✅</button><button v-if="guest.statut !== 'refusé'" @click="refuseGuest(guest.id)">❌</button><button @click="deleteGuestConfirm(guest.id)">🗑️</button></td>
+            <td class="px-3 py-3 flex gap-2">
+              <button v-if="guest.statut !== 'validé'" @click="validateGuest(guest.id)" class="admin-btn-soft">Valider</button>
+              <button v-if="guest.statut !== 'refusé'" @click="refuseGuest(guest.id)" class="admin-btn-soft">Refuser</button>
+              <button @click="deleteGuestConfirm(guest.id)" class="admin-btn-soft">Supprimer</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -166,6 +178,27 @@ function sendByWhatsapp() {
     .join('\n')
   const text = encodeURIComponent(`${bulkMessage.value}\n\nInvités:\n${payload}`)
   window.open(`https://wa.me/?text=${text}`, '_blank')
+}
+
+function applyPreset(preset: 'pending' | 'confirmed' | 'declined' | 'reset') {
+  if (preset === 'pending') {
+    filters.statut = 'en_attente'
+    filters.presence = ''
+  }
+  if (preset === 'confirmed') {
+    filters.statut = 'validé'
+    filters.presence = true
+  }
+  if (preset === 'declined') {
+    filters.statut = 'refusé'
+    filters.presence = false
+  }
+  if (preset === 'reset') {
+    filters.statut = ''
+    filters.presence = ''
+    filters.search = ''
+  }
+  loadGuests()
 }
 
 watch(selectAll, val => { selectedGuests.value = val ? filteredGuests.value.map(g => g.id) : [] })

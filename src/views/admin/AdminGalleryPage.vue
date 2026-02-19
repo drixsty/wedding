@@ -1,5 +1,20 @@
 <template>
   <section class="space-y-5 animate-fade-in">
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+      <article class="admin-workflow-card">
+        <p class="admin-badge">Flux conseillé</p>
+        <p class="mt-2 text-sm text-slate-600">1) Importez les photos officielles.</p>
+      </article>
+      <article class="admin-workflow-card">
+        <p class="admin-badge">Modération</p>
+        <p class="mt-2 text-sm text-slate-600">2) Vérifiez la visibilité et la catégorie avant publication.</p>
+      </article>
+      <article class="admin-workflow-card">
+        <p class="admin-badge">Nettoyage</p>
+        <p class="mt-2 text-sm text-slate-600">3) Supprimez en lot les doublons ou photos hors contexte.</p>
+      </article>
+    </div>
+
     <div class="admin-panel">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
@@ -36,8 +51,8 @@
     </div>
 
     <div v-if="selectedPhotos.length > 0" class="admin-panel !p-4 flex gap-2 flex-wrap items-center">
-      <button @click="bulkSetPhotoVisibility(true)" class="admin-btn bg-emerald-500 text-white">{{ t('admin.dashboard.bulkPublishPhotos') }}</button>
-      <button @click="bulkSetPhotoVisibility(false)" class="admin-btn bg-amber-500 text-white">{{ t('admin.dashboard.bulkHidePhotos') }}</button>
+      <button @click="bulkSetPhotoVisibility(true)" class="admin-btn">{{ t('admin.dashboard.bulkPublishPhotos') }}</button>
+      <button @click="bulkSetPhotoVisibility(false)" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.bulkHidePhotos') }}</button>
       <button @click="bulkDeletePhotos" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.bulkDeletePhotos') }}</button>
       <span class="text-slate-600 text-sm">{{ t('admin.dashboard.selectedPhotosCount', { count: selectedPhotos.length }) }}</span>
     </div>
@@ -68,12 +83,11 @@
             <div class="flex items-center justify-between pt-2">
               <button
                 @click="togglePhotoVisibility(photo.id, !(photo.visible ?? true))"
-                class="admin-btn"
-                :class="photo.visible ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white'"
+                class="admin-btn-soft"
               >
                 {{ photo.visible ? t('admin.dashboard.hidePhoto') : t('admin.dashboard.showPhoto') }}
               </button>
-              <button @click="removePhoto(photo.id)" class="text-rose-600 text-sm">{{ t('admin.dashboard.deletePhoto') }}</button>
+              <button @click="removePhoto(photo.id)" class="admin-btn-soft">{{ t('admin.dashboard.deletePhoto') }}</button>
             </div>
           </div>
         </article>

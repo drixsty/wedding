@@ -1,5 +1,20 @@
 <template>
   <section class="space-y-5 animate-fade-in">
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+      <article class="admin-workflow-card">
+        <p class="admin-badge">1. Configurer</p>
+        <p class="mt-2 text-sm text-slate-600">Mettez à jour les textes et informations clés du mariage.</p>
+      </article>
+      <article class="admin-workflow-card">
+        <p class="admin-badge">2. Styliser</p>
+        <p class="mt-2 text-sm text-slate-600">Ajustez la palette puis vérifiez le contraste en direct.</p>
+      </article>
+      <article class="admin-workflow-card">
+        <p class="admin-badge">3. Publier</p>
+        <p class="mt-2 text-sm text-slate-600">Enregistrez puis prévisualisez le rendu côté visiteur.</p>
+      </article>
+    </div>
+
     <SiteConfigurationPanel />
 
     <div class="admin-panel">

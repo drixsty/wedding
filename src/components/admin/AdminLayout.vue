@@ -1,13 +1,13 @@
 <template>
-  <div class="admin-shell min-h-screen">
+  <div class="admin-shell">
     <header class="admin-shell__header">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Espace d'administration</p>
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Back-office mariage</p>
         <h1 class="text-2xl font-serif text-slate-900 md:text-3xl">{{ currentTitle }}</h1>
-        <p class="text-sm text-slate-500">Interface minimaliste pensée pour piloter rapidement tout le site.</p>
+        <p class="text-sm text-slate-500">Un espace épuré pour suivre les RSVPs, publier rapidement et garder le site à jour.</p>
       </div>
       <div class="flex items-center gap-2">
-        <router-link to="/" class="admin-shell__link">Voir le site</router-link>
+        <router-link to="/" class="admin-shell__link">Prévisualiser le site</router-link>
         <button @click="handleLogout" class="admin-shell__logout">Déconnexion</button>
       </div>
     </header>
@@ -41,10 +41,10 @@ const router = useRouter()
 const { signOut } = useAuth()
 
 const navItems = [
-  { to: '/admin/dashboard/overview', label: 'Dashboard', icon: '◈' },
+  { to: '/admin/dashboard/overview', label: 'Vue globale', icon: '◈' },
   { to: '/admin/dashboard/guests', label: 'Invités & RSVP', icon: '◉' },
-  { to: '/admin/dashboard/content', label: 'Contenus & thème', icon: '◎' },
-  { to: '/admin/dashboard/gallery', label: 'Galerie photos', icon: '◌' }
+  { to: '/admin/dashboard/content', label: 'Contenus', icon: '◎' },
+  { to: '/admin/dashboard/gallery', label: 'Galerie', icon: '◌' }
 ]
 
 const currentTitle = computed(() => navItems.find(item => route.path.startsWith(item.to))?.label || 'Administration')
