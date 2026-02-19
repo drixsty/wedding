@@ -1,10 +1,12 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen animate-fade-in">
     <!-- Hero Section Ultra-Moderne -->
 
     <section class="relative h-[72svh] min-h-[34rem] max-h-[52rem] md:h-[82vh] md:min-h-[40rem] flex flex-col justify-center items-center overflow-hidden bg-surface-strong">
       <!-- Background Image + Overlay -->
       <div class="absolute inset-0 z-0">
+        <div class="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-dore/20 blur-3xl animate-float-soft"></div>
+        <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-mauve/20 blur-3xl animate-float-soft delay-300"></div>
         <img
             :src="content.home.heroImageUrl"
             srcset="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1200&q=80 1200w,

@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-surface-base via-surface-elevated to-surface-subtle">
+  <div class="min-h-screen bg-gradient-to-b from-surface-base via-surface-elevated to-surface-subtle relative overflow-hidden">
+    <div class="pointer-events-none absolute -top-20 right-0 h-72 w-72 rounded-full bg-dore/20 blur-3xl animate-float-soft"></div>
+    <div class="pointer-events-none absolute bottom-20 -left-16 h-64 w-64 rounded-full bg-sage/20 blur-3xl animate-float-soft delay-300"></div>
 
     <header class="relative bg-surface-strong text-content-inverse">
       <div class="container mx-auto px-4 py-16 sm:py-20 text-center">

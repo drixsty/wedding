@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-page min-h-screen p-6">
+  <div class="admin-page min-h-screen p-6 animate-fade-in">
     <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
       <h1 class="text-3xl font-serif tracking-wide text-ivoire">{{ t('admin.dashboard.title') }}</h1>
       <div class="flex gap-4 items-center">
