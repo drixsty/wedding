@@ -329,11 +329,17 @@ async function handleAdminUpload() {
   }
 
   const { error, data } = await uploadAdminPhotos(adminUploadFiles.value, adminUploadForm.value)
+  const uploadedCount = data?.uploadedPhotos.length || 0
+  const failedCount = data?.failedUploads.length || 0
 
   adminGallerySuccess.value = !error
-  adminGalleryFeedback.value = error
-    ? t('admin.dashboard.adminUploadError', { error })
-    : t('admin.dashboard.adminUploadSuccess', { count: data?.length || 0 })
+  if (error) {
+    adminGalleryFeedback.value = t('admin.dashboard.adminUploadError', { error })
+  } else if (failedCount > 0) {
+    adminGalleryFeedback.value = `${t('admin.dashboard.adminUploadSuccess', { count: uploadedCount })} ${failedCount} fichier(s) n'ont pas pu être envoyé(s).`
+  } else {
+    adminGalleryFeedback.value = t('admin.dashboard.adminUploadSuccess', { count: uploadedCount })
+  }
 
   if (!error) {
     resetAdminUploadForm()

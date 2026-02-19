@@ -188,11 +188,17 @@ async function handleUpload() {
   }
 
   const { error, data } = await uploadVisitorPhotos(selectedFiles.value, uploadForm.value)
+  const uploadedCount = data?.uploadedPhotos.length || 0
+  const failedCount = data?.failedUploads.length || 0
 
   uploadSuccess.value = !error
-  uploadFeedback.value = error
-    ? t('gallery.form.error', { error })
-    : t('gallery.form.success', { count: data?.length || 0 })
+  if (error) {
+    uploadFeedback.value = t('gallery.form.error', { error })
+  } else if (failedCount > 0) {
+    uploadFeedback.value = `${t('gallery.form.success', { count: uploadedCount })} ${failedCount} fichier(s) n'ont pas pu être envoyés.`
+  } else {
+    uploadFeedback.value = t('gallery.form.success', { count: uploadedCount })
+  }
 
   if (!error) {
     resetUploadForm()
