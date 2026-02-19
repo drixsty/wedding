@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-2xl border text-center"
+    class="app-card text-center"
     :class="[
       compact ? 'px-4 py-6' : 'px-6 py-10',
       dark

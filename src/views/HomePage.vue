@@ -47,7 +47,7 @@
         <!-- CTA Button -->
         <router-link
             to="/rsvp"
-            class="mt-8 inline-block bg-surface-elevated text-content-primary font-semibold px-8 py-3 rounded-lg hover:bg-surface-elevated/90 transition transform hover:scale-105 duration-300 animate-fade-in-up delay-500"
+            class="mt-8 app-btn-soft transform hover:scale-105 animate-fade-in-up delay-500"
         >
           {{ t('home.cta') }}
         </router-link>

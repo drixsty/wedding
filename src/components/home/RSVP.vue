@@ -29,7 +29,7 @@
 
       <router-link
           to="/rsvp"
-          class="inline-flex items-center justify-center gap-3 bg-ivoire text-brown-dark font-semibold px-8 sm:px-12 py-3 sm:py-5 rounded-lg text-lg sm:text-xl hover:bg-ivoire/90 transition-all duration-300 shadow-lg"
+          class="app-btn-primary px-8 sm:px-12 py-3 sm:py-5 text-lg sm:text-xl shadow-lg"
       >
         <svg class="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />

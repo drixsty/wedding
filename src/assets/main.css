@@ -152,6 +152,27 @@
   .admin-link:hover::after {
     @apply w-full;
   }
+
+
+  .app-card {
+    @apply rounded-md border border-dore/20 bg-white/90 shadow-md;
+  }
+
+  .app-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 font-semibold transition-all duration-300;
+  }
+
+  .app-btn-primary {
+    @apply app-btn bg-gradient-to-r from-dore to-dore-dark text-marron-dark hover:brightness-105;
+  }
+
+  .app-btn-secondary {
+    @apply app-btn bg-surface-strong text-content-inverse hover:bg-marron-dark;
+  }
+
+  .app-btn-soft {
+    @apply app-btn bg-surface-elevated text-content-primary hover:bg-surface-elevated/90;
+  }
   
   .section-title {
     @apply text-title-lg md:text-5xl lg:text-6xl font-serif text-content-primary text-center mb-6;
