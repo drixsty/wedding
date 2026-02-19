@@ -237,7 +237,9 @@ export const messages = {
         remaining: 'Restants',
         cameraError: "Impossible d'accéder à la caméra",
         invalidQr: 'QR code invalide',
-        validationError: 'Erreur lors de la validation'
+        validationError: 'Erreur lors de la validation',
+        unsupportedDetector: 'Votre navigateur ne supporte pas encore le scan QR automatique (BarcodeDetector).'
+
       }
     },
     faq: {

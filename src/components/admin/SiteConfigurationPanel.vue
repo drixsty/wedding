@@ -57,8 +57,10 @@ import { onMounted, ref } from 'vue'
 import { useSiteContent } from '@/composables/useSiteContent'
 import { useTenant } from '@/composables/useTenant'
 import { useTenants } from '@/composables/useTenants'
+import { useTheme } from '@/composables/useTheme'
 
 const { content, sanitizeContent, saveSiteContent, loadSiteContent } = useSiteContent()
+const { loadTheme } = useTheme()
 const { tenantSlug, setTenant } = useTenant()
 const { tenants, fetchTenants, createTenant } = useTenants()
 
@@ -75,7 +77,7 @@ async function refreshDraft() {
 
 async function switchTenant() {
   setTenant(selectedTenant.value)
-  await refreshDraft()
+  await Promise.all([loadTheme(), refreshDraft()])
 }
 
 async function create() {
@@ -95,7 +97,7 @@ async function create() {
   setTenant(data.slug)
   newTenantName.value = ''
   await fetchTenants()
-  await refreshDraft()
+  await Promise.all([loadTheme(), refreshDraft()])
   feedback.value = `Tenant ${data.slug} créé.`
 }
 

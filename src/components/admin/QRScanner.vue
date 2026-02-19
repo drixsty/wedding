@@ -130,6 +130,7 @@ const scanning = ref(false)
 const lastScan = ref<any>(null)
 const error = ref('')
 const stream = ref<MediaStream>()
+const isBarcodeDetectorSupported = typeof window !== 'undefined' && 'BarcodeDetector' in window
 
 const stats = ref({
   scanned: 0,
@@ -154,6 +155,11 @@ async function startCamera() {
 }
 
 function startScanning() {
+  if (!isBarcodeDetectorSupported) {
+    error.value = t('admin.scanner.unsupportedDetector')
+    return
+  }
+
   scanning.value = true
   void scanQRCode()
 }
