@@ -1,23 +1,23 @@
 <template>
-  <div class="admin-card mb-6">
+  <div class="admin-panel">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
       <div>
-        <h2 class="text-lg font-serif">Configuration multi-tenant</h2>
-        <p class="text-sm text-ivoire/70">Créez un tenant et personnalisez textes/images sans code.</p>
+        <h2 class="admin-section-title">Configuration multi-tenant</h2>
+        <p class="text-sm text-slate-600">Créez un tenant et personnalisez textes/images sans code.</p>
       </div>
       <button @click="save" :disabled="saving" class="admin-btn">{{ saving ? 'Enregistrement...' : 'Sauvegarder la configuration' }}</button>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
       <div>
-        <label class="text-xs text-ivoire/70 uppercase mb-1 block">Tenant actif</label>
+        <label class="admin-field-label">Tenant actif</label>
         <select v-model="selectedTenant" class="admin-input w-full" @change="switchTenant">
           <option v-for="tenant in tenants" :key="tenant.slug" :value="tenant.slug">{{ tenant.name }} ({{ tenant.slug }})</option>
         </select>
       </div>
       <form class="flex gap-2 items-end" @submit.prevent="create">
         <div class="flex-1">
-          <label class="text-xs text-ivoire/70 uppercase mb-1 block">Nouveau tenant</label>
+          <label class="admin-field-label">Nouveau tenant</label>
           <input v-model="newTenantName" class="admin-input w-full" placeholder="Ex: Mariage-Awa-et-Sam" />
         </div>
         <button class="admin-btn admin-btn-muted" type="submit">Créer</button>
@@ -39,8 +39,8 @@
     </div>
 
     <div class="mt-6">
-      <h3 class="text-sm uppercase text-ivoire/70 mb-3">Carousel</h3>
-      <div v-for="(item, index) in draft.carousel" :key="index" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 border border-white/10 rounded-xl p-3">
+      <h3 class="text-sm uppercase text-slate-500 mb-3">Carousel</h3>
+      <div v-for="(item, index) in draft.carousel" :key="index" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 border border-slate-200 rounded-xl p-3 bg-slate-50/60">
         <input v-model="item.title" class="admin-input" :placeholder="`Titre slide ${index + 1}`" />
         <input v-model="item.alt" class="admin-input" :placeholder="`Alt slide ${index + 1}`" />
         <input v-model="item.caption" class="admin-input md:col-span-2" :placeholder="`Légende slide ${index + 1}`" />
@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <p v-if="feedback" class="mt-3 text-sm text-ivoire/80">{{ feedback }}</p>
+    <p v-if="feedback" class="mt-3 text-sm text-slate-600">{{ feedback }}</p>
   </div>
 </template>
 
