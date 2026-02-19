@@ -1,4 +1,4 @@
-import QRCode from 'qrcode'
+import QRCode, { type QRCodeToDataURLOptions } from 'qrcode'
 
 export interface QRCodeData {
   guestId: string
@@ -23,17 +23,18 @@ export async function generateQRCode(data: QRCodeData): Promise<string> {
     })
 
     // Générer le QR code en data URL
-    const qrCodeDataURL = await QRCode.toDataURL(payload, {
-      errorCorrectionLevel: 'H',
+    const options: QRCodeToDataURLOptions = {
+      errorCorrectionLevel: 'H' as const,
       type: 'image/png',
-      quality: 1,
       margin: 2,
       color: {
-        dark: '#B89F91', // Couleur greige
-        light: '#FCFAF7'  // Couleur ivoire
+        dark: '#B89F91',
+        light: '#FCFAF7'
       },
       width: 400
-    })
+    }
+
+    const qrCodeDataURL = await QRCode.toDataURL(payload, options)
 
     return qrCodeDataURL
   } catch (error) {
@@ -57,15 +58,17 @@ export async function generateQRCodeCanvas(
     type: 'wedding-invitation'
   })
 
-  await QRCode.toCanvas(canvas, payload, {
-    errorCorrectionLevel: 'H',
+  const options = {
+    errorCorrectionLevel: 'H' as const,
     margin: 2,
     color: {
       dark: '#B89F91',
       light: '#FCFAF7'
     },
     width: 300
-  })
+  }
+
+  await QRCode.toCanvas(canvas, payload, options)
 }
 
 /**

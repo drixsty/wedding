@@ -6,7 +6,7 @@
       <!-- Background Image + Overlay -->
       <div class="absolute inset-0 z-0">
         <img
-            src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2560&q=80"
+            :src="content.home.heroImageUrl"
             srcset="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1200&q=80 1200w,
                     https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1920&q=80 1920w,
                     https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2560&q=80 2560w,
@@ -29,16 +29,16 @@
             class="text-5xl sm:text-6xl md:text-7xl font-serif font-extrabold text-white tracking-tight transform transition-all duration-1000 ease-out opacity-0 scale-90 animate-fade-in-up"
             style="animation-delay: 200ms;"
         >
-          {{ coupleName }}
+          {{ content.coupleName }}
         </h1>
 
         <!-- Subtitle -->
         <p class="text-lg sm:text-xl text-white/80 italic animate-fade-in-up delay-300">
-          {{ t('home.subtitle') }}
+          {{ content.home.subtitle }}
         </p>
 
         <p class="text-lg sm:text-xl text-white/90 animate-fade-in-up delay-400">
-          {{ weddingDateFormatted }} • {{ weddingLocation }}
+          {{ weddingDateFormatted }} • {{ content.weddingLocation }}
         </p>
 
         <!-- Countdown Timer -->
@@ -49,7 +49,7 @@
             to="/rsvp"
             class="mt-8 app-btn-soft transform hover:scale-105 animate-fade-in-up delay-500"
         >
-          {{ t('home.cta') }}
+          {{ content.home.cta }}
         </router-link>
       </div>
     </section>
@@ -65,10 +65,10 @@
       <!-- Section Header -->
       <div class="text-center mb-12 sm:mb-16">
         <h2 class="text-title-md sm:text-title-lg font-semibold tracking-tight text-content-primary">
-          {{ t('home.momentsTitle') }}
+          {{ content.home.momentsTitle }}
         </h2>
         <p class="text-content-muted mt-3 text-body-sm sm:text-body">
-          {{ t('home.momentsSubtitle') }}
+          {{ content.home.momentsSubtitle }}
         </p>
       </div>
 
@@ -107,47 +107,26 @@ import FAQ from '@/components/home/FAQ.vue'
 import { formatDate } from '@/utils/formatters'
 import NotreHistoire from "@/components/home/NotreHistoire.vue";
 import RSVP from "@/components/home/RSVP.vue";
-import { t } from '@/i18n'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 
 dayjs.extend(duration)
 
 
-const coupleName = import.meta.env.VITE_COUPLE_NAMES || t('defaults.coupleName')
-const weddingLocation = import.meta.env.VITE_WEDDING_LOCATION || t('defaults.weddingLocation')
-const weddingDateRaw = import.meta.env.VITE_WEDDING_DATE || t('defaults.weddingDate')
+import { useSiteContent } from '@/composables/useSiteContent'
 
-const weddingDateFormatted = computed(() => 
-  formatDate(weddingDateRaw, 'DD MMMM YYYY [à] HH[h]mm')
+const { content } = useSiteContent()
+
+const weddingDateFormatted = computed(() =>
+  formatDate(content.value.weddingDate, 'DD MMMM YYYY [à] HH[h]mm')
 )
 
-const carouselImages = [
-  {
-    url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200&q=80',
-    alt: t('home.carousel.1.alt'),
-    title: t('home.carousel.1.title'),
-    caption: t('home.carousel.1.caption')
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80',
-    alt: t('home.carousel.2.alt'),
-    title: t('home.carousel.2.title'),
-    caption: t('home.carousel.2.caption')
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1200&q=80',
-    alt: t('home.carousel.3.alt'),
-    title: t('home.carousel.3.title'),
-    caption: t('home.carousel.3.caption')
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1200&q=80',
-    alt: t('home.carousel.4.alt'),
-    title: t('home.carousel.4.title'),
-    caption: t('home.carousel.4.caption')
-  }
-]
+const carouselImages = computed(() => content.value.carousel.map(item => ({
+  url: item.imageUrl,
+  alt: item.alt,
+  title: item.title,
+  caption: item.caption
+})))
 </script>
 
 <style scoped>

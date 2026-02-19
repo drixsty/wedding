@@ -28,7 +28,7 @@ dayjs.extend(duration)
 
 const weddingDate = import.meta.env.VITE_WEDDING_DATE || '2026-07-23T14:00:00'
 const now = ref(Date.now())
-let interval: number
+let interval: ReturnType<typeof setInterval>
 
 const timeUnits = computed(() => {
   const diff = dayjs(weddingDate).diff(dayjs(now.value))

@@ -19,7 +19,7 @@
             class="font-serif tracking-wide transition-all duration-300"
             :class="scrolled ? 'text-neutral-900 text-lg' : 'text-neutral-800 text-xl'"
         >
-          {{ coupleName }}
+          {{ content.coupleName }}
         </router-link>
 
         <div class="hidden md:flex items-center space-x-10">
@@ -85,20 +85,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { t } from '@/i18n'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { useSiteContent } from '@/composables/useSiteContent'
 
 const mobileMenuOpen = ref(false)
 const scrolled = ref(false)
+const { content } = useSiteContent()
 
-const coupleName = import.meta.env.VITE_COUPLE_NAMES || t('defaults.coupleName')
-
-const navLinks = [
-  { to: '/', label: t('nav.home') },
-  { to: '/galerie', label: t('nav.gallery') },
-  { to: '/rsvp', label: t('nav.rsvp') },
-  { to: '/admin/login', label: t('nav.adminLogin') }
-]
+const navLinks = computed(() => [
+  { to: '/', label: content.value.nav.home },
+  { to: '/galerie', label: content.value.nav.gallery },
+  { to: '/rsvp', label: content.value.nav.rsvp },
+  { to: '/admin/login', label: content.value.nav.adminLogin }
+])
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 40
