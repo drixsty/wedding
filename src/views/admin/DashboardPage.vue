@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-page min-h-screen p-6">
+  <div class="admin-page min-h-screen p-6 animate-fade-in">
     <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
       <h1 class="text-3xl font-serif tracking-wide text-ivoire">{{ t('admin.dashboard.title') }}</h1>
       <div class="flex gap-4 items-center">
@@ -57,17 +57,40 @@
       </div>
     </div>
 
+    <SiteConfigurationPanel />
+
     <div class="admin-card mb-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
         <div>
           <h2 class="text-lg font-serif">{{ t('admin.dashboard.themeTitle') }}</h2>
           <p class="text-sm text-ivoire/70">{{ t('admin.dashboard.themeDescription') }}</p>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap">
           <button @click="syncThemeDraft" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.resetTheme') }}</button>
+          <button @click="applySmartPalette" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.generatePalette') }}</button>
           <button @click="persistTheme" :disabled="themeSaving" class="admin-btn">
             {{ themeSaving ? t('admin.dashboard.themeSaving') : t('admin.dashboard.themeSave') }}
           </button>
+        </div>
+      </div>
+
+      <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white/5 border border-white/10 rounded-xl p-3">
+          <label for="theme-primary-seed" class="block text-xs uppercase text-ivoire/70 mb-2">{{ t('admin.dashboard.primarySeedColor') }}</label>
+          <div class="flex items-center gap-3">
+            <input id="theme-primary-seed" v-model="themePrimaryColor" type="color" class="h-10 w-14 rounded-lg border border-white/20 bg-transparent p-1" />
+            <input v-model="themePrimaryColor" type="text" class="admin-input flex-1 uppercase" placeholder="#B89F91" />
+          </div>
+          <p class="text-xs text-ivoire/60 mt-2">{{ t('admin.dashboard.primarySeedHint') }}</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-3">
+          <p class="block text-xs uppercase text-ivoire/70 mb-2">{{ t('admin.dashboard.contrastPreview') }}</p>
+          <div class="grid grid-cols-2 gap-2">
+            <div :style="{ backgroundColor: themeDraft.marron, color: readableOnPrimary }" class="rounded-lg px-3 py-2 text-xs font-semibold">Primary</div>
+            <div :style="{ backgroundColor: themeDraft.dore, color: readableOnSecondary }" class="rounded-lg px-3 py-2 text-xs font-semibold">Secondary</div>
+            <div :style="{ backgroundColor: themeDraft.ivoire, color: readableOnSurface }" class="rounded-lg px-3 py-2 text-xs font-semibold col-span-2">Surface / Texte lisible</div>
+          </div>
+          <p class="text-xs text-ivoire/60 mt-2">{{ t('admin.dashboard.contrastHint') }}</p>
         </div>
       </div>
 
@@ -220,13 +243,14 @@ import { useGuests } from '@/composables/useGuests'
 import { useTheme } from '@/composables/useTheme'
 import { useGallery } from '@/composables/useGallery'
 import EmptyState from '@/components/common/EmptyState.vue'
+import SiteConfigurationPanel from '@/components/admin/SiteConfigurationPanel.vue'
 import { THEME_COLOR_KEYS } from '@/constants/theme'
 import { t } from '@/i18n'
 
 const router = useRouter()
 const { signOut } = useAuth()
 const { guests, stats, loading, fetchGuests, fetchStats, updateGuestStatus, deleteGuest } = useGuests()
-const { theme, saveTheme, sanitizeTheme } = useTheme()
+const { theme, saveTheme, sanitizeTheme, generateThemeFromPrimary, getReadableTextColor } = useTheme()
 const {
   photos: adminPhotos,
   loading: galleryLoading,
@@ -244,6 +268,7 @@ const selectedGuests = ref<string[]>([])
 const selectAll = ref(false)
 const themeColorKeys = THEME_COLOR_KEYS
 const themeDraft = ref(sanitizeTheme(theme.value))
+const themePrimaryColor = ref(themeDraft.value.marron)
 const themeSaving = ref(false)
 const themeFeedback = ref<string | null>(null)
 const uploadableCategories = ['couple', 'family', 'friends', 'ceremony', 'reception']
@@ -266,6 +291,13 @@ const statusClassMap: Record<string, string> = {
 
 function syncThemeDraft() {
   themeDraft.value = sanitizeTheme(theme.value)
+  themePrimaryColor.value = themeDraft.value.marron
+}
+
+function applySmartPalette() {
+  themeDraft.value = generateThemeFromPrimary(themePrimaryColor.value)
+  themePrimaryColor.value = themeDraft.value.marron
+  themeFeedback.value = t('admin.dashboard.themeGenerated')
 }
 
 async function persistTheme() {
@@ -280,6 +312,10 @@ async function persistTheme() {
 
   themeSaving.value = false
 }
+
+const readableOnPrimary = computed(() => getReadableTextColor(themeDraft.value.marron))
+const readableOnSecondary = computed(() => getReadableTextColor(themeDraft.value.dore))
+const readableOnSurface = computed(() => getReadableTextColor(themeDraft.value.ivoire))
 
 const filteredGuests = computed(() => guests.value.filter(g => {
   const statusMatch = filters.statut ? g.statut === filters.statut : true
@@ -414,6 +450,23 @@ async function groupDelete() {
 watch(theme, () => {
   syncThemeDraft()
 }, { deep: true })
+
+function normalizePrimaryColorInput(value: string): string {
+  const trimmed = value.trim()
+  const hex = trimmed.startsWith('#') ? trimmed : `#${trimmed}`
+  return /^#([A-Fa-f0-9]{6})$/.test(hex) ? hex.toUpperCase() : themeDraft.value.marron
+}
+
+watch(themePrimaryColor, value => {
+  if (typeof value !== 'string') {
+    return
+  }
+
+  const normalized = normalizePrimaryColorInput(value)
+  if (normalized !== value) {
+    themePrimaryColor.value = normalized
+  }
+})
 
 watch(selectAll, val => {
   selectedGuests.value = val ? filteredGuests.value.map(g => g.id) : []

@@ -3,15 +3,15 @@
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
         <div class="space-y-4">
-          <h3 class="text-2xl font-serif text-white tracking-wide">{{ coupleName }}</h3>
+          <h3 class="text-2xl font-serif text-white tracking-wide">{{ content.coupleName }}</h3>
           <div class="text-sm text-neutral-400 space-y-1">
             <p>{{ weddingDate }}</p>
-            <p>{{ weddingLocation }}</p>
+            <p>{{ content.weddingLocation }}</p>
           </div>
         </div>
 
         <div>
-          <h4 class="text-sm uppercase tracking-widest text-neutral-500 mb-6">{{ t('footer.navigation') }}</h4>
+          <h4 class="text-sm uppercase tracking-widest text-neutral-500 mb-6">{{ content.footer.navigationTitle }}</h4>
           <ul class="space-y-3">
             <li v-for="link in navLinks" :key="link.to">
               <router-link :to="link.to" class="footer-link">{{ link.label }}</router-link>
@@ -20,15 +20,15 @@
         </div>
 
         <div>
-          <h4 class="text-sm uppercase tracking-widest text-neutral-500 mb-6">{{ t('footer.contact') }}</h4>
-          <p class="text-sm text-neutral-400 leading-relaxed">{{ t('footer.questions') }}</p>
-          <a href="mailto:contact@votremariage.com" class="footer-link block mt-3">contact@votremariage.com</a>
+          <h4 class="text-sm uppercase tracking-widest text-neutral-500 mb-6">{{ content.footer.contactTitle }}</h4>
+          <p class="text-sm text-neutral-400 leading-relaxed">{{ content.footer.questions }}</p>
+          <a :href="`mailto:${content.contactEmail}`" class="footer-link block mt-3">{{ content.contactEmail }}</a>
         </div>
       </div>
 
       <div class="border-t border-neutral-800 mt-16 pt-8 text-center text-xs text-neutral-500">
-        <p>© {{ currentYear }} {{ coupleName }} — {{ t('footer.rights') }}</p>
-        <p class="mt-2 opacity-70">{{ t('footer.madeWithCare') }}</p>
+        <p>© {{ currentYear }} {{ content.coupleName }} — {{ content.footer.rights }}</p>
+        <p class="mt-2 opacity-70">{{ content.footer.madeWithCare }}</p>
       </div>
     </div>
   </footer>
@@ -37,20 +37,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { formatDate } from '@/utils/formatters'
-import { t } from '@/i18n'
+import { useSiteContent } from '@/composables/useSiteContent'
 
-const coupleName = import.meta.env.VITE_COUPLE_NAMES || t('defaults.coupleName')
-const weddingLocation = import.meta.env.VITE_WEDDING_LOCATION || t('defaults.weddingLocation')
-const weddingDateRaw = import.meta.env.VITE_WEDDING_DATE || t('defaults.weddingDate')
+const { content } = useSiteContent()
 
-const weddingDate = computed(() => formatDate(weddingDateRaw, 'DD MMMM YYYY'))
+const weddingDate = computed(() => formatDate(content.value.weddingDate, 'DD MMMM YYYY'))
 const currentYear = new Date().getFullYear()
 
-const navLinks = [
-  { to: '/', label: t('nav.home') },
-  { to: '/rsvp', label: t('nav.rsvp') },
-  { to: '/galerie', label: t('nav.gallery') }
-]
+const navLinks = computed(() => [
+  { to: '/', label: content.value.nav.home },
+  { to: '/rsvp', label: content.value.nav.rsvp },
+  { to: '/galerie', label: content.value.nav.gallery }
+])
 </script>
 
 <style scoped>

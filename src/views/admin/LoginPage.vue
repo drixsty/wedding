@@ -1,13 +1,13 @@
 <template>
   <div
-      class="admin-login min-h-screen flex items-center justify-center px-6 py-24 relative overflow-hidden"
+      class="admin-login min-h-screen flex items-center justify-center px-6 py-24 relative overflow-hidden animate-fade-in"
   >
     <!-- Soft radial glow background -->
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.04),transparent_60%)]"></div>
 
     <!-- Card -->
     <div
-        class="admin-card relative w-full max-w-md !bg-[#2a1f18]/85 !border-dore/45 p-10 shadow-2xl shadow-black/25"
+        class="admin-card relative w-full max-w-md !bg-[#2a1f18]/85 !border-dore/45 p-10 shadow-2xl shadow-black/25 animate-scale-in"
     >
       <!-- Header -->
       <div class="text-center mb-10">

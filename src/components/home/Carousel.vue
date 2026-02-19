@@ -105,7 +105,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const currentIndex = ref(0)
 const isPlaying = ref(props.autoplay)
-let intervalId: number | null = null
+let intervalId: ReturnType<typeof setInterval> | null = null
 
 function next() {
   currentIndex.value = (currentIndex.value + 1) % props.images.length

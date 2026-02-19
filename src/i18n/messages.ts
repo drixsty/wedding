@@ -60,6 +60,9 @@ export const messages = {
         reception: 'Réception'
       },
       empty: 'Aucune photo disponible pour cette catégorie.',
+      emptyTitle: 'Aucun souvenir pour le moment',
+      emptyCategoryTitle: 'Aucune photo dans la catégorie {category}',
+      emptyHint: 'Essayez une autre catégorie ou soyez le premier à partager une photo ✨',
       uploadTitle: 'Partagez vos photos',
       uploadSubtitle: 'Envoyez vos souvenirs du mariage. Ils seront publiés après validation.',
       form: {
@@ -69,6 +72,8 @@ export const messages = {
         descriptionPlaceholder: 'Ajoutez un petit mot sur ce moment...',
         category: 'Catégorie',
         file: 'Image',
+        dropzoneTitle: 'Glissez-déposez vos images ici',
+        dropzoneSubtitle: 'ou cliquez pour sélectionner des fichiers',
         fileRequired: 'Merci de sélectionner au moins une image avant l’envoi.',
         selectedFiles: '{count} image(s) sélectionnée(s)',
         submit: 'Envoyer mes photos',
@@ -163,6 +168,12 @@ export const messages = {
         themeSaving: 'Enregistrement...',
         themeSaveSuccess: 'Palette enregistrée avec succès.',
         themeSaveError: 'Impossible d’enregistrer le thème : {error}',
+        generatePalette: 'Générer depuis la couleur principale',
+        primarySeedColor: 'Couleur principale',
+        primarySeedHint: 'Choisissez une couleur maître, puis générez automatiquement les tons secondaires et accents.',
+        contrastPreview: 'Aperçu contraste',
+        contrastHint: 'Le texte est choisi automatiquement (noir/blanc) pour conserver une bonne lisibilité.',
+        themeGenerated: 'Palette générée automatiquement. Vérifiez et ajustez si nécessaire.',
         themeColorLabels: {
           marron: 'Marron principal',
           marronLight: 'Marron clair',
@@ -226,7 +237,9 @@ export const messages = {
         remaining: 'Restants',
         cameraError: "Impossible d'accéder à la caméra",
         invalidQr: 'QR code invalide',
-        validationError: 'Erreur lors de la validation'
+        validationError: 'Erreur lors de la validation',
+        unsupportedDetector: 'Votre navigateur ne supporte pas encore le scan QR automatique (BarcodeDetector).'
+
       }
     },
     faq: {
