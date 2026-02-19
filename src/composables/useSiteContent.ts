@@ -44,7 +44,14 @@ function sanitizeContent(input?: Partial<SiteContentConfig> | null): SiteContent
       cta: (input?.home?.cta || fallback.home.cta).toString().trim(),
       momentsTitle: (input?.home?.momentsTitle || fallback.home.momentsTitle).toString().trim(),
       momentsSubtitle: (input?.home?.momentsSubtitle || fallback.home.momentsSubtitle).toString().trim(),
-      heroImageUrl: (input?.home?.heroImageUrl || fallback.home.heroImageUrl).toString().trim()
+      heroImageUrl: (input?.home?.heroImageUrl || fallback.home.heroImageUrl).toString().trim(),
+      storyTitle: (input?.home?.storyTitle || fallback.home.storyTitle).toString().trim(),
+      storySubtitle: (input?.home?.storySubtitle || fallback.home.storySubtitle).toString().trim(),
+      storyCta: (input?.home?.storyCta || fallback.home.storyCta).toString().trim(),
+      storyModalTitle: (input?.home?.storyModalTitle || fallback.home.storyModalTitle).toString().trim(),
+      storyParagraphs: Array.isArray(input?.home?.storyParagraphs) && input?.home?.storyParagraphs.length > 0
+        ? input.home.storyParagraphs.map(paragraph => paragraph.toString().trim()).filter(Boolean)
+        : [...fallback.home.storyParagraphs]
     },
     galleryPage: {
       title: (input?.galleryPage?.title || fallback.galleryPage.title).toString().trim(),

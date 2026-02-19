@@ -29,6 +29,11 @@ export interface SiteContentConfig {
     momentsTitle: string
     momentsSubtitle: string
     heroImageUrl: string
+    storyTitle: string
+    storySubtitle: string
+    storyCta: string
+    storyModalTitle: string
+    storyParagraphs: string[]
   }
   galleryPage: {
     title: string
@@ -64,7 +69,17 @@ export const DEFAULT_SITE_CONTENT: SiteContentConfig = {
     cta: 'Entrer dans notre histoire',
     momentsTitle: "Fragments d'une Histoire Extraordinaire",
     momentsSubtitle: 'Des instants volés, des confidences et des souvenirs qui dessinent notre aventure',
-    heroImageUrl: 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2560&q=80'
+    heroImageUrl: 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2560&q=80',
+    storyTitle: 'Notre Histoire',
+    storySubtitle: 'Un récit entre hasard, héritage, passion et promesse',
+    storyCta: 'Découvrir le chapitre caché',
+    storyModalTitle: 'Notre Histoire • Version Intégrale',
+    storyParagraphs: [
+      'Tout a commencé par une énigme : un ticket oublié sur une table, un prénom griffonné au dos, et cette intuition inexplicable que nos chemins venaient de se reconnaître.',
+      'De café en promenade nocturne, nos conversations sont devenues des refuges. Nous avons appris à rire de tout, à débattre de rien et à nous comprendre dans les silences.',
+      'Très vite, nos familles, nos cultures et nos habitudes se sont entremêlées. Chaque rencontre a construit un pont entre nos univers, avec la certitude que nos différences seraient notre plus grande richesse.',
+      'Nous avons traversé des saisons intenses : les grands projets, les doutes discrets, les victoires improvisées. À chaque étape, nous avons choisi la tendresse plutôt que la peur.'
+    ]
   },
   galleryPage: {
     title: 'Galerie Photos',
