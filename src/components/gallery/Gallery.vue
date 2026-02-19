@@ -1,6 +1,6 @@
 <template>
   <section class="w-full space-y-8 animate-fade-in-up">
-    <div class="grid grid-cols-1 xl:grid-cols-[2fr,1fr] gap-8 items-start">
+    <div class="grid grid-cols-1 xl:grid-cols-[2fr,1fr] gap-8 items-start" v-reveal>
       <div class="space-y-6">
         <div class="flex flex-wrap justify-center xl:justify-start gap-3">
           <button
@@ -47,7 +47,7 @@
         </div>
       </div>
 
-      <aside class="upload-panel rounded-lg p-6 border border-dore/25 bg-gradient-to-b from-white/90 to-amber-50/60 backdrop-blur-sm animate-slide-in-right">
+      <aside class="upload-panel rounded-lg p-6 border border-dore/25 bg-gradient-to-b from-white/90 to-amber-50/60 backdrop-blur-sm" v-reveal="{ delay: 160 }">
         <h2 class="font-serif text-2xl text-marron-dark mb-2">{{ t('gallery.uploadTitle') }}</h2>
         <p class="text-sm text-marron/80 mb-5">{{ t('gallery.uploadSubtitle') }}</p>
 

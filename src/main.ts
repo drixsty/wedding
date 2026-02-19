@@ -5,6 +5,7 @@ import './assets/main.css'
 import { useTheme } from '@/composables/useTheme'
 import { useTenant } from '@/composables/useTenant'
 import { useSiteContent } from '@/composables/useSiteContent'
+import revealDirective from '@/directives/reveal'
 
 const app = createApp(App)
 const { initializeTenant } = useTenant()
@@ -16,5 +17,6 @@ loadTheme()
 loadSiteContent()
 
 app.use(router)
+app.directive('reveal', revealDirective)
 
 app.mount('#app')

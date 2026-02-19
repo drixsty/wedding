@@ -57,10 +57,10 @@
     </section>
 
     <!-- Story Section Enhanced -->
-    <NotreHistoire/>
+    <div v-reveal="{ delay: 100 }"><NotreHistoire/></div>
 
     <!-- Carousel Section with better design -->
-    <section class="relative py-24 bg-surface-elevated overflow-hidden w-full">
+    <section v-reveal="{ delay: 80 }" class="relative py-24 bg-surface-elevated overflow-hidden w-full">
       <!-- Top Gradient Accent -->
       <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-dore to-transparent"></div>
 
@@ -86,15 +86,15 @@
     </section>
 
     <!-- Ceremony Locations -->
-    <CeremonyLocations />
+    <div v-reveal="{ delay: 120 }"><CeremonyLocations /></div>
 
     <!-- Timeline Section -->
-    <Timeline />
+    <div v-reveal="{ delay: 140 }"><Timeline /></div>
 
     <!-- FAQ Section -->
-    <FAQ />
+    <div v-reveal="{ delay: 160 }"><FAQ /></div>
 
-    <RSVP/>
+    <div v-reveal="{ delay: 180 }"><RSVP/></div>
 
   </div>
 </template>

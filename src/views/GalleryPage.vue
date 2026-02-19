@@ -4,7 +4,7 @@
     <div class="pointer-events-none absolute bottom-10 right-0 h-64 w-64 rounded-full bg-mauve/20 blur-3xl animate-float-soft delay-300"></div>
 
     <header class="relative bg-surface-strong text-content-inverse">
-      <div class="container mx-auto px-4 pt-24 pb-16 sm:pt-28 sm:pb-20 text-center">
+      <div class="container mx-auto px-4 pt-24 pb-16 sm:pt-28 sm:pb-20 text-center" v-reveal>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold tracking-wide animate-fade-in-down">
           {{ content.galleryPage.title }}
         </h1>
@@ -17,7 +17,7 @@
       <div class="absolute bottom-0 left-0 w-full h-px bg-content-inverse/10"></div>
     </header>
 
-    <main class="container mx-auto px-4 py-12">
+    <main class="container mx-auto px-4 py-12" v-reveal="{ delay: 120 }">
       <Gallery />
     </main>
   </div>
