@@ -3,36 +3,36 @@
     <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
       <h1 class="text-3xl font-serif tracking-wide text-ivoire">{{ t('admin.dashboard.title') }}</h1>
       <div class="flex gap-4 items-center">
-        <router-link to="/" class="lux-link text-ivoire/70 hover:text-ivoire text-sm">{{ t('admin.dashboard.viewSite') }}</router-link>
-        <button @click="handleLogout" class="lux-button-sm lux-button-danger">{{ t('admin.dashboard.logout') }}</button>
+        <router-link to="/" class="admin-link text-ivoire/70 hover:text-ivoire text-sm">{{ t('admin.dashboard.viewSite') }}</router-link>
+        <button @click="handleLogout" class="admin-btn admin-btn-danger">{{ t('admin.dashboard.logout') }}</button>
       </div>
     </div>
 
     <div v-if="stats" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-      <div class="lux-card border-l-4 border-green-500">
+      <div class="admin-card border-l-4 border-green-500">
         <div class="text-xs text-ivoire/70 uppercase">{{ t('admin.dashboard.yesConfirmations') }}</div>
         <div class="text-2xl font-bold text-green-500">{{ stats.confirmations_oui }}</div>
         <div class="text-xs text-ivoire/60 mt-1">+ {{ stats.total_accompagnants }} {{ t('admin.dashboard.plusOnes') }}</div>
       </div>
-      <div class="lux-card border-l-4 border-red-500">
+      <div class="admin-card border-l-4 border-red-500">
         <div class="text-xs text-ivoire/70 uppercase">{{ t('admin.dashboard.noConfirmations') }}</div>
         <div class="text-2xl font-bold text-red-500">{{ stats.confirmations_non }}</div>
       </div>
-      <div class="lux-card border-l-4 border-yellow-500">
+      <div class="admin-card border-l-4 border-yellow-500">
         <div class="text-xs text-ivoire/70 uppercase">{{ t('admin.dashboard.pending') }}</div>
         <div class="text-2xl font-bold text-yellow-500">{{ stats.en_attente }}</div>
       </div>
-      <div class="lux-card border-l-4 border-dore">
+      <div class="admin-card border-l-4 border-dore">
         <div class="text-xs text-ivoire/70 uppercase">{{ t('admin.dashboard.totalGuests') }}</div>
         <div class="text-2xl font-bold text-dore">{{ stats.total_invites }}</div>
       </div>
     </div>
 
-    <div class="lux-card mb-4">
+    <div class="admin-card mb-4">
       <div class="flex flex-col md:flex-row gap-4 items-end">
         <div>
           <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.status') }}</label>
-          <select v-model="filters.statut" class="lux-input w-full">
+          <select v-model="filters.statut" class="admin-input w-full">
             <option value="">{{ t('admin.dashboard.all') }}</option>
             <option value="en_attente">{{ t('admin.dashboard.pending') }}</option>
             <option value="validé">{{ t('admin.dashboard.validated') }}</option>
@@ -41,7 +41,7 @@
         </div>
         <div>
           <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.attendance') }}</label>
-          <select v-model="filters.presence" class="lux-input w-full">
+          <select v-model="filters.presence" class="admin-input w-full">
             <option value="">{{ t('admin.dashboard.all') }}</option>
             <option :value="true">{{ t('admin.dashboard.yes') }}</option>
             <option :value="false">{{ t('admin.dashboard.no') }}</option>
@@ -49,23 +49,23 @@
         </div>
         <div class="flex-1">
           <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.search') }}</label>
-          <input v-model="filters.search" type="text" :placeholder="t('admin.dashboard.searchPlaceholder')" class="lux-input w-full" />
+          <input v-model="filters.search" type="text" :placeholder="t('admin.dashboard.searchPlaceholder')" class="admin-input w-full" />
         </div>
         <div>
-          <button @click="loadGuests" class="lux-button-sm">{{ t('admin.dashboard.searchAction') }}</button>
+          <button @click="loadGuests" class="admin-btn">{{ t('admin.dashboard.searchAction') }}</button>
         </div>
       </div>
     </div>
 
-    <div class="lux-card mb-6">
+    <div class="admin-card mb-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
         <div>
           <h2 class="text-lg font-serif">{{ t('admin.dashboard.themeTitle') }}</h2>
           <p class="text-sm text-ivoire/70">{{ t('admin.dashboard.themeDescription') }}</p>
         </div>
         <div class="flex gap-2">
-          <button @click="syncThemeDraft" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.resetTheme') }}</button>
-          <button @click="persistTheme" :disabled="themeSaving" class="lux-button-sm">
+          <button @click="syncThemeDraft" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.resetTheme') }}</button>
+          <button @click="persistTheme" :disabled="themeSaving" class="admin-btn">
             {{ themeSaving ? t('admin.dashboard.themeSaving') : t('admin.dashboard.themeSave') }}
           </button>
         </div>
@@ -78,7 +78,7 @@
           </label>
           <div class="flex items-center gap-3">
             <input :id="`theme-${colorKey}`" v-model="themeDraft[colorKey]" type="color" class="h-10 w-14 rounded-lg border border-white/20 bg-transparent p-1" />
-            <input v-model="themeDraft[colorKey]" type="text" class="lux-input flex-1 uppercase" placeholder="#FFFFFF" />
+            <input v-model="themeDraft[colorKey]" type="text" class="admin-input flex-1 uppercase" placeholder="#FFFFFF" />
           </div>
         </div>
       </div>
@@ -86,45 +86,45 @@
       <p v-if="themeFeedback" class="mt-4 text-sm text-ivoire/80">{{ themeFeedback }}</p>
     </div>
 
-    <div class="lux-card mb-6">
+    <div class="admin-card mb-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
         <div>
           <h2 class="text-lg font-serif">{{ t('admin.dashboard.galleryTitle') }}</h2>
           <p class="text-sm text-ivoire/70">{{ t('admin.dashboard.galleryDescription') }}</p>
         </div>
-        <button @click="loadAdminPhotos" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.refreshGallery') }}</button>
+        <button @click="loadAdminPhotos" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.refreshGallery') }}</button>
       </div>
 
       <form class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4" @submit.prevent="handleAdminUpload">
         <div>
           <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.adminUploadTitle') }}</label>
-          <input v-model="adminUploadForm.titre" type="text" class="lux-input w-full" :placeholder="t('admin.dashboard.adminUploadTitlePlaceholder')" required />
+          <input v-model="adminUploadForm.titre" type="text" class="admin-input w-full" :placeholder="t('admin.dashboard.adminUploadTitlePlaceholder')" required />
         </div>
         <div>
           <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.adminUploadCategory') }}</label>
-          <select v-model="adminUploadForm.categorie" class="lux-input w-full" required>
+          <select v-model="adminUploadForm.categorie" class="admin-input w-full" required>
             <option v-for="category in uploadableCategories" :key="category" :value="category">{{ t(`gallery.categories.${category}`) }}</option>
           </select>
         </div>
         <div class="md:col-span-2">
           <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.adminUploadDescription') }}</label>
-          <textarea v-model="adminUploadForm.description" class="lux-input w-full" rows="3" :placeholder="t('admin.dashboard.adminUploadDescriptionPlaceholder')"></textarea>
+          <textarea v-model="adminUploadForm.description" class="admin-input w-full" rows="3" :placeholder="t('admin.dashboard.adminUploadDescriptionPlaceholder')"></textarea>
         </div>
         <div class="md:col-span-2">
           <label class="text-xs text-ivoire/70 uppercase mb-1 block">{{ t('admin.dashboard.adminUploadImages') }}</label>
-          <input ref="adminFileInput" type="file" multiple accept="image/*" class="lux-input w-full" @change="onAdminFilesChange" required />
+          <input ref="adminFileInput" type="file" multiple accept="image/*" class="admin-input w-full" @change="onAdminFilesChange" required />
           <p v-if="adminUploadFiles.length" class="text-xs text-ivoire/70 mt-2">{{ t('admin.dashboard.adminUploadSelected', { count: adminUploadFiles.length }) }}</p>
         </div>
         <div class="md:col-span-2 flex items-center gap-2">
-          <button type="submit" class="lux-button-sm" :disabled="galleryUploading">{{ galleryUploading ? t('admin.dashboard.adminUploadInProgress') : t('admin.dashboard.adminUploadSubmit') }}</button>
+          <button type="submit" class="admin-btn" :disabled="galleryUploading">{{ galleryUploading ? t('admin.dashboard.adminUploadInProgress') : t('admin.dashboard.adminUploadSubmit') }}</button>
           <p v-if="adminGalleryFeedback" class="text-sm" :class="adminGallerySuccess ? 'text-green-300' : 'text-red-300'">{{ adminGalleryFeedback }}</p>
         </div>
       </form>
 
       <div v-if="selectedPhotos.length > 0" class="flex flex-wrap items-center gap-2 mb-4">
-        <button @click="bulkSetPhotoVisibility(true)" class="lux-button-sm bg-green-500 text-black hover:bg-green-600">{{ t('admin.dashboard.bulkPublishPhotos') }}</button>
-        <button @click="bulkSetPhotoVisibility(false)" class="lux-button-sm bg-yellow-500 text-black hover:bg-yellow-600">{{ t('admin.dashboard.bulkHidePhotos') }}</button>
-        <button @click="bulkDeletePhotos" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.bulkDeletePhotos') }}</button>
+        <button @click="bulkSetPhotoVisibility(true)" class="admin-btn bg-green-500 text-black hover:bg-green-600">{{ t('admin.dashboard.bulkPublishPhotos') }}</button>
+        <button @click="bulkSetPhotoVisibility(false)" class="admin-btn bg-yellow-500 text-black hover:bg-yellow-600">{{ t('admin.dashboard.bulkHidePhotos') }}</button>
+        <button @click="bulkDeletePhotos" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.bulkDeletePhotos') }}</button>
         <span class="text-ivoire/70 text-sm">{{ t('admin.dashboard.selectedPhotosCount', { count: selectedPhotos.length }) }}</span>
       </div>
 
@@ -156,7 +156,7 @@
             <div class="flex items-center justify-between pt-2">
               <button
                 @click="togglePhotoVisibility(photo.id, !(photo.visible ?? true))"
-                class="lux-button-sm"
+                class="admin-btn"
                 :class="photo.visible ? 'bg-green-500 text-black hover:bg-green-600' : 'bg-yellow-500 text-black hover:bg-yellow-600'"
               >
                 {{ photo.visible ? t('admin.dashboard.hidePhoto') : t('admin.dashboard.showPhoto') }}
@@ -169,13 +169,13 @@
     </div>
 
     <div v-if="selectedGuests.length > 0" class="flex gap-2 mb-4 flex-wrap">
-      <button @click="groupValidate" class="lux-button-sm bg-green-500 text-black hover:bg-green-600">{{ t('admin.dashboard.bulkValidate') }}</button>
-      <button @click="groupRefuse" class="lux-button-sm bg-red-500 text-black hover:bg-red-600">{{ t('admin.dashboard.bulkRefuse') }}</button>
-      <button @click="groupDelete" class="lux-button-sm lux-button-muted">{{ t('admin.dashboard.bulkDelete') }}</button>
+      <button @click="groupValidate" class="admin-btn bg-green-500 text-black hover:bg-green-600">{{ t('admin.dashboard.bulkValidate') }}</button>
+      <button @click="groupRefuse" class="admin-btn bg-red-500 text-black hover:bg-red-600">{{ t('admin.dashboard.bulkRefuse') }}</button>
+      <button @click="groupDelete" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.bulkDelete') }}</button>
       <span class="ml-4 text-ivoire/70 text-sm self-center">{{ t('admin.dashboard.selectedCount', { count: selectedGuests.length }) }}</span>
     </div>
 
-    <div class="lux-card overflow-x-auto">
+    <div class="admin-card overflow-x-auto">
       <div v-if="loading" class="p-8 text-center"><div class="inline-block w-8 h-8 border-4 border-dore/30 border-t-dore rounded-full animate-spin"></div></div>
       <EmptyState v-else-if="guests.length === 0" :description="t('admin.dashboard.noneFound')" dark />
       <div v-else>
@@ -437,50 +437,6 @@ onMounted(async () => {
   linear-gradient(180deg, var(--color-marron-dark) 0%, #1b1511 100%);
 }
 
-.lux-card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  border-radius: 0.6rem;
-  padding: 1.5rem;
-  border: 1px solid rgba(var(--color-dore-rgb), 0.35);
-  transition: all 0.3s ease;
-}
-
-.lux-card:hover { border-color: rgba(var(--color-dore-rgb), 0.45); }
-
-.lux-input {
-  background: rgba(255,248,235,0.08);
-  border: 1px solid rgba(var(--color-dore-rgb), 0.35);
-  border-radius: 0.6rem;
-  padding: 0.6rem 0.8rem;
-  color: #fff5e9;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.lux-input::placeholder { color: rgba(255, 231, 201, 0.55); }
-.lux-input:focus { outline: none; border-color: rgba(var(--color-dore-rgb), 0.9); background: rgba(255,248,235,0.15); box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.24); }
-
-.lux-button-sm {
-  background: linear-gradient(135deg, var(--color-dore) 0%, var(--color-dore-dark) 100%);
-  color: #1f1a16;
-  border-radius: 0.6rem;
-  padding: 0.55rem 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.lux-button-sm:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.05); color: #fffaf1; box-shadow: 0 8px 20px rgba(var(--color-dore-rgb), 0.22); }
-.lux-button-sm:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.lux-button-muted { background: rgba(255,248,235,0.16); color: #fff5e9; }
-.lux-button-muted:hover:not(:disabled) { background: rgba(255,248,235,0.26); }
-
-.lux-button-danger { background: rgba(220,38,38,0.15); color: #fecaca; }
-.lux-button-danger:hover:not(:disabled) { background: rgba(220,38,38,0.25); color: #fee2e2; }
-
-
 .admin-page input[type="checkbox"] {
   width: 1rem;
   height: 1rem;
@@ -490,7 +446,4 @@ onMounted(async () => {
   accent-color: var(--color-dore);
 }
 
-.lux-link { position: relative; }
-.lux-link::after { content: ''; position: absolute; left: 0; bottom: -3px; width: 0; height: 1px; background: currentColor; transition: width .2s ease; }
-.lux-link:hover::after { width: 100%; }
 </style>

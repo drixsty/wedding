@@ -7,7 +7,7 @@
 
     <!-- Card -->
     <div
-        class="relative w-full max-w-md bg-[#2a1f18]/85 backdrop-blur-xl border border-dore/45 rounded-lg p-10 transition-all duration-500 hover:border-dore/50 shadow-2xl shadow-black/25"
+        class="admin-card relative w-full max-w-md !bg-[#2a1f18]/85 !border-dore/45 p-10 shadow-2xl shadow-black/25"
     >
       <!-- Header -->
       <div class="text-center mb-10">
@@ -33,7 +33,7 @@
               type="email"
               required
               :placeholder="t('admin.login.emailPlaceholder')"
-              class="lux-input"
+              class="admin-input"
           />
         </div>
 
@@ -48,7 +48,7 @@
               type="password"
               required
               placeholder="••••••••"
-              class="lux-input"
+              class="admin-input"
           />
         </div>
 
@@ -67,7 +67,7 @@
         <button
             type="submit"
             :disabled="loading"
-            class="lux-button w-full"
+            class="admin-btn w-full"
         >
           <span v-if="loading" class="opacity-70">{{ t('admin.login.loading') }}</span>
           <span v-else>{{ t('admin.login.submit') }}</span>
@@ -79,7 +79,7 @@
       <div class="mt-10 text-center">
         <router-link
             to="/"
-            class="lux-link text-sm"
+            class="admin-link text-sm text-white/70 hover:text-white"
         >
           {{ t('admin.login.back') }}
         </router-link>
@@ -121,78 +121,6 @@ async function handleLogin() {
   opacity: 0;
   transform: translateY(-8px);
 }
-
-/* Inputs luxe */
-.lux-input {
-  width: 100%;
-  background: rgba(255, 248, 235, 0.2);
-  border: 1px solid rgba(var(--color-dore-rgb), 0.65);
-  border-radius: 1rem;
-  padding: 14px 16px;
-  font-size: 0.95rem;
-  color: #fffdf8;
-  transition: all 0.3s ease;
-}
-
-.lux-input::placeholder {
-  color: rgba(255, 242, 224, 0.7);
-}
-
-.lux-input:focus {
-  outline: none;
-  border-color: rgba(var(--color-dore-rgb), 1);
-  background: rgba(255, 248, 235, 0.3);
-  box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.3);
-}
-
-/* Button luxe */
-.lux-button {
-  background: linear-gradient(135deg, var(--color-dore) 0%, var(--color-dore-dark) 100%);
-  color: #2f1c0d;
-  border-radius: 1rem;
-  padding: 14px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: all 0.35s ease;
-}
-
-.lux-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(var(--color-dore-rgb), 0.35);
-}
-
-.lux-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Back link micro interaction */
-.lux-link {
-  position: relative;
-  color: rgba(255, 255, 255, 0.7);
-  transition: color 0.3s ease;
-}
-
-.lux-link::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 1px;
-  background: linear-gradient(135deg, var(--color-dore) 0%, var(--color-dore-dark) 100%);
-  transition: width 0.3s ease;
-}
-
-.lux-link:hover {
-  color: #fffdf8;
-}
-
-.lux-link:hover::after {
-  width: 100%;
-}
-
 
 .admin-login {
   background: radial-gradient(circle at top, rgba(var(--color-dore-rgb), 0.2), transparent 55%),

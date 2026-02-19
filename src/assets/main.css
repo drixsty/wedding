@@ -102,6 +102,56 @@
   .input-field {
     @apply w-full px-6 py-4 border-2 border-dore/30 rounded-md focus:outline-none focus:ring-4 focus:ring-dore/20 focus:border-dore transition-all duration-200 bg-white hover:border-dore/50;
   }
+
+  .admin-card {
+    @apply bg-white/5 backdrop-blur-xl border border-dore/35 rounded-md p-6 transition-all duration-300;
+  }
+
+  .admin-card:hover {
+    @apply border-dore/45;
+  }
+
+  .admin-input {
+    @apply w-full rounded-md border border-dore/35 bg-amber-50/10 px-3 py-2 text-ivoire placeholder-amber-100/60 transition-all duration-300;
+  }
+
+  .admin-input:focus {
+    @apply outline-none border-dore ring-2 ring-dore/30 bg-amber-50/15;
+  }
+
+  .admin-btn {
+    @apply rounded-md px-4 py-2 font-semibold text-marron-dark bg-gradient-to-r from-dore to-dore-dark transition-all duration-300;
+  }
+
+  .admin-btn:hover:not(:disabled) {
+    @apply brightness-105 shadow-lg;
+    box-shadow: 0 8px 20px rgba(var(--color-dore-rgb), 0.22);
+  }
+
+  .admin-btn:disabled {
+    @apply opacity-60 cursor-not-allowed;
+  }
+
+  .admin-btn-muted {
+    @apply bg-white/15 text-ivoire;
+  }
+
+  .admin-btn-danger {
+    @apply bg-red-500/20 text-red-100;
+  }
+
+  .admin-link {
+    @apply relative;
+  }
+
+  .admin-link::after {
+    content: '';
+    @apply absolute left-0 -bottom-0.5 w-0 h-px bg-current transition-all duration-200;
+  }
+
+  .admin-link:hover::after {
+    @apply w-full;
+  }
   
   .section-title {
     @apply text-title-lg md:text-5xl lg:text-6xl font-serif text-content-primary text-center mb-6;
