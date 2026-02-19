@@ -22,7 +22,7 @@
       <div class="text-center mt-12">
         <router-link
             to="/rsvp"
-            class="inline-block px-6 py-3 bg-surface-strong text-content-inverse font-medium rounded-lg shadow hover:bg-marron-dark transition-colors duration-200"
+            class="app-btn-secondary px-6 py-3 shadow"
         >
           📍 Recevoir le guide pratique avec votre confirmation
         </router-link>

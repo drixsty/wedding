@@ -7,14 +7,14 @@
 
     <!-- Card -->
     <div
-        class="relative w-full max-w-md bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-10 transition-all duration-500 hover:border-white/20"
+        class="admin-card relative w-full max-w-md !bg-[#2a1f18]/85 !border-dore/45 p-10 shadow-2xl shadow-black/25"
     >
       <!-- Header -->
       <div class="text-center mb-10">
         <h1 class="text-3xl font-serif text-white tracking-wide">
           {{ t('admin.login.title') }}
         </h1>
-        <p class="text-neutral-400 text-sm mt-3">
+        <p class="text-ivoire/85 text-sm mt-3">
           {{ t('admin.login.subtitle') }}
         </p>
       </div>
@@ -24,7 +24,7 @@
 
         <!-- Email -->
         <div class="space-y-2">
-          <label class="text-xs uppercase tracking-widest text-neutral-500">
+          <label class="text-xs uppercase tracking-widest text-ivoire/90">
             {{ t('admin.login.email') }}
           </label>
 
@@ -33,13 +33,13 @@
               type="email"
               required
               :placeholder="t('admin.login.emailPlaceholder')"
-              class="lux-input"
+              class="admin-input"
           />
         </div>
 
         <!-- Password -->
         <div class="space-y-2">
-          <label class="text-xs uppercase tracking-widest text-neutral-500">
+          <label class="text-xs uppercase tracking-widest text-ivoire/90">
             {{ t('admin.login.password') }}
           </label>
 
@@ -48,7 +48,7 @@
               type="password"
               required
               placeholder="••••••••"
-              class="lux-input"
+              class="admin-input"
           />
         </div>
 
@@ -56,7 +56,7 @@
         <transition name="fade">
           <div
               v-if="error"
-              class="bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-xl p-4"
+              class="bg-red-500/10 border border-red-400/40 text-red-200 text-sm rounded-lg p-4"
           >
             <p class="font-medium mb-1">{{ t('admin.login.loginError') }}</p>
             <p class="opacity-80">{{ error }}</p>
@@ -67,7 +67,7 @@
         <button
             type="submit"
             :disabled="loading"
-            class="lux-button w-full"
+            class="admin-btn w-full"
         >
           <span v-if="loading" class="opacity-70">{{ t('admin.login.loading') }}</span>
           <span v-else>{{ t('admin.login.submit') }}</span>
@@ -79,7 +79,7 @@
       <div class="mt-10 text-center">
         <router-link
             to="/"
-            class="lux-link text-sm"
+            class="admin-link text-sm text-white/70 hover:text-white"
         >
           {{ t('admin.login.back') }}
         </router-link>
@@ -121,77 +121,6 @@ async function handleLogin() {
   opacity: 0;
   transform: translateY(-8px);
 }
-
-/* Inputs luxe */
-.lux-input {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  padding: 14px 16px;
-  font-size: 0.95rem;
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.lux-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.lux-input:focus {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.07);
-}
-
-/* Button luxe */
-.lux-button {
-  background: var(--color-dore);
-  color: #1f1a16;
-  border-radius: 9999px;
-  padding: 14px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: all 0.35s ease;
-}
-
-.lux-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(var(--color-dore-rgb), 0.35);
-}
-
-.lux-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Back link micro interaction */
-.lux-link {
-  position: relative;
-  color: rgba(255, 255, 255, 0.7);
-  transition: color 0.3s ease;
-}
-
-.lux-link::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 1px;
-  background: var(--color-dore);
-  transition: width 0.3s ease;
-}
-
-.lux-link:hover {
-  color: white;
-}
-
-.lux-link:hover::after {
-  width: 100%;
-}
-
 
 .admin-login {
   background: radial-gradient(circle at top, rgba(var(--color-dore-rgb), 0.2), transparent 55%),

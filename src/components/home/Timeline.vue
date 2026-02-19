@@ -32,7 +32,7 @@
             >
               <div :class="index % 2 === 0 ? 'sm:col-start-1' : 'sm:col-start-2'">
                 <div
-                    class="rounded-2xl p-5 sm:p-6 transition-all duration-300"
+                    class="app-card p-5 sm:p-6 transition-all duration-300"
                     :class="statusStyles(index).card"
                 >
                   <p class="text-xs sm:text-sm opacity-60 mb-2">
@@ -45,8 +45,7 @@
 
                   <button
                       @click="toggle(index)"
-                      class="mt-4 w-full flex items-center justify-between px-4 py-3 rounded-xl
-                           bg-surface-subtle hover:bg-border-soft text-body-sm font-medium transition-all duration-200"
+                      class="mt-4 w-full flex items-center justify-between px-4 py-3 rounded-md bg-surface-subtle hover:bg-border-soft text-body-sm font-medium transition-all duration-200"
                       :class="openedIndex === index ? 'bg-border-soft' : ''"
                   >
                     <span>

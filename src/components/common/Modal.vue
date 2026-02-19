@@ -28,7 +28,7 @@
           >
             <div
               v-if="modelValue"
-              class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
+              class="relative bg-white rounded-md shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden"
               @click.stop
             >
               <!-- Close button -->
