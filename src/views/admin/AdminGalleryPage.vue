@@ -43,7 +43,7 @@
     </div>
 
     <div class="admin-panel">
-      <div v-if="galleryLoading" class="p-10 text-center">Chargement...</div>
+      <div v-if="galleryLoading" class="p-10 text-center">{{ t('gallery.loading') }}</div>
       <EmptyState v-else-if="adminPhotos.length === 0" :description="t('admin.dashboard.galleryEmpty')" compact />
       <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         <article v-for="photo in adminPhotos" :key="photo.id" class="rounded-xl border border-slate-200 overflow-hidden bg-white">

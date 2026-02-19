@@ -13,6 +13,7 @@
 
     <nav class="admin-shell__nav" aria-label="Navigation administration">
       <router-link v-for="item in navItems" :key="item.to" :to="item.to" class="admin-shell__tab" active-class="admin-shell__tab--active">
+        <span>{{ item.icon }}</span>
         {{ item.label }}
       </router-link>
     </nav>
@@ -32,9 +33,9 @@ const router = useRouter()
 const { signOut } = useAuth()
 
 const navItems = [
-  { to: '/admin/dashboard/guests', label: 'Invités & RSVP' },
-  { to: '/admin/dashboard/content', label: 'Contenus & thème' },
-  { to: '/admin/dashboard/gallery', label: 'Galerie photos' }
+  { to: '/admin/dashboard/guests', label: 'Invités & RSVP', icon: '👥' },
+  { to: '/admin/dashboard/content', label: 'Contenus & thème', icon: '🎨' },
+  { to: '/admin/dashboard/gallery', label: 'Galerie photos', icon: '🖼️' }
 ]
 
 async function handleLogout() {
