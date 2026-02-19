@@ -219,3 +219,55 @@ APRÈS AVOIR EXÉCUTÉ CE SCRIPT:
 5. Pour voir les stats:
    SELECT * FROM guest_stats;
 */
+
+-- ===============================================
+-- MULTI-TENANT + CONTENU CMS NO-CODE
+-- ===============================================
+
+CREATE TABLE IF NOT EXISTS tenants (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+INSERT INTO tenants (name, slug)
+VALUES ('Default', 'default')
+ON CONFLICT (slug) DO NOTHING;
+
+ALTER TABLE site_theme ADD COLUMN IF NOT EXISTS tenant_slug TEXT REFERENCES tenants(slug);
+UPDATE site_theme SET tenant_slug = COALESCE(tenant_slug, 'default');
+ALTER TABLE site_theme ALTER COLUMN tenant_slug SET NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS idx_site_theme_tenant_slug ON site_theme(tenant_slug);
+
+CREATE TABLE IF NOT EXISTS site_content (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  tenant_slug TEXT UNIQUE NOT NULL REFERENCES tenants(slug) ON DELETE CASCADE,
+  content JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE tenants ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_content ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Tenants lecture publique"
+  ON tenants FOR SELECT
+  USING (true);
+
+CREATE POLICY "Tenants gestion admin"
+  ON tenants FOR ALL
+  USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Site content lecture publique"
+  ON site_content FOR SELECT
+  USING (true);
+
+CREATE POLICY "Site content gestion admin"
+  ON site_content FOR ALL
+  USING (auth.role() = 'authenticated');
+
+CREATE TRIGGER update_site_content_updated_at
+    BEFORE UPDATE ON site_content
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();

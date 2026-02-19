@@ -1,6 +1,6 @@
 <template>
-  <section class="w-full space-y-8">
-    <div class="grid grid-cols-1 xl:grid-cols-[2fr,1fr] gap-8 items-start">
+  <section class="w-full space-y-8 animate-fade-in-up">
+    <div class="grid grid-cols-1 xl:grid-cols-[2fr,1fr] gap-8 items-start" v-reveal>
       <div class="space-y-6">
         <div class="flex flex-wrap justify-center xl:justify-start gap-3">
           <button
@@ -10,11 +10,11 @@
             class="px-5 py-2.5 rounded-lg font-medium transition-all duration-300 transform"
             :class="[
               selectedCategory === category
-                ? 'bg-dore text-white scale-105'
-                : 'bg-white text-marron hover:bg-dore/10 border border-dore/30'
+                ? 'bg-dore text-white scale-105 shadow-lg shadow-dore/30'
+                : 'bg-white text-marron hover:bg-dore/10 border border-dore/30 hover:-translate-y-0.5'
             ]"
           >
-            {{ t(`gallery.categories.${category}`) }}
+            {{ categoryIllustrations[category] }} {{ t(`gallery.categories.${category}`) }}
           </button>
         </div>
 
@@ -22,13 +22,19 @@
           <div class="inline-block w-8 h-8 border-4 border-dore/30 border-t-dore rounded-full animate-spin"></div>
         </div>
 
-        <EmptyState v-else-if="filteredPhotos.length === 0" :description="t('gallery.empty')" />
+        <EmptyState
+          v-else-if="filteredPhotos.length === 0"
+          :title="selectedCategory === 'all' ? t('gallery.emptyTitle') : t('gallery.emptyCategoryTitle', { category: t(`gallery.categories.${selectedCategory}`) })"
+          :description="t('gallery.empty')"
+          :hint="t('gallery.emptyHint')"
+          :icon="categoryIllustrations[selectedCategory]"
+        />
 
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <div
             v-for="(photo, idx) in filteredPhotos"
             :key="photo.id"
-            class="relative overflow-hidden rounded-lg transition-all duration-500 cursor-pointer group animate-fade-up"
+            class="relative overflow-hidden rounded-lg transition-all duration-500 cursor-pointer group animate-fade-up hover:-translate-y-1 hover:shadow-xl"
             :style="{ 'animation-delay': `${idx * 90}ms` }"
             @click="openLightbox(idx)"
           >
@@ -41,7 +47,7 @@
         </div>
       </div>
 
-      <aside class="upload-panel rounded-lg p-6 border border-dore/25 bg-gradient-to-b from-white/90 to-amber-50/60 backdrop-blur-sm">
+      <aside class="upload-panel rounded-lg p-6 border border-dore/25 bg-gradient-to-b from-white/90 to-amber-50/60 backdrop-blur-sm" v-reveal="{ delay: 160 }">
         <h2 class="font-serif text-2xl text-marron-dark mb-2">{{ t('gallery.uploadTitle') }}</h2>
         <p class="text-sm text-marron/80 mb-5">{{ t('gallery.uploadSubtitle') }}</p>
 
@@ -75,9 +81,15 @@
               @drop.prevent="onDropFiles"
               @click="openFilePicker"
             >
-              <p class="text-sm font-medium text-marron-dark">Glissez-déposez vos images ici</p>
-              <p class="text-xs text-marron/70 mt-1">ou cliquez pour sélectionner des fichiers</p>
-              <p v-if="selectedFiles.length" class="mt-2 text-xs text-marron/80">
+              <div class="mx-auto w-14 h-14 rounded-2xl bg-dore/15 flex items-center justify-center text-2xl mb-3" :class="isDragging ? 'animate-pulse' : 'animate-float-soft'">📤</div>
+              <p class="text-sm font-semibold text-marron-dark">{{ t('gallery.form.dropzoneTitle') }}</p>
+              <p class="text-xs text-marron/70 mt-1">{{ t('gallery.form.dropzoneSubtitle') }}</p>
+              <div class="mt-3 flex justify-center gap-2 text-xs text-marron/65">
+                <span class="px-2 py-1 rounded-full bg-white/70">JPG</span>
+                <span class="px-2 py-1 rounded-full bg-white/70">PNG</span>
+                <span class="px-2 py-1 rounded-full bg-white/70">WEBP</span>
+              </div>
+              <p v-if="selectedFiles.length" class="mt-2 text-xs text-marron/80 font-medium">
                 {{ t('gallery.form.selectedFiles', { count: selectedFiles.length }) }}
               </p>
             </div>
@@ -144,6 +156,14 @@ const isDragging = ref(false)
 
 const categories = ['all', 'couple', 'family', 'friends', 'ceremony', 'reception']
 const uploadableCategories = categories.filter(category => category !== 'all')
+const categoryIllustrations: Record<string, string> = {
+  all: '🖼️',
+  couple: '💍',
+  family: '👨‍👩‍👧‍👦',
+  friends: '🥂',
+  ceremony: '⛪',
+  reception: '🎉'
+}
 
 const { photos, loading, uploading, fetchPublicPhotos, uploadVisitorPhotos } = useGallery()
 
@@ -300,4 +320,9 @@ onUnmounted(() => {
   background: rgba(var(--color-dore-rgb), 0.12);
   box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.2);
 }
+
+.fade-scale-enter-active,
+.fade-scale-leave-active { transition: all 0.25s ease; }
+.fade-scale-enter-from,
+.fade-scale-leave-to { opacity: 0; transform: scale(0.97); }
 </style>

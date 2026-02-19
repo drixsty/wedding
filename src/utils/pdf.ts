@@ -29,18 +29,18 @@ export async function generateInvitationPDF(data: InvitationData): Promise<Blob>
   const ivoire = [252, 250, 247]
 
   // Fond ivoire
-  pdf.setFillColor(...ivoire)
+  pdf.setFillColor(ivoire[0], ivoire[1], ivoire[2])
   pdf.rect(0, 0, pageWidth, pageHeight, 'F')
 
   // Border décorative
-  pdf.setDrawColor(...champagne)
+  pdf.setDrawColor(champagne[0], champagne[1], champagne[2])
   pdf.setLineWidth(0.5)
   pdf.rect(10, 10, pageWidth - 20, pageHeight - 20)
   pdf.rect(12, 12, pageWidth - 24, pageHeight - 24)
 
   // Titre principal
   pdf.setFontSize(32)
-  pdf.setTextColor(...greige)
+  pdf.setTextColor(greige[0], greige[1], greige[2])
   pdf.setFont('helvetica', 'bold')
   pdf.text('Vous êtes invité(e)', pageWidth / 2, 40, { align: 'center' })
 
@@ -56,7 +56,7 @@ export async function generateInvitationPDF(data: InvitationData): Promise<Blob>
   // Message d'invitation
   pdf.setFontSize(14)
   pdf.setFont('helvetica', 'normal')
-  pdf.setTextColor(...greige)
+  pdf.setTextColor(greige[0], greige[1], greige[2])
   
   const invitationText = [
     '',
@@ -93,14 +93,14 @@ export async function generateInvitationPDF(data: InvitationData): Promise<Blob>
     pdf.addImage(data.qrCodeDataURL, 'PNG', qrX, qrY, qrSize, qrSize)
     
     pdf.setFontSize(10)
-    pdf.setTextColor(...greige)
+    pdf.setTextColor(greige[0], greige[1], greige[2])
     pdf.text('Présentez ce QR code à l\'entrée', pageWidth / 2, qrY + qrSize + 8, { align: 'center' })
   }
 
   // Footer
   pdf.setFontSize(10)
   pdf.setFont('helvetica', 'italic')
-  pdf.setTextColor(...greige)
+  pdf.setTextColor(greige[0], greige[1], greige[2])
   pdf.text('Nous avons hâte de célébrer avec vous !', pageWidth / 2, pageHeight - 25, { align: 'center' })
   
   pdf.setFontSize(8)

@@ -120,7 +120,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { decodeQRCodeData } from '@/utils/qrcode'
-import jsQR from 'jsqr'
 import { t } from '@/i18n'
 
 defineEmits(['close'])
@@ -131,6 +130,7 @@ const scanning = ref(false)
 const lastScan = ref<any>(null)
 const error = ref('')
 const stream = ref<MediaStream>()
+const isBarcodeDetectorSupported = typeof window !== 'undefined' && 'BarcodeDetector' in window
 
 const stats = ref({
   scanned: 0,
@@ -155,11 +155,32 @@ async function startCamera() {
 }
 
 function startScanning() {
+  if (!isBarcodeDetectorSupported) {
+    error.value = t('admin.scanner.unsupportedDetector')
+    return
+  }
+
   scanning.value = true
-  scanQRCode()
+  void scanQRCode()
 }
 
-function scanQRCode() {
+async function detectQRCodeFromCanvas(canvas: HTMLCanvasElement): Promise<string | null> {
+  const BarcodeDetectorCtor = (window as Window & { BarcodeDetector?: new (options?: { formats?: string[] }) => { detect: (source: ImageBitmapSource) => Promise<Array<{ rawValue?: string }>> } }).BarcodeDetector
+
+  if (!BarcodeDetectorCtor) {
+    return null
+  }
+
+  try {
+    const detector = new BarcodeDetectorCtor({ formats: ['qr_code'] })
+    const results = await detector.detect(canvas)
+    return results[0]?.rawValue ?? null
+  } catch {
+    return null
+  }
+}
+
+async function scanQRCode() {
   if (!scanning.value || !videoRef.value || !canvasRef.value) return
 
   const video = videoRef.value
@@ -167,7 +188,7 @@ function scanQRCode() {
   const ctx = canvas.getContext('2d')
 
   if (!ctx || video.readyState !== video.HAVE_ENOUGH_DATA) {
-    requestAnimationFrame(scanQRCode)
+    requestAnimationFrame(() => { void scanQRCode() })
     return
   }
 
@@ -175,24 +196,22 @@ function scanQRCode() {
   canvas.height = video.videoHeight
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-  const code = jsQR(imageData.data, imageData.width, imageData.height)
+  const qrRawValue = await detectQRCodeFromCanvas(canvas)
 
-  if (code) {
-    const data = decodeQRCodeData(code.data)
+  if (qrRawValue) {
+    const data = decodeQRCodeData(qrRawValue)
     if (data) {
       lastScan.value = data
       stats.value.scanned++
-      // Pause scanning when code detected
       scanning.value = false
     } else {
       error.value = t('admin.scanner.invalidQr')
-      setTimeout(() => error.value = '', 3000)
+      setTimeout(() => { error.value = '' }, 3000)
     }
   }
 
   if (scanning.value) {
-    requestAnimationFrame(scanQRCode)
+    requestAnimationFrame(() => { void scanQRCode() })
   }
 }
 
@@ -210,7 +229,7 @@ async function checkInGuest() {
     setTimeout(() => {
       lastScan.value = null
       scanning.value = true
-      scanQRCode()
+      void scanQRCode()
     }, 2000)
   } catch (err) {
     error.value = t('admin.scanner.validationError')
