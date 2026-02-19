@@ -27,7 +27,25 @@ const router = createRouter({
     {
       path: '/admin/dashboard',
       name: 'admin-dashboard',
-      component: () => import('@/views/admin/DashboardPage.vue'),
+      component: () => import('@/components/admin/AdminLayout.vue'),
+      redirect: '/admin/dashboard/guests',
+      children: [
+        {
+          path: 'guests',
+          name: 'admin-guests',
+          component: () => import('@/views/admin/AdminGuestsPage.vue')
+        },
+        {
+          path: 'content',
+          name: 'admin-content',
+          component: () => import('@/views/admin/AdminContentPage.vue')
+        },
+        {
+          path: 'gallery',
+          name: 'admin-gallery',
+          component: () => import('@/views/admin/AdminGalleryPage.vue')
+        }
+      ],
       meta: { requiresAuth: true }
     }
   ],

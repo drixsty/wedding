@@ -107,16 +107,72 @@
     @apply bg-white/5 backdrop-blur-xl border border-dore/35 rounded-md p-6 transition-all duration-300;
   }
 
+  .admin-shell {
+    @apply bg-slate-100 px-4 py-5 md:px-8 md:py-8;
+  }
+
+  .admin-shell__header {
+    @apply mb-5 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 md:flex-row md:items-center md:justify-between;
+  }
+
+  .admin-shell__nav {
+    @apply mb-5 flex gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2;
+  }
+
+  .admin-shell__tab {
+    @apply whitespace-nowrap rounded-xl px-4 py-2 text-sm font-semibold text-slate-600;
+  }
+
+  .admin-shell__tab--active {
+    @apply bg-slate-900 text-white;
+  }
+
+  .admin-shell__link {
+    @apply rounded-xl border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100;
+  }
+
+  .admin-shell__logout {
+    @apply rounded-xl bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700;
+  }
+
+  .admin-panel {
+    @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm;
+  }
+
+  .admin-subpanel {
+    @apply rounded-xl border border-slate-200 bg-slate-50 p-4;
+  }
+
+  .admin-section-title {
+    @apply text-lg font-serif text-slate-900;
+  }
+
+  .admin-field-label {
+    @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500;
+  }
+
+  .admin-kpi-label {
+    @apply text-xs uppercase tracking-wide text-slate-500;
+  }
+
+  .admin-kpi-value {
+    @apply mt-2 text-3xl font-bold;
+  }
+
+  .admin-kpi-meta {
+    @apply mt-1 text-xs text-slate-500;
+  }
+
   .admin-card:hover {
     @apply border-dore/45;
   }
 
   .admin-input {
-    @apply w-full rounded-md border border-dore/35 bg-amber-50/10 px-3 py-2 text-ivoire placeholder-amber-100/60 transition-all duration-300;
+    @apply w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder-slate-400 transition-all duration-300;
   }
 
   .admin-input:focus {
-    @apply outline-none border-dore ring-2 ring-dore/30 bg-amber-50/15;
+    @apply outline-none border-slate-900 ring-2 ring-slate-400/20;
   }
 
   .admin-btn {
@@ -133,7 +189,7 @@
   }
 
   .admin-btn-muted {
-    @apply bg-white/15 text-ivoire;
+    @apply bg-slate-100 text-slate-700;
   }
 
   .admin-btn-danger {
