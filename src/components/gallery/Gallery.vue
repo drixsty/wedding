@@ -7,7 +7,7 @@
             v-for="category in categories"
             :key="category"
             @click="selectedCategory = category"
-            class="px-5 py-2.5 rounded-xl font-medium transition-all duration-300 transform"
+            class="px-5 py-2.5 rounded-lg font-medium transition-all duration-300 transform"
             :class="[
               selectedCategory === category
                 ? 'bg-dore text-white scale-105'
@@ -28,7 +28,7 @@
           <div
             v-for="(photo, idx) in filteredPhotos"
             :key="photo.id"
-            class="relative overflow-hidden rounded-xl transition-all duration-500 cursor-pointer group animate-fade-up"
+            class="relative overflow-hidden rounded-lg transition-all duration-500 cursor-pointer group animate-fade-up"
             :style="{ 'animation-delay': `${idx * 90}ms` }"
             @click="openLightbox(idx)"
           >
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <aside class="upload-panel rounded-xl p-6 border border-dore/25 bg-gradient-to-b from-white/90 to-amber-50/60 backdrop-blur-sm">
+      <aside class="upload-panel rounded-lg p-6 border border-dore/25 bg-gradient-to-b from-white/90 to-amber-50/60 backdrop-blur-sm">
         <h2 class="font-serif text-2xl text-marron-dark mb-2">{{ t('gallery.uploadTitle') }}</h2>
         <p class="text-sm text-marron/80 mb-5">{{ t('gallery.uploadSubtitle') }}</p>
 
@@ -67,15 +67,26 @@
 
           <div>
             <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.file') }}</label>
-            <input ref="visitorFileInput" type="file" accept="image/*" multiple @change="onFileChange" class="field file:px-2 file:py-1.5 file:rounded-lg file:border-0 file:bg-dore/20 file:text-marron" required />
-            <p v-if="selectedFiles.length" class="mt-1 text-xs text-marron/70">
-              {{ t('gallery.form.selectedFiles', { count: selectedFiles.length }) }}
-            </p>
+            <div
+              class="dropzone"
+              :class="{ 'dropzone-active': isDragging }"
+              @dragover.prevent="onDragOver"
+              @dragleave.prevent="onDragLeave"
+              @drop.prevent="onDropFiles"
+              @click="openFilePicker"
+            >
+              <p class="text-sm font-medium text-marron-dark">Glissez-déposez vos images ici</p>
+              <p class="text-xs text-marron/70 mt-1">ou cliquez pour sélectionner des fichiers</p>
+              <p v-if="selectedFiles.length" class="mt-2 text-xs text-marron/80">
+                {{ t('gallery.form.selectedFiles', { count: selectedFiles.length }) }}
+              </p>
+            </div>
+            <input ref="visitorFileInput" type="file" accept="image/*" multiple @change="onFileChange" class="sr-only" required />
           </div>
 
           <p v-if="uploadFeedback" class="text-sm" :class="uploadSuccess ? 'text-green-700' : 'text-red-700'">{{ uploadFeedback }}</p>
 
-          <button type="submit" class="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-dore to-dore-dark text-marron-dark font-semibold hover:brightness-105 transition disabled:opacity-60 shadow-md shadow-dore/20" :disabled="uploading">
+          <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-gradient-to-r from-dore to-dore-dark text-marron-dark font-semibold hover:brightness-105 transition disabled:opacity-60 shadow-md shadow-dore/20" :disabled="uploading">
             {{ uploading ? t('gallery.form.uploading') : t('gallery.form.submit') }}
           </button>
           <p class="text-xs text-marron/75">{{ t('gallery.form.pendingHint') }}</p>
@@ -103,7 +114,7 @@
           </button>
 
           <div @click.stop class="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center">
-            <img :key="currentPhoto?.id" :src="currentPhoto?.url" :alt="currentPhoto?.titre || ''" class="max-w-full max-h-[80vh] rounded-xl shadow-xl object-cover" />
+            <img :key="currentPhoto?.id" :src="currentPhoto?.url" :alt="currentPhoto?.titre || ''" class="max-w-full max-h-[80vh] rounded-lg shadow-xl object-cover" />
           </div>
 
           <div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 text-white rounded-md p-4 max-w-[90%] text-center">
@@ -129,6 +140,7 @@ const selectedFiles = ref<File[]>([])
 const visitorFileInput = ref<HTMLInputElement | null>(null)
 const uploadFeedback = ref('')
 const uploadSuccess = ref(false)
+const isDragging = ref(false)
 
 const categories = ['all', 'couple', 'family', 'friends', 'ceremony', 'reception']
 const uploadableCategories = categories.filter(category => category !== 'all')
@@ -167,9 +179,30 @@ function prevPhoto() {
   if (currentIndex.value > 0) currentIndex.value--
 }
 
+function setFiles(files: File[]) {
+  selectedFiles.value = files.filter(file => file.type.startsWith('image/'))
+}
+
 function onFileChange(event: Event) {
   const target = event.target as HTMLInputElement
-  selectedFiles.value = Array.from(target.files || [])
+  setFiles(Array.from(target.files || []))
+}
+
+function openFilePicker() {
+  visitorFileInput.value?.click()
+}
+
+function onDragOver() {
+  isDragging.value = true
+}
+
+function onDragLeave() {
+  isDragging.value = false
+}
+
+function onDropFiles(event: DragEvent) {
+  isDragging.value = false
+  setFiles(Array.from(event.dataTransfer?.files || []))
 }
 
 function resetUploadForm() {
@@ -231,7 +264,7 @@ onUnmounted(() => {
 .field {
   width: 100%;
   border: 1px solid rgba(var(--color-dore-rgb), 0.4);
-  border-radius: 1rem;
+  border-radius: 0.7rem;
   padding: 0.6rem 0.75rem;
   color: var(--color-marron-dark);
   background: rgba(255, 252, 245, 0.95);
@@ -240,10 +273,31 @@ onUnmounted(() => {
 .field:focus {
   outline: none;
   border-color: rgba(var(--color-dore-rgb), 0.95);
-  box-shadow: 0 0 0 4px rgba(var(--color-dore-rgb), 0.16);
+  box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.2);
 }
 
 .field::placeholder {
   color: rgba(80, 57, 38, 0.45);
+}
+
+.dropzone {
+  border: 1px dashed rgba(var(--color-dore-rgb), 0.55);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.dropzone:hover {
+  border-color: rgba(var(--color-dore-rgb), 0.85);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.dropzone-active {
+  border-color: rgba(var(--color-dore-rgb), 0.95);
+  background: rgba(var(--color-dore-rgb), 0.12);
+  box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.2);
 }
 </style>

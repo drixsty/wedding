@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-2xl mx-auto px-4">
     <div
-        class="bg-gradient-to-b from-white via-amber-50/40 to-white border border-dore/30 rounded-xl p-6 sm:p-10 shadow-xl shadow-dore/10 transition-all duration-500 animate-fade-in-up"
+        class="bg-gradient-to-b from-white via-amber-50/40 to-white border border-dore/30 rounded-lg p-6 sm:p-10 shadow-xl shadow-dore/10 transition-all duration-500 animate-fade-in-up"
     >
       <!-- Header -->
       <div class="mb-8">
@@ -131,7 +131,7 @@
         <Transition name="fade">
           <div
               v-if="error"
-              class="bg-red-50 border border-red-200 text-red-700 text-sm p-4 rounded-xl"
+              class="bg-red-50 border border-red-200 text-red-700 text-sm p-4 rounded-lg"
           >
             {{ error }}
           </div>
@@ -141,7 +141,7 @@
         <Transition name="fade">
           <div
               v-if="success"
-              class="bg-green-50 border border-green-200 text-green-700 text-sm p-4 rounded-xl"
+              class="bg-green-50 border border-green-200 text-green-700 text-sm p-4 rounded-lg"
           >
             {{ t('rsvp.success') }}
           </div>
@@ -151,7 +151,7 @@
         <button
             type="submit"
             :disabled="loading || !formValid"
-            class="w-full h-12 rounded-xl bg-gradient-to-r from-dore to-dore-dark text-marron-dark font-semibold transition-all duration-300 hover:brightness-105 hover:shadow-lg hover:shadow-dore/25 disabled:opacity-40 disabled:cursor-not-allowed"
+            class="w-full h-12 rounded-lg bg-gradient-to-r from-dore to-dore-dark text-marron-dark font-semibold transition-all duration-300 hover:brightness-105 hover:shadow-lg hover:shadow-dore/25 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <span v-if="loading">{{ t('rsvp.submitLoading') }}</span>
           <span v-else>{{ t('rsvp.submit') }}</span>
@@ -206,7 +206,7 @@ const formValid = computed(() => {
 
 const presenceClass = (value: boolean) => {
   return [
-    'h-12 rounded-xl border text-sm font-medium transition-all duration-300',
+    'h-12 rounded-lg border text-sm font-medium transition-all duration-300',
     form.presence_confirmee === value
         ? 'bg-gradient-to-r from-dore to-dore-dark text-marron-dark border-dore shadow-md shadow-dore/20'
         : 'bg-white text-marron border-dore/35 hover:border-dore/70 hover:bg-dore/10'
@@ -248,7 +248,7 @@ async function handleSubmit() {
 <style scoped>
 /* Inputs modernes */
 .input {
-  @apply w-full h-12 px-4 rounded-xl border border-dore/35 bg-ivoire text-marron-dark placeholder-marron/45 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-dore/20 focus:border-dore hover:border-dore/60;
+  @apply w-full h-12 px-4 rounded-lg border border-dore/35 bg-ivoire text-marron-dark placeholder-marron/45 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-dore/30 focus:border-dore hover:border-dore/60;
 }
 
 textarea.input {
