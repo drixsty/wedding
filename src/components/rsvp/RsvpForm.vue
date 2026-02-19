@@ -1,23 +1,23 @@
 <template>
   <div class="max-w-2xl mx-auto px-4">
     <div
-        class="bg-white border border-neutral-200 rounded-2xl p-6 sm:p-10 transition-all duration-500 animate-fade-in-up"
+        class="bg-gradient-to-b from-white via-amber-50/40 to-white border border-dore/30 rounded-xl p-6 sm:p-10 shadow-xl shadow-dore/10 transition-all duration-500 animate-fade-in-up"
     >
       <!-- Header -->
       <div class="mb-8">
-        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-neutral-900">
+        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-marron-dark">
           {{ t('rsvp.title') }}
         </h2>
-        <p class="text-neutral-500 text-sm sm:text-base mt-2">
+        <p class="text-marron/70 text-sm sm:text-base mt-2">
           {{ t('rsvp.deadlinePrefix') }}
-          <span class="font-medium text-neutral-700">{{ deadline }}</span>
+          <span class="font-medium text-marron-dark">{{ deadline }}</span>
         </p>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
         <!-- Nom complet -->
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">
+          <label class="block text-sm font-medium text-marron-dark mb-2">
             {{ t('rsvp.fullName') }} <span class="text-red-500">*</span>
           </label>
           <input
@@ -31,7 +31,7 @@
 
         <!-- Email -->
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">
+          <label class="block text-sm font-medium text-marron-dark mb-2">
             Email <span class="text-red-500">*</span>
           </label>
           <input
@@ -45,7 +45,7 @@
 
         <!-- {{ t('rsvp.phone') }} -->
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">
+          <label class="block text-sm font-medium text-marron-dark mb-2">
             {{ t('rsvp.phone') }}
           </label>
           <input
@@ -58,7 +58,7 @@
 
         <!-- Présence -->
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-3">
+          <label class="block text-sm font-medium text-marron-dark mb-3">
             {{ t('rsvp.presenceQuestion') }} <span class="text-red-500">*</span>
           </label>
 
@@ -85,7 +85,7 @@
         <Transition name="fade-slide">
           <div v-if="form.presence_confirmee" class="space-y-6">
             <div>
-              <label class="block text-sm font-medium text-neutral-700 mb-2">
+              <label class="block text-sm font-medium text-marron-dark mb-2">
                 {{ t('rsvp.plusOnes') }}
               </label>
               <input
@@ -95,13 +95,13 @@
                   max="5"
                   class="input"
               />
-              <p class="text-xs text-neutral-400 mt-1">
+              <p class="text-xs text-marron/60 mt-1">
                 {{ t('rsvp.plusOnesHint') }}
               </p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-neutral-700 mb-2">
+              <label class="block text-sm font-medium text-marron-dark mb-2">
                 {{ t('rsvp.foodRestrictions') }}
               </label>
               <textarea
@@ -116,7 +116,7 @@
 
         <!-- Message -->
         <div>
-          <label class="block text-sm font-medium text-neutral-700 mb-2">
+          <label class="block text-sm font-medium text-marron-dark mb-2">
             {{ t('rsvp.messageForCouple') }}
           </label>
           <textarea
@@ -131,7 +131,7 @@
         <Transition name="fade">
           <div
               v-if="error"
-              class="bg-red-50 border border-red-200 text-red-600 text-sm p-4 rounded-xl"
+              class="bg-red-50 border border-red-200 text-red-700 text-sm p-4 rounded-xl"
           >
             {{ error }}
           </div>
@@ -141,7 +141,7 @@
         <Transition name="fade">
           <div
               v-if="success"
-              class="bg-green-50 border border-green-200 text-green-600 text-sm p-4 rounded-xl"
+              class="bg-green-50 border border-green-200 text-green-700 text-sm p-4 rounded-xl"
           >
             {{ t('rsvp.success') }}
           </div>
@@ -151,13 +151,13 @@
         <button
             type="submit"
             :disabled="loading || !formValid"
-            class="w-full h-12 rounded-xl bg-neutral-900 text-white font-medium transition-all duration-300 hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed"
+            class="w-full h-12 rounded-xl bg-gradient-to-r from-dore to-dore-dark text-marron-dark font-semibold transition-all duration-300 hover:brightness-105 hover:shadow-lg hover:shadow-dore/25 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <span v-if="loading">{{ t('rsvp.submitLoading') }}</span>
           <span v-else>{{ t('rsvp.submit') }}</span>
         </button>
 
-        <p class="text-xs text-neutral-400 text-center">
+        <p class="text-xs text-marron/60 text-center">
           {{ t('rsvp.required') }}
         </p>
       </form>
@@ -208,8 +208,8 @@ const presenceClass = (value: boolean) => {
   return [
     'h-12 rounded-xl border text-sm font-medium transition-all duration-300',
     form.presence_confirmee === value
-        ? 'bg-neutral-900 text-white border-neutral-900'
-        : 'bg-white text-neutral-700 border-neutral-300 hover:border-neutral-900'
+        ? 'bg-gradient-to-r from-dore to-dore-dark text-marron-dark border-dore shadow-md shadow-dore/20'
+        : 'bg-white text-marron border-dore/35 hover:border-dore/70 hover:bg-dore/10'
   ]
 }
 
@@ -248,7 +248,7 @@ async function handleSubmit() {
 <style scoped>
 /* Inputs modernes */
 .input {
-  @apply w-full h-12 px-4 rounded-xl border border-neutral-300 bg-white text-neutral-800 placeholder-neutral-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-neutral-900;
+  @apply w-full h-12 px-4 rounded-xl border border-dore/35 bg-ivoire text-marron-dark placeholder-marron/45 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-dore/20 focus:border-dore hover:border-dore/60;
 }
 
 textarea.input {

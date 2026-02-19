@@ -7,14 +7,14 @@
 
     <!-- Card -->
     <div
-        class="relative w-full max-w-md bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl p-10 transition-all duration-500 hover:border-white/20"
+        class="relative w-full max-w-md bg-white/[0.04] backdrop-blur-xl border border-dore/25 rounded-xl p-10 transition-all duration-500 hover:border-dore/50 shadow-2xl shadow-black/25"
     >
       <!-- Header -->
       <div class="text-center mb-10">
         <h1 class="text-3xl font-serif text-white tracking-wide">
           {{ t('admin.login.title') }}
         </h1>
-        <p class="text-neutral-400 text-sm mt-3">
+        <p class="text-ivoire/75 text-sm mt-3">
           {{ t('admin.login.subtitle') }}
         </p>
       </div>
@@ -24,7 +24,7 @@
 
         <!-- Email -->
         <div class="space-y-2">
-          <label class="text-xs uppercase tracking-widest text-neutral-500">
+          <label class="text-xs uppercase tracking-widest text-ivoire/70">
             {{ t('admin.login.email') }}
           </label>
 
@@ -39,7 +39,7 @@
 
         <!-- Password -->
         <div class="space-y-2">
-          <label class="text-xs uppercase tracking-widest text-neutral-500">
+          <label class="text-xs uppercase tracking-widest text-ivoire/70">
             {{ t('admin.login.password') }}
           </label>
 
@@ -56,7 +56,7 @@
         <transition name="fade">
           <div
               v-if="error"
-              class="bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-xl p-4"
+              class="bg-red-500/10 border border-red-400/40 text-red-200 text-sm rounded-xl p-4"
           >
             <p class="font-medium mb-1">{{ t('admin.login.loginError') }}</p>
             <p class="opacity-80">{{ error }}</p>
@@ -125,30 +125,30 @@ async function handleLogin() {
 /* Inputs luxe */
 .lux-input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
+  background: rgba(255, 250, 240, 0.1);
+  border: 1px solid rgba(var(--color-dore-rgb), 0.35);
+  border-radius: 1rem;
   padding: 14px 16px;
   font-size: 0.95rem;
-  color: white;
+  color: #fff8ee;
   transition: all 0.3s ease;
 }
 
 .lux-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 241, 220, 0.45);
 }
 
 .lux-input:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(var(--color-dore-rgb), 0.8);
+  background: rgba(255, 250, 240, 0.16);
 }
 
 /* Button luxe */
 .lux-button {
   background: var(--color-dore);
-  color: #1f1a16;
-  border-radius: 9999px;
+  color: #2f1c0d;
+  border-radius: 1rem;
   padding: 14px;
   font-size: 0.95rem;
   font-weight: 500;
@@ -185,7 +185,7 @@ async function handleLogin() {
 }
 
 .lux-link:hover {
-  color: white;
+  color: #fff8ee;
 }
 
 .lux-link:hover::after {

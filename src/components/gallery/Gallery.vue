@@ -7,7 +7,7 @@
             v-for="category in categories"
             :key="category"
             @click="selectedCategory = category"
-            class="px-5 py-2.5 rounded-2xl font-medium transition-all duration-300 transform"
+            class="px-5 py-2.5 rounded-xl font-medium transition-all duration-300 transform"
             :class="[
               selectedCategory === category
                 ? 'bg-dore text-white scale-105'
@@ -28,7 +28,7 @@
           <div
             v-for="(photo, idx) in filteredPhotos"
             :key="photo.id"
-            class="relative overflow-hidden rounded-2xl transition-all duration-500 cursor-pointer group animate-fade-up"
+            class="relative overflow-hidden rounded-xl transition-all duration-500 cursor-pointer group animate-fade-up"
             :style="{ 'animation-delay': `${idx * 90}ms` }"
             @click="openLightbox(idx)"
           >
@@ -41,23 +41,23 @@
         </div>
       </div>
 
-      <aside class="upload-panel rounded-2xl p-6 border border-dore/20 bg-white/70 backdrop-blur-sm">
-        <h2 class="font-serif text-2xl text-marron mb-2">{{ t('gallery.uploadTitle') }}</h2>
-        <p class="text-sm text-marron/75 mb-5">{{ t('gallery.uploadSubtitle') }}</p>
+      <aside class="upload-panel rounded-xl p-6 border border-dore/25 bg-gradient-to-b from-white/90 to-amber-50/60 backdrop-blur-sm">
+        <h2 class="font-serif text-2xl text-marron-dark mb-2">{{ t('gallery.uploadTitle') }}</h2>
+        <p class="text-sm text-marron/80 mb-5">{{ t('gallery.uploadSubtitle') }}</p>
 
         <form class="space-y-4" @submit.prevent="handleUpload">
           <div>
-            <label class="block text-sm mb-1 text-marron">{{ t('gallery.form.title') }}</label>
+            <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.title') }}</label>
             <input v-model="uploadForm.titre" type="text" required class="field" :placeholder="t('gallery.form.titlePlaceholder')" />
           </div>
 
           <div>
-            <label class="block text-sm mb-1 text-marron">{{ t('gallery.form.description') }}</label>
+            <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.description') }}</label>
             <textarea v-model="uploadForm.description" rows="3" class="field" :placeholder="t('gallery.form.descriptionPlaceholder')"></textarea>
           </div>
 
           <div>
-            <label class="block text-sm mb-1 text-marron">{{ t('gallery.form.category') }}</label>
+            <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.category') }}</label>
             <select v-model="uploadForm.categorie" class="field" required>
               <option v-for="category in uploadableCategories" :key="category" :value="category">
                 {{ t(`gallery.categories.${category}`) }}
@@ -66,7 +66,7 @@
           </div>
 
           <div>
-            <label class="block text-sm mb-1 text-marron">{{ t('gallery.form.file') }}</label>
+            <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.file') }}</label>
             <input ref="visitorFileInput" type="file" accept="image/*" multiple @change="onFileChange" class="field file:px-2 file:py-1.5 file:rounded-lg file:border-0 file:bg-dore/20 file:text-marron" required />
             <p v-if="selectedFiles.length" class="mt-1 text-xs text-marron/70">
               {{ t('gallery.form.selectedFiles', { count: selectedFiles.length }) }}
@@ -75,10 +75,10 @@
 
           <p v-if="uploadFeedback" class="text-sm" :class="uploadSuccess ? 'text-green-700' : 'text-red-700'">{{ uploadFeedback }}</p>
 
-          <button type="submit" class="w-full px-4 py-2.5 rounded-xl bg-dore text-white font-semibold hover:bg-dore-dark transition disabled:opacity-60" :disabled="uploading">
+          <button type="submit" class="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-dore to-dore-dark text-marron-dark font-semibold hover:brightness-105 transition disabled:opacity-60 shadow-md shadow-dore/20" :disabled="uploading">
             {{ uploading ? t('gallery.form.uploading') : t('gallery.form.submit') }}
           </button>
-          <p class="text-xs text-marron/70">{{ t('gallery.form.pendingHint') }}</p>
+          <p class="text-xs text-marron/75">{{ t('gallery.form.pendingHint') }}</p>
         </form>
       </aside>
     </div>
@@ -103,7 +103,7 @@
           </button>
 
           <div @click.stop class="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center">
-            <img :key="currentPhoto?.id" :src="currentPhoto?.url" :alt="currentPhoto?.titre || ''" class="max-w-full max-h-[80vh] rounded-2xl shadow-xl object-cover" />
+            <img :key="currentPhoto?.id" :src="currentPhoto?.url" :alt="currentPhoto?.titre || ''" class="max-w-full max-h-[80vh] rounded-xl shadow-xl object-cover" />
           </div>
 
           <div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 text-white rounded-md p-4 max-w-[90%] text-center">
@@ -231,15 +231,19 @@ onUnmounted(() => {
 .field {
   width: 100%;
   border: 1px solid rgba(var(--color-dore-rgb), 0.4);
-  border-radius: 0.8rem;
+  border-radius: 1rem;
   padding: 0.6rem 0.75rem;
-  color: var(--color-marron);
-  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-marron-dark);
+  background: rgba(255, 252, 245, 0.95);
 }
 
 .field:focus {
   outline: none;
-  border-color: rgba(var(--color-dore-rgb), 0.85);
-  box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.15);
+  border-color: rgba(var(--color-dore-rgb), 0.95);
+  box-shadow: 0 0 0 4px rgba(var(--color-dore-rgb), 0.16);
+}
+
+.field::placeholder {
+  color: rgba(80, 57, 38, 0.45);
 }
 </style>

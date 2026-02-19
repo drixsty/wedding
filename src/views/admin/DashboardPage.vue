@@ -442,43 +442,53 @@ onMounted(async () => {
   backdrop-filter: blur(12px);
   border-radius: 1rem;
   padding: 1.5rem;
-  border: 1px solid rgba(var(--color-dore-rgb), 0.25);
+  border: 1px solid rgba(var(--color-dore-rgb), 0.35);
   transition: all 0.3s ease;
 }
 
 .lux-card:hover { border-color: rgba(var(--color-dore-rgb), 0.45); }
 
 .lux-input {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(var(--color-dore-rgb), 0.25);
-  border-radius: 12px;
+  background: rgba(255,248,235,0.08);
+  border: 1px solid rgba(var(--color-dore-rgb), 0.35);
+  border-radius: 1rem;
   padding: 0.6rem 0.8rem;
-  color: white;
+  color: #fff5e9;
   font-size: 0.9rem;
   transition: all 0.3s ease;
 }
 
-.lux-input::placeholder { color: rgba(255,255,255,0.5); }
-.lux-input:focus { outline: none; border-color: rgba(var(--color-dore-rgb), 0.65); background: rgba(255,255,255,0.1); }
+.lux-input::placeholder { color: rgba(255, 231, 201, 0.55); }
+.lux-input:focus { outline: none; border-color: rgba(var(--color-dore-rgb), 0.9); background: rgba(255,248,235,0.15); box-shadow: 0 0 0 4px rgba(var(--color-dore-rgb), 0.16); }
 
 .lux-button-sm {
-  background: var(--color-dore);
+  background: linear-gradient(135deg, var(--color-dore) 0%, var(--color-dore-dark) 100%);
   color: #1f1a16;
-  border-radius: 9999px;
+  border-radius: 1rem;
   padding: 0.55rem 1rem;
   font-size: 0.8rem;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 
-.lux-button-sm:hover:not(:disabled) { transform: translateY(-1px); background: var(--color-dore-dark); color: white; }
+.lux-button-sm:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.05); color: #fffaf1; box-shadow: 0 8px 20px rgba(var(--color-dore-rgb), 0.22); }
 .lux-button-sm:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.lux-button-muted { background: rgba(255,255,255,0.15); color: white; }
-.lux-button-muted:hover:not(:disabled) { background: rgba(255,255,255,0.25); }
+.lux-button-muted { background: rgba(255,248,235,0.16); color: #fff5e9; }
+.lux-button-muted:hover:not(:disabled) { background: rgba(255,248,235,0.26); }
 
 .lux-button-danger { background: rgba(220,38,38,0.15); color: #fecaca; }
 .lux-button-danger:hover:not(:disabled) { background: rgba(220,38,38,0.25); color: #fee2e2; }
+
+
+.admin-page input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(var(--color-dore-rgb), 0.55);
+  background: rgba(255, 250, 240, 0.1);
+  accent-color: var(--color-dore);
+}
 
 .lux-link { position: relative; }
 .lux-link::after { content: ''; position: absolute; left: 0; bottom: -3px; width: 0; height: 1px; background: currentColor; transition: width .2s ease; }
