@@ -30,7 +30,7 @@
         <div class="flex justify-center mt-6">
           <button
               @click="showModal = true"
-              class="flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-surface-strong text-content-inverse font-semibold rounded-xl hover:bg-marron-dark transition-all duration-300"
+              class="flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-surface-strong text-content-inverse font-semibold rounded-lg hover:bg-marron-dark transition-all duration-300"
           >
             Découvrir le chapitre caché
           </button>

@@ -440,7 +440,7 @@ onMounted(async () => {
 .lux-card {
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(12px);
-  border-radius: 1rem;
+  border-radius: 0.6rem;
   padding: 1.5rem;
   border: 1px solid rgba(var(--color-dore-rgb), 0.35);
   transition: all 0.3s ease;
@@ -451,7 +451,7 @@ onMounted(async () => {
 .lux-input {
   background: rgba(255,248,235,0.08);
   border: 1px solid rgba(var(--color-dore-rgb), 0.35);
-  border-radius: 1rem;
+  border-radius: 0.6rem;
   padding: 0.6rem 0.8rem;
   color: #fff5e9;
   font-size: 0.9rem;
@@ -459,12 +459,12 @@ onMounted(async () => {
 }
 
 .lux-input::placeholder { color: rgba(255, 231, 201, 0.55); }
-.lux-input:focus { outline: none; border-color: rgba(var(--color-dore-rgb), 0.9); background: rgba(255,248,235,0.15); box-shadow: 0 0 0 4px rgba(var(--color-dore-rgb), 0.16); }
+.lux-input:focus { outline: none; border-color: rgba(var(--color-dore-rgb), 0.9); background: rgba(255,248,235,0.15); box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.24); }
 
 .lux-button-sm {
   background: linear-gradient(135deg, var(--color-dore) 0%, var(--color-dore-dark) 100%);
   color: #1f1a16;
-  border-radius: 1rem;
+  border-radius: 0.6rem;
   padding: 0.55rem 1rem;
   font-size: 0.8rem;
   font-weight: 600;

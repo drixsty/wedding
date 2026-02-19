@@ -19,19 +19,25 @@
   }
 
   button {
-    @apply rounded-lg;
+    @apply rounded-md;
   }
 
   input,
   select,
   textarea {
-    @apply rounded-lg;
+    @apply rounded-md;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    @apply outline-none ring-2 ring-dore/30;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply relative bg-dore hover:bg-dore-dark text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:-translate-y-1 overflow-hidden;
+    @apply relative bg-dore hover:bg-dore-dark text-white px-6 py-3 rounded-md transition-all duration-300 transform hover:-translate-y-1 overflow-hidden;
   }
   
   .btn-primary::before {
@@ -44,11 +50,11 @@
   }
   
   .btn-secondary {
-    @apply relative bg-marron hover:bg-marron-dark text-ivoire font-semibold py-4 px-10 rounded-lg transition-all duration-300 shadow-lg hover:shadow-2xl overflow-hidden;
+    @apply relative bg-marron hover:bg-marron-dark text-ivoire font-semibold py-4 px-10 rounded-md transition-all duration-300 shadow-lg hover:shadow-2xl overflow-hidden;
   }
   
   .btn-outline {
-    @apply border-2 border-dore text-marron hover:bg-dore hover:text-white font-semibold py-4 px-10 rounded-lg transition-all duration-300 backdrop-blur-sm;
+    @apply border-2 border-dore text-marron hover:bg-dore hover:text-white font-semibold py-4 px-10 rounded-md transition-all duration-300 backdrop-blur-sm;
   }
   
   .card-afro {
@@ -94,7 +100,7 @@
   }
   
   .input-field {
-    @apply w-full px-6 py-4 border-2 border-dore/30 rounded-lg focus:outline-none focus:ring-4 focus:ring-dore/20 focus:border-dore transition-all duration-200 bg-white hover:border-dore/50;
+    @apply w-full px-6 py-4 border-2 border-dore/30 rounded-md focus:outline-none focus:ring-4 focus:ring-dore/20 focus:border-dore transition-all duration-200 bg-white hover:border-dore/50;
   }
   
   .section-title {
