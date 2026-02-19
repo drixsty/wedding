@@ -46,6 +46,16 @@ interface UploadPhotoOptions {
   uploadedByGuest: boolean
 }
 
+interface FileUploadFailure {
+  fileName: string
+  error: string
+}
+
+interface UploadPhotosData {
+  uploadedPhotos: Photo[]
+  failedUploads: FileUploadFailure[]
+}
+
 function normalizePhoto(photo: Partial<Photo>): Photo {
   return {
     id: photo.id || crypto.randomUUID(),
@@ -160,17 +170,38 @@ export function useGallery() {
       }
 
       const uploadedPhotos: Photo[] = []
+      const failedUploads: FileUploadFailure[] = []
 
       for (const file of files) {
-        const photo = await uploadSinglePhoto(file, payload, options)
-        uploadedPhotos.push(photo)
+        try {
+          const photo = await uploadSinglePhoto(file, payload, options)
+          uploadedPhotos.push(photo)
+        } catch (err: any) {
+          failedUploads.push({
+            fileName: file.name,
+            error: err?.message || 'Erreur inconnue lors du téléversement.'
+          })
+        }
       }
 
-      if (!options.uploadedByGuest) {
+      if (!options.uploadedByGuest && uploadedPhotos.length > 0) {
         photos.value = [...uploadedPhotos, ...photos.value]
       }
 
-      return { data: uploadedPhotos, error: null }
+      if (failedUploads.length > 0 && uploadedPhotos.length === 0) {
+        const failedCount = failedUploads.length
+        const failureError = `${failedCount} photo${failedCount > 1 ? 's' : ''} n'a pas pu être téléversée${failedCount > 1 ? 's' : ''}.`
+        error.value = failureError
+        return { data: null, error: failureError }
+      }
+
+      return {
+        data: {
+          uploadedPhotos,
+          failedUploads
+        } as UploadPhotosData,
+        error: null
+      }
     } catch (err: any) {
       error.value = err.message
       return { data: null, error: err.message }
