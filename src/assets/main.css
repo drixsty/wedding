@@ -112,11 +112,11 @@
   }
 
   .admin-shell__header {
-    @apply mb-5 flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between;
+    @apply sticky top-3 z-20 mb-5 flex flex-col gap-4 rounded-lg border border-slate-200 bg-white/95 p-4 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between;
   }
 
   .admin-shell__nav {
-    @apply mb-5 flex gap-2 overflow-x-auto rounded-lg border border-slate-200 bg-white p-2 shadow-sm;
+    @apply sticky top-32 z-10 mb-5 flex gap-2 overflow-x-auto rounded-lg border border-slate-200 bg-white p-2 shadow-sm;
   }
 
   .admin-shell__tab {
@@ -194,6 +194,10 @@
 
   .admin-btn-danger {
     @apply bg-red-500/20 text-red-100;
+  }
+
+  .admin-quicklink {
+    @apply flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100;
   }
 
   .admin-link {

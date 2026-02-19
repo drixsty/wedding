@@ -23,11 +23,12 @@
         <button class="admin-btn admin-btn-muted" @click="markInvitationSentSelected">{{ t('admin.dashboard.markInvitationsSent') }}</button>
       </div>
       <p class="text-sm text-slate-500">{{ t('admin.dashboard.bulkMessagingHint') }}</p>
+      <p v-if="feedback" class="text-sm" :class="feedbackType === 'success' ? 'text-emerald-600' : 'text-rose-600'">{{ feedback }}</p>
     </div>
 
     <div class="admin-panel">
       <h2 class="admin-section-title">Filtrer les réponses</h2>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+      <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-4">
         <div>
           <label class="admin-field-label">{{ t('admin.dashboard.status') }}</label>
           <select v-model="filters.statut" class="admin-input w-full"><option value="">{{ t('admin.dashboard.all') }}</option><option value="en_attente">{{ t('admin.dashboard.pending') }}</option><option value="validé">{{ t('admin.dashboard.validated') }}</option><option value="refusé">{{ t('admin.dashboard.refused') }}</option></select>
@@ -38,15 +39,15 @@
         </div>
         <div class="md:col-span-2">
           <label class="admin-field-label">{{ t('admin.dashboard.search') }}</label>
-          <div class="flex gap-2"><input v-model="filters.search" type="text" :placeholder="t('admin.dashboard.searchPlaceholder')" class="admin-input w-full" /><button @click="loadGuests" class="admin-btn">{{ t('admin.dashboard.searchAction') }}</button></div>
+          <div class="flex gap-2"><input v-model="filters.search" type="text" :placeholder="t('admin.dashboard.searchPlaceholder')" class="admin-input w-full" /><button @click="loadGuests" class="admin-btn" :disabled="loading">{{ t('admin.dashboard.searchAction') }}</button></div>
         </div>
       </div>
     </div>
 
     <div v-if="selectedGuests.length > 0" class="admin-panel !p-4 flex gap-2 flex-wrap items-center">
-      <button @click="groupValidate" class="admin-btn bg-emerald-500 text-white">{{ t('admin.dashboard.bulkValidate') }}</button>
-      <button @click="groupRefuse" class="admin-btn bg-rose-500 text-white">{{ t('admin.dashboard.bulkRefuse') }}</button>
-      <button @click="groupDelete" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.bulkDelete') }}</button>
+      <button @click="groupValidate" class="admin-btn bg-emerald-500 text-white" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkValidate') }}</button>
+      <button @click="groupRefuse" class="admin-btn bg-rose-500 text-white" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkRefuse') }}</button>
+      <button @click="groupDelete" class="admin-btn admin-btn-muted" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkDelete') }}</button>
       <span class="text-sm text-slate-600">{{ t('admin.dashboard.selectedCount', { count: selectedGuests.length }) }}</span>
     </div>
 
@@ -86,6 +87,9 @@ const selectAll = ref(false)
 const bulkMessage = ref('Bonjour, voici votre invitation numérique. Nous avons hâte de célébrer avec vous ✨')
 const showScanner = ref(false)
 const isMobile = window.matchMedia('(max-width: 1024px)').matches
+const feedback = ref<string | null>(null)
+const feedbackType = ref<'success' | 'error'>('success')
+const isBulkProcessing = ref(false)
 
 const statusClassMap: Record<string, string> = { en_attente: 'bg-amber-100 text-amber-800', validé: 'bg-emerald-100 text-emerald-800', refusé: 'bg-rose-100 text-rose-800' }
 
@@ -98,17 +102,52 @@ const filteredGuests = computed(() => guests.value.filter(g => {
 
 const selectedGuestsData = computed(() => guests.value.filter(guest => selectedGuests.value.includes(guest.id)))
 
-async function loadGuests() { await fetchGuests(filters); await fetchStats(); selectedGuests.value = []; selectAll.value = false }
+function setFeedback(message: string, type: 'success' | 'error' = 'success') {
+  feedback.value = message
+  feedbackType.value = type
+}
+
+async function loadGuests() {
+  await fetchGuests(filters)
+  await fetchStats()
+  selectedGuests.value = []
+  selectAll.value = false
+}
 async function validateGuest(id: string) { await updateGuestStatus(id, 'validé'); await loadGuests() }
 async function refuseGuest(id: string) { await updateGuestStatus(id, 'refusé'); await loadGuests() }
 async function deleteGuestConfirm(id: string) { if (confirm(t('admin.dashboard.confirmDeleteGuest'))) { await deleteGuest(id); await loadGuests() } }
-async function groupValidate() { for (const id of selectedGuests.value) await updateGuestStatus(id, 'validé'); await loadGuests() }
-async function groupRefuse() { for (const id of selectedGuests.value) await updateGuestStatus(id, 'refusé'); await loadGuests() }
-async function groupDelete() { if (confirm(t('admin.dashboard.confirmDeleteGuests', { count: selectedGuests.value.length }))) { for (const id of selectedGuests.value) await deleteGuest(id); await loadGuests() } }
+async function groupValidate() {
+  isBulkProcessing.value = true
+  const results = await Promise.allSettled(selectedGuests.value.map(id => updateGuestStatus(id, 'validé')))
+  const failed = results.filter(result => result.status === 'fulfilled' && result.value.error).length
+  setFeedback(failed > 0 ? `Validation partielle (${failed} erreur${failed > 1 ? 's' : ''}).` : 'Invités validés.', failed > 0 ? 'error' : 'success')
+  await loadGuests()
+  isBulkProcessing.value = false
+}
+
+async function groupRefuse() {
+  isBulkProcessing.value = true
+  const results = await Promise.allSettled(selectedGuests.value.map(id => updateGuestStatus(id, 'refusé')))
+  const failed = results.filter(result => result.status === 'fulfilled' && result.value.error).length
+  setFeedback(failed > 0 ? `Mise à jour partielle (${failed} erreur${failed > 1 ? 's' : ''}).` : 'Invités refusés.', failed > 0 ? 'error' : 'success')
+  await loadGuests()
+  isBulkProcessing.value = false
+}
+
+async function groupDelete() {
+  if (!confirm(t('admin.dashboard.confirmDeleteGuests', { count: selectedGuests.value.length }))) return
+  isBulkProcessing.value = true
+  const results = await Promise.allSettled(selectedGuests.value.map(id => deleteGuest(id)))
+  const failed = results.filter(result => result.status === 'fulfilled' && result.value.error).length
+  setFeedback(failed > 0 ? `Suppression partielle (${failed} erreur${failed > 1 ? 's' : ''}).` : 'Invités supprimés.', failed > 0 ? 'error' : 'success')
+  await loadGuests()
+  isBulkProcessing.value = false
+}
 
 async function markInvitationSentSelected() {
   if (selectedGuests.value.length === 0) return
-  await markInvitationSent(selectedGuests.value)
+  const { error } = await markInvitationSent(selectedGuests.value)
+  setFeedback(error ? `Erreur d'envoi: ${error}` : 'Invitations marquées comme envoyées.', error ? 'error' : 'success')
   await loadGuests()
 }
 
