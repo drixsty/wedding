@@ -6,15 +6,13 @@
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.04),transparent_60%)]"></div>
 
     <!-- Card -->
-    <div
-        class="admin-card relative w-full max-w-md !bg-[#2a1f18]/85 !border-dore/45 p-10 shadow-2xl shadow-black/25 animate-scale-in"
-    >
+    <div class="admin-card relative w-full max-w-md !bg-white !border-slate-200 p-10 shadow-2xl shadow-slate-900/10 animate-scale-in">
       <!-- Header -->
       <div class="text-center mb-10">
-        <h1 class="text-3xl font-serif text-white tracking-wide">
+        <h1 class="text-3xl font-serif text-slate-900 tracking-wide">
           {{ t('admin.login.title') }}
         </h1>
-        <p class="text-ivoire/85 text-sm mt-3">
+        <p class="text-slate-500 text-sm mt-3">
           {{ t('admin.login.subtitle') }}
         </p>
       </div>
@@ -24,7 +22,7 @@
 
         <!-- Email -->
         <div class="space-y-2">
-          <label class="text-xs uppercase tracking-widest text-ivoire/90">
+          <label class="text-xs uppercase tracking-widest text-slate-600">
             {{ t('admin.login.email') }}
           </label>
 
@@ -39,7 +37,7 @@
 
         <!-- Password -->
         <div class="space-y-2">
-          <label class="text-xs uppercase tracking-widest text-ivoire/90">
+          <label class="text-xs uppercase tracking-widest text-slate-600">
             {{ t('admin.login.password') }}
           </label>
 
@@ -56,7 +54,7 @@
         <transition name="fade">
           <div
               v-if="error"
-              class="bg-red-500/10 border border-red-400/40 text-red-200 text-sm rounded-lg p-4"
+            class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-4"
           >
             <p class="font-medium mb-1">{{ t('admin.login.loginError') }}</p>
             <p class="opacity-80">{{ error }}</p>
@@ -79,7 +77,7 @@
       <div class="mt-10 text-center">
         <router-link
             to="/"
-            class="admin-link text-sm text-white/70 hover:text-white"
+            class="admin-link text-sm text-slate-500 hover:text-slate-900"
         >
           {{ t('admin.login.back') }}
         </router-link>
@@ -123,7 +121,7 @@ async function handleLogin() {
 }
 
 .admin-login {
-  background: radial-gradient(circle at top, rgba(var(--color-dore-rgb), 0.2), transparent 55%),
-  linear-gradient(180deg, var(--color-marron-dark) 0%, #1b1511 100%);
+  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.12), transparent 55%),
+  linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
 }
 </style>

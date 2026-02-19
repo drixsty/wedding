@@ -108,19 +108,25 @@
   }
 
   .admin-shell {
-    @apply bg-slate-100 px-3 py-4 md:px-8 md:py-8;
+    @apply min-h-screen bg-slate-100 px-3 py-4 md:px-8 md:py-8;
+  }
+
+  .admin-shell::before {
+    content: '';
+    @apply pointer-events-none fixed inset-0;
+    background: radial-gradient(circle at 15% -5%, rgba(15, 23, 42, 0.07), transparent 35%), radial-gradient(circle at 90% 0%, rgba(180, 159, 145, 0.18), transparent 30%);
   }
 
   .admin-shell__header {
-    @apply sticky top-3 z-20 mb-5 flex flex-col gap-4 rounded-lg border border-slate-200 bg-white/95 p-4 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between;
+    @apply sticky top-3 z-20 mb-5 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between;
   }
 
   .admin-shell__nav {
-    @apply sticky top-32 z-10 mb-5 flex gap-2 overflow-x-auto rounded-lg border border-slate-200 bg-white p-2 shadow-sm;
+    @apply sticky top-32 z-10 mb-5 flex gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-sm;
   }
 
   .admin-shell__tab {
-    @apply whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 inline-flex items-center gap-2;
+    @apply whitespace-nowrap rounded-xl px-4 py-2 text-sm font-semibold text-slate-600 inline-flex items-center gap-2;
   }
 
   .admin-shell__tab--active {
@@ -136,7 +142,11 @@
   }
 
   .admin-panel {
-    @apply rounded-lg border border-slate-200 bg-white p-4 md:p-5 shadow-sm;
+    @apply rounded-2xl border border-slate-200 bg-white p-4 md:p-5 shadow-sm;
+  }
+
+  .admin-workflow-card {
+    @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm;
   }
 
   .admin-subpanel {
@@ -176,12 +186,12 @@
   }
 
   .admin-btn {
-    @apply rounded-md px-4 py-2 font-semibold text-marron-dark bg-gradient-to-r from-dore to-dore-dark transition-all duration-300;
+    @apply rounded-xl px-4 py-2 font-semibold text-slate-900 bg-slate-900 text-white transition-all duration-300;
   }
 
   .admin-btn:hover:not(:disabled) {
-    @apply brightness-105 shadow-lg;
-    box-shadow: 0 8px 20px rgba(var(--color-dore-rgb), 0.22);
+    @apply bg-slate-800 shadow-lg;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.2);
   }
 
   .admin-btn:disabled {
@@ -190,6 +200,22 @@
 
   .admin-btn-muted {
     @apply bg-slate-100 text-slate-700;
+  }
+
+  .admin-btn-muted:hover:not(:disabled) {
+    @apply bg-slate-200 text-slate-800;
+  }
+
+  .admin-btn-soft {
+    @apply rounded-xl px-4 py-2 font-semibold text-slate-700 bg-slate-100;
+  }
+
+  .admin-btn-soft:hover:not(:disabled) {
+    @apply bg-slate-200;
+  }
+
+  .admin-badge {
+    @apply rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600;
   }
 
   .admin-btn-danger {

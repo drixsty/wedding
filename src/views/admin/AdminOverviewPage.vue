@@ -5,10 +5,28 @@
         <div>
           <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Vue d'ensemble</p>
           <h2 class="admin-section-title">Pilotage administration</h2>
-          <p class="text-sm text-slate-600">Les indicateurs essentiels et les actions prioritaires en un seul écran.</p>
+          <p class="text-sm text-slate-600">Suivez les priorités du jour et traitez les demandes en 3 étapes simples.</p>
         </div>
         <button class="admin-btn admin-btn-muted" @click="loadOverview">Actualiser</button>
       </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+      <article class="admin-workflow-card">
+        <p class="admin-badge">Étape 1</p>
+        <h3 class="mt-3 font-semibold text-slate-900">Valider les RSVP en attente</h3>
+        <p class="mt-1 text-sm text-slate-600">Traitez d'abord les réponses non confirmées pour garder votre liste propre.</p>
+      </article>
+      <article class="admin-workflow-card">
+        <p class="admin-badge">Étape 2</p>
+        <h3 class="mt-3 font-semibold text-slate-900">Vérifier les messages groupés</h3>
+        <p class="mt-1 text-sm text-slate-600">Envoyez un rappel email/WhatsApp aux invités sélectionnés.</p>
+      </article>
+      <article class="admin-workflow-card">
+        <p class="admin-badge">Étape 3</p>
+        <h3 class="mt-3 font-semibold text-slate-900">Publier le contenu</h3>
+        <p class="mt-1 text-sm text-slate-600">Appliquez vos changements de texte, thème et galerie en toute confiance.</p>
+      </article>
     </div>
 
     <div v-if="stats" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
