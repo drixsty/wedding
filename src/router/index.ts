@@ -28,22 +28,12 @@ const router = createRouter({
       path: '/admin/dashboard',
       name: 'admin-dashboard',
       component: () => import('@/components/admin/AdminLayout.vue'),
-      redirect: '/admin/dashboard/overview',
+      redirect: '/admin/dashboard/guests',
       children: [
-        {
-          path: 'overview',
-          name: 'admin-overview',
-          component: () => import('@/views/admin/AdminOverviewPage.vue')
-        },
         {
           path: 'guests',
           name: 'admin-guests',
           component: () => import('@/views/admin/AdminGuestsPage.vue')
-        },
-        {
-          path: 'content',
-          name: 'admin-content',
-          component: () => import('@/views/admin/AdminContentPage.vue')
         },
         {
           path: 'gallery',
