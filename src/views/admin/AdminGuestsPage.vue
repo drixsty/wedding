@@ -1,206 +1,171 @@
+<!-- Atelier Registry: Updated for Timeless vision -->
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useGuests } from '../../composables/useGuests'
+
+
+const { guests, stats, loading, fetchGuests, fetchStats, updateGuestStatus, markInvitationSent, deleteGuest } = useGuests()
+
+const filterStatus = ref('Tous')
+const selectedGuests = ref<string[]>([])
+
+const statCardsCount = computed(() => [
+  { label: 'Invitations Totales', value: stats.value?.total_invites || 0, trend: '', iconType: 'users' },
+  { label: 'Confirmations', value: stats.value?.confirmations_oui || 0, trend: `${Math.round((stats.value?.confirmations_oui || 0) / (stats.value?.total_invites || 1) * 100)}%`, iconType: 'check' },
+  { label: 'Déclinaisons', value: stats.value?.confirmations_non || 0, trend: '', iconType: 'x' },
+  { label: 'En Attente', value: stats.value?.en_attente || 0, trend: '', iconType: 'clock' }
+])
+
+const filteredGuests = computed(() => {
+  if (filterStatus.value === 'Tous') return guests.value
+  if (filterStatus.value === 'Oui') return guests.value.filter(g => g.presence_confirmee === true)
+  if (filterStatus.value === 'Non') return guests.value.filter(g => g.presence_confirmee === false)
+  return guests.value.filter(g => g.statut === 'en_attente')
+})
+
+const statusClass = (statut: string) => {
+  if (statut === 'validé') return 'bg-emerald-50 text-emerald-600 border-emerald-100'
+  if (statut === 'refusé') return 'bg-rose-50 text-rose-600 border-rose-100'
+  return 'bg-stone-50 text-stone-600 border-stone-200'
+}
+
+const toggleSelectAll = (event: Event) => {
+  const checked = (event.target as HTMLInputElement).checked
+  selectedGuests.value = checked ? filteredGuests.value.map(g => g.id) : []
+}
+
+async function handleAction(guestId: string, action: 'validé' | 'refusé' | 'inviter' | 'supprimer') {
+  if (action === 'validé' || action === 'refusé') await updateGuestStatus(guestId, action)
+  else if (action === 'inviter') await markInvitationSent([guestId])
+  else if (action === 'supprimer' && confirm('Supprimer cet invité ?')) await deleteGuest(guestId)
+  await fetchStats()
+}
+
+async function bulkAction(action: 'validé' | 'refusé' | 'inviter') {
+  if (selectedGuests.value.length === 0) return
+  if (action === 'inviter') {
+    await markInvitationSent(selectedGuests.value)
+  } else {
+    for (const id of selectedGuests.value) {
+      await updateGuestStatus(id, action)
+    }
+  }
+  selectedGuests.value = []
+  await fetchStats()
+}
+
+onMounted(async () => {
+  await fetchGuests()
+  await fetchStats()
+})
+</script>
+
 <template>
-  <section class="space-y-5 animate-fade-in">
-    <div v-if="stats" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-      <article class="admin-panel border-l-4 border-emerald-500">
-        <p class="admin-kpi-label">{{ t('admin.dashboard.yesConfirmations') }}</p>
-        <p class="admin-kpi-value text-emerald-600">{{ stats.confirmations_oui }}</p>
-        <p class="admin-kpi-meta">+ {{ stats.total_accompagnants }} {{ t('admin.dashboard.plusOnes') }}</p>
-      </article>
-      <article class="admin-panel border-l-4 border-rose-500"><p class="admin-kpi-label">{{ t('admin.dashboard.noConfirmations') }}</p><p class="admin-kpi-value text-rose-600">{{ stats.confirmations_non }}</p></article>
-      <article class="admin-panel border-l-4 border-amber-500"><p class="admin-kpi-label">{{ t('admin.dashboard.pending') }}</p><p class="admin-kpi-value text-amber-600">{{ stats.en_attente }}</p></article>
-      <article class="admin-panel border-l-4 border-violet-500"><p class="admin-kpi-label">{{ t('admin.dashboard.totalGuests') }}</p><p class="admin-kpi-value text-violet-600">{{ stats.total_invites }}</p></article>
-    </div>
-
-    <div class="admin-panel space-y-4">
-      <div class="flex items-center justify-between gap-3 flex-wrap">
-        <h2 class="admin-section-title">{{ t('admin.dashboard.bulkMessagingTitle') }}</h2>
-        <button v-if="isMobile" class="admin-btn admin-btn-muted" @click="showScanner = true">{{ t('admin.dashboard.openScanner') }}</button>
-      </div>
-      <textarea v-model="bulkMessage" rows="3" class="admin-input" :placeholder="t('admin.dashboard.bulkMessagingPlaceholder')"></textarea>
-      <div class="flex flex-wrap gap-2">
-        <button class="admin-btn" @click="sendByEmail">{{ t('admin.dashboard.sendByEmail') }}</button>
-        <button class="admin-btn admin-btn-muted" @click="sendByWhatsapp">{{ t('admin.dashboard.sendByWhatsapp') }}</button>
-        <button class="admin-btn admin-btn-muted" @click="markInvitationSentSelected">{{ t('admin.dashboard.markInvitationsSent') }}</button>
-      </div>
-      <p class="text-sm text-slate-500">{{ t('admin.dashboard.bulkMessagingHint') }}</p>
-      <p v-if="feedback" class="text-sm" :class="feedbackType === 'success' ? 'text-emerald-600' : 'text-rose-600'">{{ feedback }}</p>
-    </div>
-
-    <div class="admin-panel">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <h2 class="admin-section-title">Filtrer les réponses</h2>
-        <div class="flex flex-wrap gap-2">
-          <button class="admin-btn-soft" @click="applyPreset('pending')">En attente</button>
-          <button class="admin-btn-soft" @click="applyPreset('confirmed')">Confirmés</button>
-          <button class="admin-btn-soft" @click="applyPreset('declined')">Refus</button>
-          <button class="admin-btn-soft" @click="applyPreset('reset')">Réinitialiser</button>
+  <div class="space-y-20 animate-fade-in-up">
+    <!-- Stat Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div v-for="stat in statCardsCount" :key="stat.label" class="p-10 bg-white border border-stone/10 shadow-editorial group hover:shadow-floating transition-all duration-1000">
+        <div class="flex justify-between items-start mb-6">
+          <div class="p-3 border border-stone/10 text-gold-muted group-hover:border-gold-muted transition-colors">
+            <!-- Inline SVGs -->
+            <svg v-if="stat.iconType === 'users'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+            <svg v-else-if="stat.iconType === 'check'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <svg v-else-if="stat.iconType === 'x'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <span class="text-[0.6rem] uppercase tracking-widest text-stone font-bold">{{ stat.trend }}</span>
         </div>
-      </div>
-      <div class="grid grid-cols-1 gap-4 mt-4 md:grid-cols-4">
-        <div>
-          <label class="admin-field-label">{{ t('admin.dashboard.status') }}</label>
-          <select v-model="filters.statut" class="admin-input w-full"><option value="">{{ t('admin.dashboard.all') }}</option><option value="en_attente">{{ t('admin.dashboard.pending') }}</option><option value="validé">{{ t('admin.dashboard.validated') }}</option><option value="refusé">{{ t('admin.dashboard.refused') }}</option></select>
-        </div>
-        <div>
-          <label class="admin-field-label">{{ t('admin.dashboard.attendance') }}</label>
-          <select v-model="filters.presence" class="admin-input w-full"><option value="">{{ t('admin.dashboard.all') }}</option><option :value="true">{{ t('admin.dashboard.yes') }}</option><option :value="false">{{ t('admin.dashboard.no') }}</option></select>
-        </div>
-        <div class="md:col-span-2">
-          <label class="admin-field-label">{{ t('admin.dashboard.search') }}</label>
-          <div class="flex gap-2"><input v-model="filters.search" type="text" :placeholder="t('admin.dashboard.searchPlaceholder')" class="admin-input w-full" /><button @click="loadGuests" class="admin-btn" :disabled="loading">{{ t('admin.dashboard.searchAction') }}</button></div>
-        </div>
+        <p class="text-[0.65rem] uppercase tracking-widest text-stone font-bold mb-2">{{ stat.label }}</p>
+        <p class="text-4xl font-serif text-ebony">{{ stat.value }}</p>
       </div>
     </div>
 
-    <div v-if="selectedGuests.length > 0" class="admin-panel !p-4 flex gap-2 flex-wrap items-center">
-      <button @click="groupValidate" class="admin-btn" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkValidate') }}</button>
-      <button @click="groupRefuse" class="admin-btn admin-btn-muted" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkRefuse') }}</button>
-      <button @click="groupDelete" class="admin-btn admin-btn-muted" :disabled="isBulkProcessing">{{ t('admin.dashboard.bulkDelete') }}</button>
-      <span class="text-sm text-slate-600">{{ t('admin.dashboard.selectedCount', { count: selectedGuests.length }) }}</span>
+    <!-- Actions & Filters -->
+    <div class="flex flex-col md:flex-row justify-between items-end gap-10 border-b border-stone/10 pb-12">
+      <div class="space-y-4 max-w-md">
+        <h2 class="text-2xl font-serif text-ebony">Registre des invités.</h2>
+        <p class="text-[0.65rem] uppercase tracking-widest text-stone font-bold">Gérez vos confirmations et invitations avec précision.</p>
+      </div>
+      <div class="flex gap-6">
+        <button v-for="status in ['Tous', 'Oui', 'Non', 'En attente']" :key="status" @click="filterStatus = status" class="text-[0.6rem] uppercase tracking-widest font-bold transition-all duration-500" :class="filterStatus === status ? 'text-ebony' : 'text-stone hover:text-gold-muted'">
+          {{ status }}
+        </button>
+      </div>
     </div>
 
-    <div class="admin-panel overflow-x-auto">
-      <div v-if="loading" class="p-10 text-center">{{ t('gallery.loading') }}</div>
-      <EmptyState v-else-if="guests.length === 0" :description="t('admin.dashboard.noneFound')" compact />
-      <table v-else class="w-full text-sm min-w-[780px]">
-        <thead class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wide"><tr><th class="px-3 py-3"><input type="checkbox" v-model="selectAll" /></th><th class="px-3 py-3 text-left">{{ t('admin.dashboard.name') }}</th><th class="px-3 py-3 text-left">{{ t('admin.dashboard.email') }}</th><th class="px-3 py-3 text-left">{{ t('admin.dashboard.attendance') }}</th><th class="px-3 py-3 text-center">{{ t('admin.dashboard.attendants') }}</th><th class="px-3 py-3 text-left">{{ t('admin.dashboard.status') }}</th><th class="px-3 py-3 text-left">{{ t('admin.dashboard.actions') }}</th></tr></thead>
-        <tbody>
-          <tr v-for="guest in filteredGuests" :key="guest.id" class="border-t border-slate-100">
-            <td class="px-3 py-3 text-center"><input type="checkbox" :value="guest.id" v-model="selectedGuests" /></td>
-            <td class="px-3 py-3 font-medium text-slate-900">{{ guest.nom_complet }}</td><td class="px-3 py-3 text-slate-600">{{ guest.email }}</td>
-            <td class="px-3 py-3"><span :class="guest.presence_confirmee ? 'text-emerald-600' : 'text-rose-600'">{{ guest.presence_confirmee ? t('admin.dashboard.yes') : t('admin.dashboard.no') }}</span></td>
-            <td class="px-3 py-3 text-center text-slate-700">{{ guest.nombre_accompagnants }}</td>
-            <td class="px-3 py-3"><span class="px-2 py-1 rounded-full text-xs font-semibold" :class="statusClassMap[guest.statut]">{{ t(`admin.dashboard.statuses.${guest.statut}`) }}</span></td>
-            <td class="px-3 py-3 flex gap-2">
-              <button v-if="guest.statut !== 'validé'" @click="validateGuest(guest.id)" class="admin-btn-soft">Valider</button>
-              <button v-if="guest.statut !== 'refusé'" @click="refuseGuest(guest.id)" class="admin-btn-soft">Refuser</button>
-              <button @click="deleteGuestConfirm(guest.id)" class="admin-btn-soft">Supprimer</button>
+    <!-- Bulk Actions Floating Bar -->
+    <div v-if="selectedGuests.length > 0" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 bg-ebony text-ivory px-10 py-6 shadow-floating flex items-center gap-12 border border-stone/10 animate-fade-in-up">
+      <div class="flex items-center gap-4 border-r border-ivory/10 pr-12">
+        <span class="text-xl font-serif text-gold-muted">{{ selectedGuests.length }}</span>
+        <span class="text-[0.6rem] uppercase tracking-widest font-bold">Sélectionnés</span>
+      </div>
+      <div class="flex gap-8">
+        <button @click="bulkAction('validé')" class="text-[0.6rem] uppercase tracking-widest font-bold hover:text-emerald-400 transition-colors">Valider</button>
+        <button @click="bulkAction('refusé')" class="text-[0.6rem] uppercase tracking-widest font-bold hover:text-rose-400 transition-colors">Refuser</button>
+        <button @click="bulkAction('inviter')" class="text-[0.6rem] uppercase tracking-widest font-bold hover:text-gold-muted transition-colors">Inviter</button>
+      </div>
+    </div>
+
+    <!-- Registry Table -->
+    <div class="bg-white border border-stone/10 shadow-editorial overflow-hidden">
+      <div v-if="loading && !guests.length" class="p-20 text-center">
+        <div class="w-8 h-[1px] bg-stone mx-auto animate-pulse"></div>
+      </div>
+      <table v-else class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-stone/5 border-b border-stone/10">
+            <th class="px-10 py-6 w-10">
+              <input type="checkbox" @change="toggleSelectAll" :checked="selectedGuests.length === filteredGuests.length && filteredGuests.length > 0" class="w-4 h-4 rounded-none border-stone/20 text-ebony focus:ring-ebony bg-transparent" />
+            </th>
+            <th class="px-10 py-6 text-[0.6rem] uppercase tracking-widest text-stone font-bold">Invité</th>
+            <th class="px-10 py-6 text-[0.6rem] uppercase tracking-widest text-stone font-bold">Statut</th>
+            <th class="px-10 py-6 text-[0.6rem] uppercase tracking-widest text-stone font-bold">Accompagnants</th>
+            <th class="px-10 py-6 text-[0.6rem] uppercase tracking-widest text-stone font-bold text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone/5">
+          <tr v-for="guest in filteredGuests" :key="guest.id" class="group hover:bg-ivory transition-colors duration-500">
+            <td class="px-10 py-8">
+              <input type="checkbox" v-model="selectedGuests" :value="guest.id" class="w-4 h-4 rounded-none border-stone/20 text-ebony focus:ring-ebony bg-transparent" />
+            </td>
+            <td class="px-10 py-8">
+              <div class="flex flex-col">
+                <span class="text-lg font-serif text-ebony mb-1">{{ guest.nom_complet }}</span>
+                <span class="text-[0.6rem] uppercase tracking-widest text-stone">{{ guest.email }}</span>
+              </div>
+            </td>
+            <td class="px-10 py-8">
+              <span class="px-4 py-1.5 text-[0.55rem] uppercase tracking-widest font-bold border transition-all" :class="statusClass(guest.statut)">
+                {{ guest.statut === 'validé' ? 'Confirmé' : guest.statut === 'refusé' ? 'Refusé' : 'En attente' }}
+              </span>
+            </td>
+            <td class="px-10 py-8">
+              <span class="font-serif text-xl text-ebony">{{ guest.nombre_accompagnants || 0 }}</span>
+            </td>
+            <td class="px-10 py-8">
+              <div class="flex justify-end gap-4 transition-opacity duration-500">
+                <button @click="handleAction(guest.id, 'validé')" class="p-2 border border-stone/10 hover:border-emerald-500 hover:text-emerald-500 transition-all" title="Valider">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shadow-sm"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </button>
+                <button @click="handleAction(guest.id, 'refusé')" class="p-2 border border-stone/10 hover:border-rose-600 hover:text-rose-600 transition-all" title="Refuser">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shadow-sm"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </button>
+                <button @click="handleAction(guest.id, 'inviter')" class="p-2 border border-stone/10 hover:border-gold-muted hover:text-gold-muted transition-all" title="Envoi invitation" :class="{'opacity-20': guest.invitation_envoyee}">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shadow-sm"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+                </button>
+                <button @click="handleAction(guest.id, 'supprimer')" class="p-2 border border-stone/10 hover:border-rose-600 hover:text-rose-600 transition-all" title="Supprimer">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shadow-sm"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    <QRScanner v-if="showScanner && isMobile" @close="showScanner = false" />
-  </section>
+  </div>
 </template>
 
-<script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { useGuests } from '@/composables/useGuests'
-import EmptyState from '@/components/common/EmptyState.vue'
-import QRScanner from '@/components/admin/QRScanner.vue'
-import { t } from '@/i18n'
-
-const { guests, stats, loading, fetchGuests, fetchStats, updateGuestStatus, deleteGuest, markInvitationSent } = useGuests()
-const filters = reactive<{ statut: string; presence: boolean | ''; search: string }>({ statut: '', presence: '', search: '' })
-const selectedGuests = ref<string[]>([])
-const selectAll = ref(false)
-const bulkMessage = ref('Bonjour, voici votre invitation numérique. Nous avons hâte de célébrer avec vous ✨')
-const showScanner = ref(false)
-const isMobile = window.matchMedia('(max-width: 1024px)').matches
-const feedback = ref<string | null>(null)
-const feedbackType = ref<'success' | 'error'>('success')
-const isBulkProcessing = ref(false)
-
-const statusClassMap: Record<string, string> = { en_attente: 'bg-amber-100 text-amber-800', validé: 'bg-emerald-100 text-emerald-800', refusé: 'bg-rose-100 text-rose-800' }
-
-const filteredGuests = computed(() => guests.value.filter(g => {
-  const statusMatch = filters.statut ? g.statut === filters.statut : true
-  const presenceMatch = filters.presence !== '' ? g.presence_confirmee === filters.presence : true
-  const searchMatch = filters.search ? g.nom_complet.toLowerCase().includes(filters.search.toLowerCase()) || g.email.toLowerCase().includes(filters.search.toLowerCase()) : true
-  return statusMatch && presenceMatch && searchMatch
-}))
-
-const selectedGuestsData = computed(() => guests.value.filter(guest => selectedGuests.value.includes(guest.id)))
-
-function setFeedback(message: string, type: 'success' | 'error' = 'success') {
-  feedback.value = message
-  feedbackType.value = type
-}
-
-async function loadGuests() {
-  await fetchGuests(filters)
-  await fetchStats()
-  selectedGuests.value = []
-  selectAll.value = false
-}
-async function validateGuest(id: string) { await updateGuestStatus(id, 'validé'); await loadGuests() }
-async function refuseGuest(id: string) { await updateGuestStatus(id, 'refusé'); await loadGuests() }
-async function deleteGuestConfirm(id: string) { if (confirm(t('admin.dashboard.confirmDeleteGuest'))) { await deleteGuest(id); await loadGuests() } }
-async function groupValidate() {
-  isBulkProcessing.value = true
-  const results = await Promise.allSettled(selectedGuests.value.map(id => updateGuestStatus(id, 'validé')))
-  const failed = results.filter(result => result.status === 'fulfilled' && result.value.error).length
-  setFeedback(failed > 0 ? `Validation partielle (${failed} erreur${failed > 1 ? 's' : ''}).` : 'Invités validés.', failed > 0 ? 'error' : 'success')
-  await loadGuests()
-  isBulkProcessing.value = false
-}
-
-async function groupRefuse() {
-  isBulkProcessing.value = true
-  const results = await Promise.allSettled(selectedGuests.value.map(id => updateGuestStatus(id, 'refusé')))
-  const failed = results.filter(result => result.status === 'fulfilled' && result.value.error).length
-  setFeedback(failed > 0 ? `Mise à jour partielle (${failed} erreur${failed > 1 ? 's' : ''}).` : 'Invités refusés.', failed > 0 ? 'error' : 'success')
-  await loadGuests()
-  isBulkProcessing.value = false
-}
-
-async function groupDelete() {
-  if (!confirm(t('admin.dashboard.confirmDeleteGuests', { count: selectedGuests.value.length }))) return
-  isBulkProcessing.value = true
-  const results = await Promise.allSettled(selectedGuests.value.map(id => deleteGuest(id)))
-  const failed = results.filter(result => result.status === 'fulfilled' && result.value.error).length
-  setFeedback(failed > 0 ? `Suppression partielle (${failed} erreur${failed > 1 ? 's' : ''}).` : 'Invités supprimés.', failed > 0 ? 'error' : 'success')
-  await loadGuests()
-  isBulkProcessing.value = false
-}
-
-async function markInvitationSentSelected() {
-  if (selectedGuests.value.length === 0) return
-  const { error } = await markInvitationSent(selectedGuests.value)
-  setFeedback(error ? `Erreur d'envoi: ${error}` : 'Invitations marquées comme envoyées.', error ? 'error' : 'success')
-  await loadGuests()
-}
-
-function sendByEmail() {
-  if (selectedGuestsData.value.length === 0) return
-  const recipients = selectedGuestsData.value.map(guest => guest.email).filter(Boolean).join(',')
-  const subject = encodeURIComponent('Votre faire-part numérique')
-  const body = encodeURIComponent(bulkMessage.value)
-  window.open(`mailto:${recipients}?subject=${subject}&body=${body}`, '_blank')
-}
-
-function sendByWhatsapp() {
-  if (selectedGuestsData.value.length === 0) return
-  const payload = selectedGuestsData.value
-    .map(guest => `${guest.nom_complet} (${guest.telephone || 'sans numéro'})`)
-    .join('\n')
-  const text = encodeURIComponent(`${bulkMessage.value}\n\nInvités:\n${payload}`)
-  window.open(`https://wa.me/?text=${text}`, '_blank')
-}
-
-function applyPreset(preset: 'pending' | 'confirmed' | 'declined' | 'reset') {
-  if (preset === 'pending') {
-    filters.statut = 'en_attente'
-    filters.presence = ''
-  }
-  if (preset === 'confirmed') {
-    filters.statut = 'validé'
-    filters.presence = true
-  }
-  if (preset === 'declined') {
-    filters.statut = 'refusé'
-    filters.presence = false
-  }
-  if (preset === 'reset') {
-    filters.statut = ''
-    filters.presence = ''
-    filters.search = ''
-  }
-  loadGuests()
-}
-
-watch(selectAll, val => { selectedGuests.value = val ? filteredGuests.value.map(g => g.id) : [] })
-onMounted(loadGuests)
-</script>
+<style scoped>
+.animate-fade-in-up { animation: fadeInUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+</style>

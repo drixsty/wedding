@@ -1,34 +1,38 @@
 <template>
-  <footer class="bg-neutral-950 text-neutral-300 pt-20 pb-10">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-        <div class="space-y-4">
-          <h3 class="text-2xl font-serif text-white tracking-wide">{{ content.coupleName }}</h3>
-          <div class="text-sm text-neutral-400 space-y-1">
-            <p>{{ weddingDate }}</p>
-            <p>{{ content.weddingLocation }}</p>
+  <footer class="py-24 border-t border-stone/20 bg-ivory">
+    <div class="container mx-auto px-10">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-20">
+        <div class="md:col-span-5 space-y-10">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 border border-ebony flex items-center justify-center font-serif text-xl font-bold">W.</div>
+            <span class="text-sm font-bold uppercase tracking-[0.4em] text-ebony">Atelier</span>
           </div>
+          <p class="text-[0.65rem] uppercase tracking-widest text-stone leading-loose max-w-sm font-bold">
+            Une célébration de l'élégance et de la promesse éternelle. Conçu pour durer, inspiré par l'art.
+          </p>
         </div>
 
-        <div>
-          <h4 class="text-sm uppercase tracking-widest text-neutral-500 mb-6">{{ content.footer.navigationTitle }}</h4>
-          <ul class="space-y-3">
+        <div class="md:col-span-3 space-y-8">
+          <h4 class="text-[0.6rem] uppercase tracking-[0.5em] text-gold-muted font-bold">Exploration</h4>
+          <ul class="space-y-4">
             <li v-for="link in navLinks" :key="link.to">
-              <router-link :to="link.to" class="footer-link">{{ link.label }}</router-link>
+              <router-link :to="link.to" class="text-[0.65rem] uppercase tracking-widest text-ebony font-bold hover:text-gold-muted transition-colors">{{ link.label }}</router-link>
             </li>
           </ul>
         </div>
 
-        <div>
-          <h4 class="text-sm uppercase tracking-widest text-neutral-500 mb-6">{{ content.footer.contactTitle }}</h4>
-          <p class="text-sm text-neutral-400 leading-relaxed">{{ content.footer.questions }}</p>
-          <a :href="`mailto:${content.contactEmail}`" class="footer-link block mt-3">{{ content.contactEmail }}</a>
+        <div class="md:col-span-4 space-y-8 text-right md:text-left">
+          <h4 class="text-[0.6rem] uppercase tracking-[0.5em] text-gold-muted font-bold">Contact & Support</h4>
+          <p class="text-[0.65rem] uppercase tracking-widest text-stone leading-loose font-bold">{{ content.footer.questions }}</p>
+          <a :href="`mailto:${content.contactEmail}`" class="inline-block text-[0.65rem] uppercase tracking-widest text-ebony font-bold border-b border-ebony/20 pb-1 hover:border-ebony transition-all">{{ content.contactEmail }}</a>
         </div>
       </div>
 
-      <div class="border-t border-neutral-800 mt-16 pt-8 text-center text-xs text-neutral-500">
-        <p>© {{ currentYear }} {{ content.coupleName }} — {{ content.footer.rights }}</p>
-        <p class="mt-2 opacity-70">{{ content.footer.madeWithCare }}</p>
+      <div class="mt-24 pt-10 border-t border-stone/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-[0.55rem] uppercase tracking-widest text-stone font-bold">© {{ currentYear }} {{ content.coupleName }} — Tous droits réservés</p>
+        <div class="flex gap-8">
+           <span class="text-[0.55rem] uppercase tracking-widest text-stone font-bold">Design by Timeless Atelier</span>
+        </div>
       </div>
     </div>
   </footer>
@@ -36,24 +40,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { formatDate } from '@/utils/formatters'
 import { useSiteContent } from '@/composables/useSiteContent'
 
 const { content } = useSiteContent()
-
-const weddingDate = computed(() => formatDate(content.value.weddingDate, 'DD MMMM YYYY'))
 const currentYear = new Date().getFullYear()
 
 const navLinks = computed(() => [
-  { to: '/', label: content.value.nav.home },
-  { to: '/rsvp', label: content.value.nav.rsvp },
-  { to: '/galerie', label: content.value.nav.gallery }
+  { to: '/', label: 'Archives' },
+  { to: '/gallery', label: 'Curation' },
+  { to: '/rsvp', label: 'Cérémonie' }
 ])
 </script>
-
-<style scoped>
-.footer-link { position: relative; font-size: 0.9rem; color: #a3a3a3; transition: color 0.3s ease; }
-.footer-link::after { content: ''; position: absolute; left: 0; bottom: -4px; width: 0%; height: 1px; background: #ffffff; transition: width 0.3s ease; }
-.footer-link:hover { color: #ffffff; }
-.footer-link:hover::after { width: 100%; }
-</style>

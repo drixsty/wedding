@@ -51,7 +51,7 @@ npm install
 \`\`\`env
 VITE_SUPABASE_URL=votre_url_supabase
 VITE_SUPABASE_ANON_KEY=votre_anon_key
-VITE_WEDDING_DATE=2025-08-15T14:00:00
+VITE_WEDDING_DATE=2026-08-15T14:00:00
 VITE_WEDDING_LOCATION=Paris, France
 VITE_COUPLE_NAMES=Marie & Jean
 \`\`\`
@@ -177,7 +177,7 @@ colors: {
 Modifiez dans `.env.local` :
 
 \`\`\`env
-VITE_WEDDING_DATE=2025-08-15T14:00:00
+VITE_WEDDING_DATE=2026-08-15T14:00:00
 VITE_WEDDING_LOCATION=Paris, France
 VITE_COUPLE_NAMES=Marie & Jean
 \`\`\`

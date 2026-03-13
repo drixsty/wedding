@@ -1,165 +1,116 @@
 <template>
-  <div class="max-w-2xl mx-auto px-4">
-    <div
-        class="bg-gradient-to-b from-white via-amber-50/40 to-white border border-dore/30 rounded-lg p-6 sm:p-10 shadow-xl shadow-dore/10 transition-all duration-500 animate-fade-in-up"
-    >
-      <!-- Header -->
-      <div class="mb-8">
-        <h2 class="text-2xl sm:text-3xl font-serif font-semibold text-marron-dark">
-          {{ t('rsvp.title') }}
-        </h2>
-        <p class="text-marron/70 text-sm sm:text-base mt-2">
-          {{ t('rsvp.deadlinePrefix') }}
-          <span class="font-medium text-marron-dark">{{ deadline }}</span>
-        </p>
+  <div class="max-w-4xl mx-auto px-6 py-20 pb-40">
+    <div class="relative min-h-[500px] flex flex-col justify-center">
+      <!-- Success View -->
+      <div v-if="success" class="text-center space-y-12 animate-fade-in">
+        <div class="inline-flex w-24 h-24 rounded-full border border-ebony items-center justify-center mx-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gold-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" /></svg>
+        </div>
+        <div class="space-y-6">
+          <h2 class="text-5xl md:text-7xl font-serif text-ebony leading-tight">{{ t('rsvp.success') }}</h2>
+          <p class="text-[0.65rem] uppercase tracking-[0.6em] text-gold-muted font-bold">Nous avons hâte de vous retrouver.</p>
+        </div>
+        <router-link to="/" class="inline-block mt-8 text-[0.65rem] uppercase tracking-widest font-bold text-ebony border-b border-ebony/20 pb-2 hover:border-ebony transition-all">Retour à l'accueil</router-link>
       </div>
 
-      <form @submit.prevent="handleSubmit" class="space-y-6">
-        <!-- Nom complet -->
-        <div>
-          <label class="block text-sm font-medium text-marron-dark mb-2">
-            {{ t('rsvp.fullName') }} <span class="text-red-500">*</span>
-          </label>
-          <input
-              v-model="form.nom_complet"
-              type="text"
-              required
-              :placeholder="t('rsvp.fullNamePlaceholder')"
-              class="input"
-          />
+      <!-- Stepped Form -->
+      <form v-else @submit.prevent="handleSubmit" class="space-y-24 relative">
+        <!-- Progress Indicator (Minimalist) -->
+        <div class="absolute -top-32 left-0 w-full flex justify-between items-center px-2">
+          <span class="text-[0.6rem] font-bold uppercase tracking-[0.4em] text-stone">Étape 0{{ currentStep }} — 04</span>
+          <div class="flex gap-4">
+             <div v-for="i in 4" :key="i" class="w-12 h-[1px] transition-all duration-1000" :class="i <= currentStep ? 'bg-gold-muted' : 'bg-stone/20'"></div>
+          </div>
         </div>
 
-        <!-- Email -->
-        <div>
-          <label class="block text-sm font-medium text-marron-dark mb-2">
-            Email <span class="text-red-500">*</span>
-          </label>
-          <input
-              v-model="form.email"
-              type="email"
-              required
-              :placeholder="t('rsvp.emailPlaceholder')"
-              class="input"
-          />
+        <!-- Step 1: Identification -->
+        <div v-if="currentStep === 1" class="space-y-16 animate-fade-in-up">
+          <div class="space-y-6">
+            <span class="text-[0.65rem] uppercase tracking-widest font-bold text-gold-muted">Introduction</span>
+            <h2 class="text-5xl md:text-7xl font-serif text-ebony leading-tight">À qui avons-nous l'honneur ?</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="group border-b border-stone/30 focus-within:border-ebony transition-all duration-700 pb-4">
+              <label class="text-[0.6rem] uppercase tracking-widest text-stone mb-4 block">Nom & Prénom</label>
+              <input v-model="form.nom_complet" type="text" class="w-full bg-transparent border-none p-0 text-2xl md:text-3xl font-serif text-ebony focus:ring-0 placeholder-stone/20" placeholder="Votre nom complet" required />
+            </div>
+            <div class="group border-b border-stone/30 focus-within:border-ebony transition-all duration-700 pb-4">
+              <label class="text-[0.6rem] uppercase tracking-widest text-stone mb-4 block">Email</label>
+              <input v-model="form.email" type="email" class="w-full bg-transparent border-none p-0 text-2xl md:text-3xl font-serif text-ebony focus:ring-0 placeholder-stone/20" placeholder="votre@email.com" required />
+            </div>
+          </div>
         </div>
 
-        <!-- {{ t('rsvp.phone') }} -->
-        <div>
-          <label class="block text-sm font-medium text-marron-dark mb-2">
-            {{ t('rsvp.phone') }}
-          </label>
-          <input
-              v-model="form.telephone"
-              type="tel"
-              placeholder="+33 6 12 34 56 78"
-              class="input"
-          />
-        </div>
-
-        <!-- Présence -->
-        <div>
-          <label class="block text-sm font-medium text-marron-dark mb-3">
-            {{ t('rsvp.presenceQuestion') }} <span class="text-red-500">*</span>
-          </label>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button
-                type="button"
-                @click="form.presence_confirmee = true"
-                :class="presenceClass(true)"
-            >
-              {{ t('rsvp.yes') }}
+        <!-- Step 2: Presence -->
+        <div v-if="currentStep === 2" class="space-y-16 animate-fade-in-up">
+          <div class="space-y-6">
+            <span class="text-[0.65rem] uppercase tracking-widest font-bold text-gold-muted">Célébration</span>
+            <h2 class="text-5xl md:text-7xl font-serif text-ebony leading-tight">Serez-vous parmi nous ?</h2>
+          </div>
+          <div class="flex flex-col md:flex-row gap-8">
+            <button type="button" @click="form.presence_confirmee = true; nextStep()" class="flex-1 p-12 text-left border border-stone/20 hover:border-gold-muted hover:bg-stone/5 transition-all duration-700 group">
+              <div class="mb-8 w-12 h-12 rounded-full border border-stone/20 flex items-center justify-center group-hover:border-gold-muted">
+                <div class="w-2 h-2 rounded-full bg-gold-muted opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </div>
+              <span class="block text-3xl font-serif text-ebony mb-2">{{ t('rsvp.yes') }}</span>
+              <span class="text-[0.65rem] uppercase tracking-widest text-stone">Ce sera un honneur</span>
             </button>
-
-            <button
-                type="button"
-                @click="form.presence_confirmee = false"
-                :class="presenceClass(false)"
-            >
-              {{ t('rsvp.no') }}
+            <button type="button" @click="form.presence_confirmee = false; nextStep()" class="flex-1 p-12 text-left border border-stone/20 hover:border-ebony hover:bg-ebony/5 transition-all duration-700 group">
+              <div class="mb-8 w-12 h-12 rounded-full border border-stone/20 flex items-center justify-center group-hover:border-ebony">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-stone group-hover:text-ebony transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" /></svg>
+              </div>
+              <span class="block text-3xl font-serif text-ebony mb-2">{{ t('rsvp.no') }}</span>
+              <span class="text-[0.65rem] uppercase tracking-widest text-stone">À regret</span>
             </button>
           </div>
         </div>
 
-        <!-- Champs conditionnels -->
-        <Transition name="fade-slide">
-          <div v-if="form.presence_confirmee" class="space-y-6">
-            <div>
-              <label class="block text-sm font-medium text-marron-dark mb-2">
-                {{ t('rsvp.plusOnes') }}
-              </label>
-              <input
-                  v-model.number="form.nombre_accompagnants"
-                  type="number"
-                  min="0"
-                  max="5"
-                  class="input"
-              />
-              <p class="text-xs text-marron/60 mt-1">
-                {{ t('rsvp.plusOnesHint') }}
-              </p>
+        <!-- Step 3: Details (Only if Yes) -->
+        <div v-if="currentStep === 3" class="space-y-16 animate-fade-in-up">
+          <div class="space-y-6">
+            <span class="text-[0.65rem] uppercase tracking-widest font-bold text-gold-muted">Accompagnement</span>
+            <h2 class="text-5xl md:text-7xl font-serif text-ebony leading-tight">Quelques précisions.</h2>
+          </div>
+          <div class="space-y-20">
+            <div class="group border-b border-stone/30 focus-within:border-ebony transition-all duration-700 pb-4">
+              <label class="text-[0.6rem] uppercase tracking-widest text-stone mb-4 block">{{ t('rsvp.plusOnes') }}</label>
+              <input v-model.number="form.nombre_accompagnants" type="number" min="0" max="10" class="w-full bg-transparent border-none p-0 text-3xl md:text-5xl font-serif text-ebony focus:ring-0" />
             </div>
-
-            <div>
-              <label class="block text-sm font-medium text-marron-dark mb-2">
-                {{ t('rsvp.foodRestrictions') }}
-              </label>
-              <textarea
-                  v-model="form.restrictions_alimentaires"
-                  rows="3"
-                  :placeholder="t('rsvp.foodRestrictionsPlaceholder')"
-                  class="input resize-none"
-              ></textarea>
+            <div class="group border-b border-stone/30 focus-within:border-ebony transition-all duration-700 pb-4">
+              <label class="text-[0.6rem] uppercase tracking-widest text-stone mb-4 block">{{ t('rsvp.foodRestrictions') }}</label>
+              <textarea v-model="form.restrictions_alimentaires" class="w-full bg-transparent border-none p-0 text-xl font-serif text-ebony focus:ring-0 placeholder-stone/20" rows="2" :placeholder="t('rsvp.foodRestrictionsPlaceholder')"></textarea>
             </div>
           </div>
-        </Transition>
-
-        <!-- Message -->
-        <div>
-          <label class="block text-sm font-medium text-marron-dark mb-2">
-            {{ t('rsvp.messageForCouple') }}
-          </label>
-          <textarea
-              v-model="form.message"
-              rows="4"
-              :placeholder="t('rsvp.messagePlaceholder')"
-              class="input resize-none"
-          ></textarea>
         </div>
 
-        <!-- Erreur -->
-        <Transition name="fade">
-          <div
-              v-if="error"
-              class="bg-red-50 border border-red-200 text-red-700 text-sm p-4 rounded-lg"
-          >
-            {{ error }}
+        <!-- Step 4: Final Message -->
+        <div v-if="currentStep === 4" class="space-y-16 animate-fade-in-up">
+          <div class="space-y-6">
+            <span class="text-[0.65rem] uppercase tracking-widest font-bold text-gold-muted">Mot de la fin</span>
+            <h2 class="text-5xl md:text-7xl font-serif text-ebony leading-tight">Un message pour nous ?</h2>
           </div>
-        </Transition>
-
-        <!-- Succès -->
-        <Transition name="fade">
-          <div
-              v-if="success"
-              class="bg-green-50 border border-green-200 text-green-700 text-sm p-4 rounded-lg"
-          >
-            {{ t('rsvp.success') }}
+          <div class="group border-b border-stone/30 focus-within:border-ebony transition-all duration-700 pb-4">
+            <textarea v-model="form.message" class="w-full bg-transparent border-none p-0 text-2xl md:text-4xl font-serif text-ebony focus:ring-0 placeholder-stone/20 leading-relaxed" rows="4" :placeholder="t('rsvp.messagePlaceholder')"></textarea>
           </div>
+        </div>
+
+        <!-- Global Actions -->
+        <div v-if="!success" class="flex items-center justify-between pt-12 border-t border-stone/20">
+          <button v-if="currentStep > 1" type="button" @click="prevStep" class="text-[0.65rem] uppercase tracking-widest font-bold text-ebony border-b border-ebony/30 hover:border-ebony transition-colors">Précédent</button>
+          <div v-else></div>
+          
+          <button v-if="currentStep < 4" type="button" @click="nextStep" :disabled="!isStepValid" class="px-10 py-5 bg-ebony text-ivory text-[0.65rem] uppercase tracking-[0.4em] font-bold shadow-floating hover:bg-gold-muted transition-all duration-700 disabled:opacity-20">
+             Continuer
+          </button>
+          <button v-else type="submit" :disabled="loading || !isStepValid" class="px-12 py-6 bg-ebony text-ivory text-[0.7rem] uppercase tracking-[0.5em] font-bold hover:bg-gold-muted transition-all duration-700 shadow-floating active:scale-95">
+             {{ loading ? t('rsvp.submitLoading') : 'Confirmer le RSVP' }}
+          </button>
+        </div>
+
+        <!-- Feedback Messages -->
+        <Transition name="fade">
+          <p v-if="error" class="text-xs text-danger uppercase tracking-widest text-center">{{ error }}</p>
         </Transition>
-
-        <!-- Submit -->
-        <button
-            type="submit"
-            :disabled="loading || !formValid"
-            class="w-full h-12 rounded-lg bg-gradient-to-r from-dore to-dore-dark text-marron-dark font-semibold transition-all duration-300 hover:brightness-105 hover:shadow-lg hover:shadow-dore/25 disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <span v-if="loading">{{ t('rsvp.submitLoading') }}</span>
-          <span v-else>{{ t('rsvp.submit') }}</span>
-        </button>
-
-        <p class="text-xs text-marron/60 text-center">
-          {{ t('rsvp.required') }}
-        </p>
       </form>
     </div>
   </div>
@@ -169,11 +120,11 @@
 import { ref, reactive, computed } from 'vue'
 import { useGuests } from '@/composables/useGuests'
 import { validateEmail } from '@/utils/validators'
-import { formatDate } from '@/utils/formatters'
 import type { RsvpFormData } from '@/types/models'
 import { t } from '@/i18n'
 
 const { submitRsvp, loading } = useGuests()
+const currentStep = ref(1)
 
 const form = reactive<RsvpFormData>({
   nom_complet: '',
@@ -188,107 +139,64 @@ const form = reactive<RsvpFormData>({
 const error = ref<string | null>(null)
 const success = ref(false)
 
-const deadline = computed(() => {
-  const weddingDate =
-      import.meta.env.VITE_WEDDING_DATE || '2025-08-15T14:00:00'
-  const deadlineDate = new Date(weddingDate)
-  deadlineDate.setDate(deadlineDate.getDate() - 30)
-  return formatDate(deadlineDate, 'DD MMMM YYYY')
+const isStepValid = computed(() => {
+  if (currentStep.value === 1) return form.nom_complet.trim().length > 3 && validateEmail(form.email)
+  if (currentStep.value === 2) return true // Presence buttons force next
+  if (currentStep.value === 3) return true
+  if (currentStep.value === 4) return true
+  return false
 })
 
-const formValid = computed(() => {
-  return (
-      form.nom_complet.trim().length > 0 &&
-      validateEmail(form.email) &&
-      form.presence_confirmee !== null
-  )
-})
+function nextStep() {
+  if (isStepValid.value) {
+    if (currentStep.value === 2 && !form.presence_confirmee) {
+      currentStep.value = 4 // Skip details if not coming
+    } else {
+      currentStep.value++
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
 
-const presenceClass = (value: boolean) => {
-  return [
-    'h-12 rounded-lg border text-sm font-medium transition-all duration-300',
-    form.presence_confirmee === value
-        ? 'bg-gradient-to-r from-dore to-dore-dark text-marron-dark border-dore shadow-md shadow-dore/20'
-        : 'bg-white text-marron border-dore/35 hover:border-dore/70 hover:bg-dore/10'
-  ]
+function prevStep() {
+  if (currentStep.value === 4 && !form.presence_confirmee) {
+    currentStep.value = 2
+  } else {
+    currentStep.value--
+  }
 }
 
 async function handleSubmit() {
   error.value = null
-  success.value = false
-
-  if (!formValid.value) {
-    error.value =
-        'Veuillez remplir correctement les champs obligatoires.'
-    return
-  }
-
   const { error: submitError } = await submitRsvp(form)
-
   if (submitError) {
     error.value = submitError
   } else {
     success.value = true
-
-    Object.assign(form, {
-      nom_complet: '',
-      email: '',
-      telephone: '',
-      nombre_accompagnants: 0,
-      presence_confirmee: true,
-      restrictions_alimentaires: '',
-      message: ''
-    })
-
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 }
 </script>
 
 <style scoped>
-/* Inputs modernes */
-.input {
-  @apply w-full h-12 px-4 rounded-lg border border-dore/35 bg-ivoire text-marron-dark placeholder-marron/45 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-dore/30 focus:border-dore hover:border-dore/60;
-}
-
-textarea.input {
-  @apply h-auto py-3;
-}
-
-/* Animations */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease forwards;
+  animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+.animate-fade-in {
+  animation: fadeIn 1.5s ease-out forwards;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.4s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
+.fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

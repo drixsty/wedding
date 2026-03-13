@@ -1,0 +1,1 @@
+﻿src/components/common/Header.vue(47,7): error TS6133: 'content' is declared but its value is never read.

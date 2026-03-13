@@ -1,137 +1,94 @@
 <template>
-  <section class="w-full space-y-8 animate-fade-in-up">
-    <div class="grid grid-cols-1 xl:grid-cols-[2fr,1fr] gap-8 items-start" v-reveal>
-      <div class="space-y-6">
-        <div class="flex flex-wrap justify-center xl:justify-start gap-3">
-          <button
-            v-for="category in categories"
-            :key="category"
-            @click="selectedCategory = category"
-            class="px-5 py-2.5 rounded-lg font-medium transition-all duration-300 transform"
-            :class="[
-              selectedCategory === category
-                ? 'bg-dore text-white scale-105 shadow-lg shadow-dore/30'
-                : 'bg-white text-marron hover:bg-dore/10 border border-dore/30 hover:-translate-y-0.5'
-            ]"
-          >
-            {{ categoryIllustrations[category] }} {{ t(`gallery.categories.${category}`) }}
-          </button>
+  <section class="max-w-6xl mx-auto space-y-24 animate-fade-in-up">
+    <!-- Minimalist Category Filter & Action Bar -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-10 border-b border-stone/10 pb-10">
+      <div class="flex flex-wrap gap-6">
+        <button v-for="cat in categories" :key="cat" @click="selectedCategory = cat" class="px-6 py-2.5 text-[0.6rem] uppercase tracking-[0.3em] font-bold transition-all duration-700 rounded-full" :class="selectedCategory === cat ? 'bg-ebony text-ivory shadow-floating' : 'text-stone hover:text-ebony hover:bg-stone/10'">
+          {{ t(`gallery.categories.${cat}`) }}
+        </button>
+      </div>
+      
+      <div class="text-[0.55rem] uppercase tracking-widest text-stone font-bold">
+        {{ filteredPhotos.length }} Fragments affichés
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-20">
+      <!-- Standardized Grid: 3 Columns -->
+      <div class="xl:col-span-8">
+        <div v-if="loading" class="h-64 flex items-center justify-center">
+            <div class="w-8 h-[1px] bg-stone animate-pulse"></div>
         </div>
 
-        <div v-if="loading" class="text-center py-10">
-          <div class="inline-block w-8 h-8 border-4 border-dore/30 border-t-dore rounded-full animate-spin"></div>
-        </div>
+        <EmptyState v-else-if="filteredPhotos.length === 0" :description="t('gallery.empty')" compact />
 
-        <EmptyState
-          v-else-if="filteredPhotos.length === 0"
-          :title="selectedCategory === 'all' ? t('gallery.emptyTitle') : t('gallery.emptyCategoryTitle', { category: t(`gallery.categories.${selectedCategory}`) })"
-          :description="t('gallery.empty')"
-          :hint="t('gallery.emptyHint')"
-          :icon="categoryIllustrations[selectedCategory]"
-        />
-
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <div
-            v-for="(photo, idx) in filteredPhotos"
-            :key="photo.id"
-            class="relative overflow-hidden rounded-lg transition-all duration-500 cursor-pointer group animate-fade-up hover:-translate-y-1 hover:shadow-xl"
-            :style="{ 'animation-delay': `${idx * 90}ms` }"
-            @click="openLightbox(idx)"
-          >
-            <img :src="photo.url" :alt="photo.titre || 'Photo souvenir'" class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-              <h3 class="text-lg font-semibold text-white">{{ photo.titre }}</h3>
-              <p class="text-sm text-white/80">{{ photo.description }}</p>
+        <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div v-for="(photo, idx) in filteredPhotos" :key="photo.id" class="group relative aspect-[4/5] bg-stone/5 overflow-hidden transition-all duration-1000 cursor-pointer shadow-editorial hover:shadow-floating rounded-2xl" @click="openLightbox(idx)">
+            <img :src="photo.url" :alt="photo.titre || ''" class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110 grayscale group-hover:grayscale-0" />
+            <div class="absolute inset-0 bg-ebony/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex flex-col justify-end p-8">
+               <span class="text-[0.6rem] uppercase tracking-widest text-ivory/60 mb-2">{{ photo.categorie }}</span>
+               <h3 class="text-xl font-serif text-ivory">{{ photo.titre }}</h3>
             </div>
           </div>
         </div>
       </div>
 
-      <aside class="upload-panel rounded-lg p-6 border border-dore/25 bg-gradient-to-b from-white/90 to-amber-50/60 backdrop-blur-sm" v-reveal="{ delay: 160 }">
-        <h2 class="font-serif text-2xl text-marron-dark mb-2">{{ t('gallery.uploadTitle') }}</h2>
-        <p class="text-sm text-marron/80 mb-5">{{ t('gallery.uploadSubtitle') }}</p>
-
-        <form class="space-y-4" @submit.prevent="handleUpload">
-          <div>
-            <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.title') }}</label>
-            <input v-model="uploadForm.titre" type="text" required class="field" :placeholder="t('gallery.form.titlePlaceholder')" />
+      <!-- Couture Upload SidePanel -->
+      <aside class="xl:col-span-4 p-12 bg-white border border-stone/30 shadow-floating h-fit sticky top-32" v-reveal="{ delay: 200 }">
+        <h2 class="font-serif text-3xl text-ebony mb-8">{{ t('gallery.uploadTitle') }}</h2>
+        
+        <form class="space-y-10" @submit.prevent="handleUpload">
+          <div class="group border-b border-stone/30 focus-within:border-ebony transition-all duration-700 pb-2">
+            <label class="text-[0.6rem] uppercase tracking-widest text-stone mb-2 block">{{ t('gallery.form.title') }}</label>
+            <input v-model="uploadForm.titre" type="text" required class="w-full bg-transparent border-none p-0 text-sm font-serif text-ebony focus:ring-0 placeholder-stone/20" :placeholder="t('gallery.form.titlePlaceholder')" />
           </div>
 
-          <div>
-            <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.description') }}</label>
-            <textarea v-model="uploadForm.description" rows="3" class="field" :placeholder="t('gallery.form.descriptionPlaceholder')"></textarea>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.category') }}</label>
-            <select v-model="uploadForm.categorie" class="field" required>
-              <option v-for="category in uploadableCategories" :key="category" :value="category">
-                {{ t(`gallery.categories.${category}`) }}
-              </option>
+          <div class="group border-b border-stone/30 focus-within:border-ebony transition-all duration-700 pb-2">
+            <label class="text-[0.6rem] uppercase tracking-widest text-stone mb-2 block">{{ t('gallery.form.category') }}</label>
+            <select v-model="uploadForm.categorie" class="w-full bg-transparent border-none p-0 text-sm font-sans font-bold text-ebony focus:ring-0 appearance-none uppercase tracking-widest" required>
+              <option v-for="category in uploadableCategories" :key="category" :value="category">{{ t(`gallery.categories.${category}`) }}</option>
             </select>
           </div>
 
-          <div>
-            <label class="block text-sm font-medium mb-1 text-marron-dark">{{ t('gallery.form.file') }}</label>
-            <div
-              class="dropzone"
-              :class="{ 'dropzone-active': isDragging }"
-              @dragover.prevent="onDragOver"
-              @dragleave.prevent="onDragLeave"
-              @drop.prevent="onDropFiles"
-              @click="openFilePicker"
-            >
-              <div class="mx-auto w-14 h-14 rounded-2xl bg-dore/15 flex items-center justify-center text-2xl mb-3" :class="isDragging ? 'animate-pulse' : 'animate-float-soft'">📤</div>
-              <p class="text-sm font-semibold text-marron-dark">{{ t('gallery.form.dropzoneTitle') }}</p>
-              <p class="text-xs text-marron/70 mt-1">{{ t('gallery.form.dropzoneSubtitle') }}</p>
-              <div class="mt-3 flex justify-center gap-2 text-xs text-marron/65">
-                <span class="px-2 py-1 rounded-full bg-white/70">JPG</span>
-                <span class="px-2 py-1 rounded-full bg-white/70">PNG</span>
-                <span class="px-2 py-1 rounded-full bg-white/70">WEBP</span>
-              </div>
-              <p v-if="selectedFiles.length" class="mt-2 text-xs text-marron/80 font-medium">
-                {{ t('gallery.form.selectedFiles', { count: selectedFiles.length }) }}
-              </p>
+          <!-- Editorial Dropzone -->
+          <div class="relative group cursor-pointer" @click="openFilePicker">
+            <div class="w-full aspect-square border border-dashed border-stone/30 flex flex-col items-center justify-center gap-4 transition-all duration-700 group-hover:border-gold-muted group-hover:bg-ivory/50">
+               <div class="w-10 h-10 rounded-full border border-stone/20 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-stone group-hover:text-gold-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" /></svg>
+               </div>
+               <span class="text-[0.6rem] uppercase tracking-widest text-stone font-bold group-hover:text-ebony">{{ selectedFiles.length ? `${selectedFiles.length} Fichiers` : 'Déposer ici' }}</span>
             </div>
             <input ref="visitorFileInput" type="file" accept="image/*" multiple @change="onFileChange" class="sr-only" required />
           </div>
 
-          <p v-if="uploadFeedback" class="text-sm" :class="uploadSuccess ? 'text-green-700' : 'text-red-700'">{{ uploadFeedback }}</p>
-
-          <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-gradient-to-r from-dore to-dore-dark text-marron-dark font-semibold hover:brightness-105 transition disabled:opacity-60 shadow-md shadow-dore/20" :disabled="uploading">
+          <button type="submit" class="w-full py-5 bg-ebony text-ivory text-[0.65rem] uppercase tracking-[0.4em] font-bold hover:bg-gold-muted transition-all duration-700 shadow-floating disabled:opacity-20" :disabled="uploading">
             {{ uploading ? t('gallery.form.uploading') : t('gallery.form.submit') }}
           </button>
-          <p class="text-xs text-marron/75">{{ t('gallery.form.pendingHint') }}</p>
+          
+          <p v-if="uploadFeedback" class="text-[0.65rem] uppercase tracking-widest text-center" :class="uploadSuccess ? 'text-emerald-600' : 'text-danger'">{{ uploadFeedback }}</p>
         </form>
       </aside>
     </div>
 
+    <!-- Minimalist Lightbox -->
     <Teleport to="body">
-      <transition name="fade-scale">
-        <div
-          v-if="lightboxOpen"
-          class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
-          @click="closeLightbox"
-        >
-          <button @click.stop="closeLightbox" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
-
-          <button v-if="currentIndex > 0" @click.stop="prevPhoto" class="absolute left-6 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-          </button>
-
-          <button v-if="currentIndex < filteredPhotos.length - 1" @click.stop="nextPhoto" class="absolute right-6 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-          </button>
-
-          <div @click.stop class="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center">
-            <img :key="currentPhoto?.id" :src="currentPhoto?.url" :alt="currentPhoto?.titre || ''" class="max-w-full max-h-[80vh] rounded-lg shadow-xl object-cover" />
-          </div>
-
-          <div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 text-white rounded-md p-4 max-w-[90%] text-center">
-            <h3 class="font-semibold text-lg">{{ currentPhoto?.titre }}</h3>
-            <p class="text-sm text-white/80 mt-1">{{ currentPhoto?.description }}</p>
+      <transition name="fade">
+        <div v-if="lightboxOpen" class="fixed inset-0 z-[100] bg-ivory/98 backdrop-blur-xl flex items-center justify-center p-8 md:p-20" @click="closeLightbox">
+          <button class="absolute top-10 right-10 text-ebony hover:text-gold-muted transition-colors"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 18L18 6M6 6l12 12" /></svg></button>
+          
+          <div class="relative w-full h-full flex items-center justify-center" @click.stop>
+             <Transition name="fade-slide" mode="out-in">
+                <div :key="currentPhoto?.id" class="w-full h-full flex flex-col md:flex-row items-center gap-16">
+                   <div class="flex-1 h-full max-h-[70vh] flex items-center justify-center">
+                      <img :src="currentPhoto?.url" class="max-w-full max-h-full shadow-floating grayscale-[0.3]" />
+                   </div>
+                   <div class="md:w-80 space-y-8">
+                      <span class="text-[0.65rem] uppercase tracking-[0.6em] text-gold-muted font-bold block">{{ currentPhoto?.categorie }}</span>
+                      <h3 class="text-4xl md:text-6xl font-serif text-ebony leading-tight">{{ currentPhoto?.titre }}</h3>
+                      <p class="text-sm font-light leading-loose text-content-secondary italic">"{{ currentPhoto?.description || 'Instant de bonheur partagé.' }}"</p>
+                   </div>
+                </div>
+             </Transition>
           </div>
         </div>
       </transition>
@@ -152,26 +109,13 @@ const selectedFiles = ref<File[]>([])
 const visitorFileInput = ref<HTMLInputElement | null>(null)
 const uploadFeedback = ref('')
 const uploadSuccess = ref(false)
-const isDragging = ref(false)
 
 const categories = ['all', 'couple', 'family', 'friends', 'ceremony', 'reception']
 const uploadableCategories = categories.filter(category => category !== 'all')
-const categoryIllustrations: Record<string, string> = {
-  all: '🖼️',
-  couple: '💍',
-  family: '👨‍👩‍👧‍👦',
-  friends: '🥂',
-  ceremony: '⛪',
-  reception: '🎉'
-}
 
 const { photos, loading, uploading, fetchPublicPhotos, uploadVisitorPhotos } = useGallery()
 
-const uploadForm = ref({
-  titre: '',
-  description: '',
-  categorie: 'couple'
-})
+const uploadForm = ref({ titre: '', description: '', categorie: 'couple' })
 
 const filteredPhotos = computed(() => {
   if (selectedCategory.value === 'all') return photos.value
@@ -191,72 +135,29 @@ function closeLightbox() {
   document.body.style.overflow = ''
 }
 
-function nextPhoto() {
-  if (currentIndex.value < filteredPhotos.value.length - 1) currentIndex.value++
-}
-
-function prevPhoto() {
-  if (currentIndex.value > 0) currentIndex.value--
-}
-
-function setFiles(files: File[]) {
-  selectedFiles.value = files.filter(file => file.type.startsWith('image/'))
-}
-
 function onFileChange(event: Event) {
   const target = event.target as HTMLInputElement
-  setFiles(Array.from(target.files || []))
+  selectedFiles.value = Array.from(target.files || []).filter(file => file.type.startsWith('image/'))
 }
 
-function openFilePicker() {
-  visitorFileInput.value?.click()
-}
-
-function onDragOver() {
-  isDragging.value = true
-}
-
-function onDragLeave() {
-  isDragging.value = false
-}
-
-function onDropFiles(event: DragEvent) {
-  isDragging.value = false
-  setFiles(Array.from(event.dataTransfer?.files || []))
-}
-
-function resetUploadForm() {
-  uploadForm.value = { titre: '', description: '', categorie: 'couple' }
-  selectedFiles.value = []
-  if (visitorFileInput.value) {
-    visitorFileInput.value.value = ''
-  }
-}
+function openFilePicker() { visitorFileInput.value?.click() }
 
 async function handleUpload() {
-  if (selectedFiles.value.length === 0) {
-    uploadSuccess.value = false
-    uploadFeedback.value = t('gallery.form.fileRequired')
-    return
-  }
-
-  const { error, data } = await uploadVisitorPhotos(selectedFiles.value, uploadForm.value)
-
+  if (selectedFiles.value.length === 0) return
+  const { error } = await uploadVisitorPhotos(selectedFiles.value, uploadForm.value)
   uploadSuccess.value = !error
-  uploadFeedback.value = error
-    ? t('gallery.form.error', { error })
-    : t('gallery.form.success', { count: data?.length || 0 })
-
+  uploadFeedback.value = error ? 'Erreur' : 'Transmis'
   if (!error) {
-    resetUploadForm()
+    uploadForm.value = { titre: '', description: '', categorie: 'couple' }
+    selectedFiles.value = []
   }
 }
 
 function handleKeyPress(e: KeyboardEvent) {
   if (!lightboxOpen.value) return
   if (e.key === 'Escape') closeLightbox()
-  else if (e.key === 'ArrowRight') nextPhoto()
-  else if (e.key === 'ArrowLeft') prevPhoto()
+  else if (e.key === 'ArrowRight' && currentIndex.value < filteredPhotos.value.length - 1) currentIndex.value++
+  else if (e.key === 'ArrowLeft' && currentIndex.value > 0) currentIndex.value--
 }
 
 onMounted(async () => {
@@ -266,63 +167,26 @@ onMounted(async () => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyPress)
-  document.body.style.overflow = ''
 })
 </script>
 
 <style scoped>
-.animate-fade-up { animation: fadeUp 0.6s forwards; }
-@keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(16px); }
-  100% { opacity: 1; transform: translateY(0); }
+.animate-fade-in-up { animation: fadeInUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+.animate-scale-in-x {
+  animation: scaleInX 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: left;
+}
+@keyframes scaleInX {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
 }
 
-.upload-panel {
-  box-shadow: 0 10px 35px rgba(43, 30, 18, 0.08);
-}
+.fade-enter-active, .fade-leave-active { transition: opacity 0.8s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 
-.field {
-  width: 100%;
-  border: 1px solid rgba(var(--color-dore-rgb), 0.4);
-  border-radius: 0.7rem;
-  padding: 0.6rem 0.75rem;
-  color: var(--color-marron-dark);
-  background: rgba(255, 252, 245, 0.95);
-}
-
-.field:focus {
-  outline: none;
-  border-color: rgba(var(--color-dore-rgb), 0.95);
-  box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.2);
-}
-
-.field::placeholder {
-  color: rgba(80, 57, 38, 0.45);
-}
-
-.dropzone {
-  border: 1px dashed rgba(var(--color-dore-rgb), 0.55);
-  border-radius: 0.7rem;
-  background: rgba(255, 255, 255, 0.65);
-  padding: 1rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.dropzone:hover {
-  border-color: rgba(var(--color-dore-rgb), 0.85);
-  background: rgba(255, 255, 255, 0.8);
-}
-
-.dropzone-active {
-  border-color: rgba(var(--color-dore-rgb), 0.95);
-  background: rgba(var(--color-dore-rgb), 0.12);
-  box-shadow: 0 0 0 3px rgba(var(--color-dore-rgb), 0.2);
-}
-
-.fade-scale-enter-active,
-.fade-scale-leave-active { transition: all 0.25s ease; }
-.fade-scale-enter-from,
-.fade-scale-leave-to { opacity: 0; transform: scale(0.97); }
+.fade-slide-enter-active, .fade-slide-leave-active { transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.fade-slide-enter-from { opacity: 0; transform: translateX(40px); }
+.fade-slide-leave-to { opacity: 0; transform: translateX(-40px); }
 </style>

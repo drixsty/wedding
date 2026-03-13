@@ -1,62 +1,64 @@
 <template>
-  <section class="relative py-16 bg-surface-subtle overflow-hidden">
-    <div class="max-w-4xl mx-auto px-5 sm:px-6 text-center">
-      <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-title-md sm:text-title-lg font-semibold tracking-tight text-content-primary">
-          {{ content.home.storyTitle }}
-        </h2>
-        <p class="text-content-muted mt-3 text-body-sm sm:text-body">
-          {{ content.home.storySubtitle }}
-        </p>
-      </div>
-      <div class="bg-surface-elevated rounded-4xl border-2 border-gradient-to-r from-dore/40 via-dore/20 to-dore/40 p-6 sm:p-10 relative overflow-hidden">
-        <div class="absolute -top-10 -left-10 w-72 h-72 bg-gradient-to-r from-dore/10 to-dore/5 rounded-full pointer-events-none"></div>
-
-        <div class="text-left text-content-primary space-y-4">
-          <p
-            v-for="(paragraph, idx) in previewParagraphs"
-            :key="idx"
-            class="leading-relaxed text-sm sm:text-base md:text-lg"
-          >
-            <span v-html="paragraph"></span>
+  <section class="py-spacing-section bg-white overflow-hidden">
+    <div class="container mx-auto px-6 max-w-7xl">
+      <!-- Section 1: Intro -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center mb-40">
+        <div class="lg:col-span-5 space-y-8" v-reveal>
+          <span class="text-[0.6rem] uppercase tracking-[0.5em] text-gold-muted font-bold block">Origines</span>
+          <h2 class="text-5xl md:text-7xl font-serif text-ebony leading-tight">Le murmure du premier jour.</h2>
+          <div class="h-[1px] w-12 bg-ebony/10"></div>
+          <p class="text-sm md:text-base leading-loose text-content-secondary font-light max-w-md">
+            Il y a des rencontres qui ne sont pas des coïncidences, mais des retrouvailles. Sous le ciel étoilé d'un été sans fin, nous avons compris que l'essentiel n'était plus de chercher, mais de construire.
           </p>
         </div>
+        <div class="lg:col-span-7 relative" v-reveal="{ delay: 200 }">
+          <div class="aspect-[16/9] bg-stone/5 overflow-hidden shadow-floating group">
+             <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80" class="w-full h-full object-cover grayscale transition-all duration-[3s] group-hover:scale-110 group-hover:grayscale-0" />
+          </div>
+          <div class="absolute -top-10 -right-10 w-40 h-40 bg-ivory/80 backdrop-blur-sm border border-stone/10 p-8 hidden md:flex items-center justify-center">
+             <span class="font-serif text-4xl text-stone italic">01</span>
+          </div>
+        </div>
+      </div>
 
-        <div class="flex justify-center mt-6">
-          <button
-            @click="showModal = true"
-            class="app-btn-secondary px-6 sm:px-8 py-3 sm:py-4"
-          >
-            {{ content.home.storyCta }}
-          </button>
+      <!-- Section 2: Asymmetric Narrative -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-32 items-center flex-row-reverse">
+        <div class="lg:col-span-6 lg:order-2 space-y-8" v-reveal>
+          <span class="text-[0.6rem] uppercase tracking-[0.5em] text-gold-muted font-bold block">La Vision</span>
+          <h2 class="text-5xl md:text-7xl font-serif text-ebony leading-tight">Une élégance silencieuse.</h2>
+          <p class="text-sm md:text-base leading-loose text-content-secondary font-light">
+            Nous avons choisi de célébrer notre union avec simplicité. Pas de fioritures, juste l'authenticité des mots échangés et la présence de ceux qui nous sont chers. 
+          </p>
+          <div class="pt-8 grid grid-cols-2 gap-8">
+             <div class="space-y-4">
+                <span class="block font-serif text-3xl text-ebony italic">Lieu</span>
+                <span class="block text-[0.6rem] uppercase tracking-widest text-stone">Domaine du Ciel</span>
+             </div>
+             <div class="space-y-4">
+                <span class="block font-serif text-3xl text-ebony italic">Atmosphère</span>
+                <span class="block text-[0.6rem] uppercase tracking-widest text-stone">Minimaliste • Vrai</span>
+             </div>
+          </div>
+        </div>
+        <div class="lg:col-span-6 lg:order-1 relative" v-reveal="{ delay: 200 }">
+           <div class="aspect-[3/4] max-w-sm ml-auto bg-stone/5 overflow-hidden shadow-editorial relative z-10 group">
+              <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80" class="w-full h-full object-cover transition-all duration-[3s] group-hover:translate-y-[-20px]" />
+           </div>
+           <div class="absolute top-20 -left-10 w-full h-full border border-stone/10 -z-10"></div>
+           <div class="absolute bottom-10 right-10 text-[0.5rem] uppercase tracking-[1.5em] text-stone vertical-text opacity-40">The Atelier Wedding</div>
         </div>
       </div>
     </div>
-
-    <StoryModal
-      v-model="showModal"
-      :title="content.home.storyModalTitle"
-      :paragraphs="storyParagraphs"
-    />
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import StoryModal from './StoryModal.vue'
-import { useSiteContent } from '@/composables/useSiteContent'
-
-const showModal = ref(false)
-const previewLimit = 3
-const { content } = useSiteContent()
-
-const storyParagraphs = computed(() => content.value.home.storyParagraphs)
-const previewParagraphs = computed(() => storyParagraphs.value.slice(0, previewLimit))
+// Logic handled by static content for now as per design direction
 </script>
 
 <style scoped>
-.border-gradient-to-r {
-  border-image-slice: 1;
-  border-image-source: linear-gradient(to right, rgba(245, 158, 11, 0.4), rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.4));
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 </style>

@@ -1,22 +1,20 @@
 <template>
-  <section class="bg-ivoire/10 backdrop-blur-md rounded-2xl bg-gradient-to-b from-brown-dark/60 to-brown-dark relative overflow-hidden">
-    <div class="container mx-auto px-4 text-center">
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 justify-center">
-        <div
-            v-for="unit in timeUnits"
-            :key="unit.label"
-            class="sm:p-8 flex flex-col items-center justify-center group"
-        >
-          <span class="text-3xl sm:text-4xl md:text-5xl font-bold text-ivoire animate-pulse">
-            {{ unit.value }}
-          </span>
-          <span class="mt-2 text-sm sm:text-base text-ivoire/70 tracking-wide uppercase">
+  <div class="py-12 bg-ivory/50 border-y border-stone/10">
+    <div class="container mx-auto px-6 max-w-4xl text-center">
+      <div class="grid grid-cols-4 gap-4 md:gap-12">
+        <div v-for="unit in timeUnits" :key="unit.label" class="space-y-1 group">
+          <div class="overflow-hidden">
+            <span class="block text-3xl md:text-5xl font-serif text-ebony animate-slide-up">
+              {{ unit.value.toString().padStart(2, '0') }}
+            </span>
+          </div>
+          <span class="block text-[0.55rem] uppercase tracking-widest text-stone font-bold group-hover:text-gold-muted transition-colors duration-700">
             {{ unit.label }}
           </span>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -35,14 +33,13 @@ const timeUnits = computed(() => {
   const d = dayjs.duration(diff)
 
   return [
-    { value: Math.max(0, Math.floor(d.asDays())), label: 'Jours' },
-    { value: Math.max(0, d.hours()), label: 'Heures' },
-    { value: Math.max(0, d.minutes()), label: 'Minutes' },
-    { value: Math.max(0, d.seconds()), label: 'Secondes' }
+    { value: Math.max(0, Math.floor(d.asDays())), label: 'J' },
+    { value: Math.max(0, d.hours()), label: 'H' },
+    { value: Math.max(0, d.minutes()), label: 'M' },
+    { value: Math.max(0, d.seconds()), label: 'S' }
   ]
 })
 
-// Mise à jour toutes les secondes
 onMounted(() => {
   interval = setInterval(() => {
     now.value = Date.now()
@@ -55,10 +52,11 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.text-ivoire {
-  color: #FDF6EE;
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
-.bg-brown-dark {
-  background-color: #4B2E1E;
+.animate-slide-up {
+  animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 </style>

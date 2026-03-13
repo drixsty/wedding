@@ -3,7 +3,7 @@ export const messages = {
     defaults: {
       coupleName: 'Marie & Jean',
       weddingLocation: 'Paris, France',
-      weddingDate: '2025-08-15T14:00:00'
+      weddingDate: '2026-08-15T14:00:00'
     },
     nav: {
       home: 'Accueil',
@@ -200,6 +200,8 @@ export const messages = {
         },
         galleryTitle: 'Gestion de la galerie',
         galleryDescription: 'Modérez les photos ajoutées par les visiteurs et affichez/masquez-les.',
+        galleryManagementTitle: 'Atelier de Curation',
+        galleryManagementDescription: 'Organisez et modérez votre héritage visuel.',
         refreshGallery: 'Actualiser les photos',
         galleryEmpty: 'Aucune photo dans la galerie pour le moment.',
         adminUploadTitle: 'Titre',

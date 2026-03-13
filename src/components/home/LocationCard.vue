@@ -1,37 +1,40 @@
 <template>
-  <div class="relative h-80 rounded-2xl overflow-hidden shadow-lg group">
-    <!-- Image de fond -->
+  <div class="relative h-[450px] overflow-hidden group shadow-editorial border border-stone/10 bg-ivory rounded-3xl">
     <img
-        :src="location.image"
-        :alt="location.name"
-        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-        loading="lazy"
+      :src="location.image"
+      :alt="location.name"
+      class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110 grayscale-[0.2] group-hover:grayscale-0"
+      loading="lazy"
     />
+    
+    <!-- Editorial Overlay: STRENGTHENED for visibility -->
+    <div class="absolute inset-0 bg-gradient-to-t from-ebony/95 via-ebony/60 to-transparent text-ivory flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-700 backdrop-blur-[1px]">
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">{{ location.icon }}</span>
+          <h3 class="text-2xl font-serif leading-none">{{ location.name }}</h3>
+        </div>
+        
+        <p class="text-[0.65rem] uppercase tracking-widest text-ivory/80 leading-relaxed font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100 line-clamp-2">
+          {{ location.description }}
+        </p>
 
-    <!-- Overlay sombre pour lisibilité -->
-    <div class="absolute inset-0 bg-black/40"></div>
+        <div class="flex flex-wrap gap-6 pt-2">
+          <div class="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.2em] font-bold">
+            <svg class="w-3.5 h-3.5 text-gold-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            {{ location.address }}
+          </div>
+          <div class="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.2em] font-bold">
+            <svg class="w-3.5 h-3.5 text-gold-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            {{ location.time }}
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Texte par-dessus -->
-    <div class="absolute inset-0 p-5 sm:p-6 flex flex-col justify-end text-white">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="text-2xl sm:text-3xl">{{ location.icon }}</span>
-        <h3 class="text-xl sm:text-2xl font-semibold">{{ location.name }}</h3>
-      </div>
-      <p class="text-sm sm:text-base mb-2 line-clamp-3">
-        {{ location.description }}
-      </p>
-      <div class="flex items-center text-xs sm:text-sm opacity-80 mb-1">
-        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-        </svg>
-        {{ location.address }}
-      </div>
-      <div class="flex items-center text-xs sm:text-sm opacity-80">
-        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-        </svg>
-        {{ location.time }}
-      </div>
+    <!-- Active Indicator -->
+    <div class="absolute top-6 right-6 w-8 h-8 rounded-full border border-ivory/20 flex items-center justify-center bg-ivory/5 opacity-0 group-hover:opacity-100 transition-all duration-700">
+       <div class="w-1.5 h-1.5 rounded-full bg-gold-muted"></div>
     </div>
   </div>
 </template>
@@ -50,13 +53,3 @@ defineProps<{
   location: Location
 }>()
 </script>
-
-<style scoped>
-/* Pour couper les textes longs sur mobile */
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>

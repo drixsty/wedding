@@ -1,162 +1,183 @@
 <template>
-  <div class="min-h-screen animate-fade-in">
-    <!-- Hero Section Ultra-Moderne -->
+  <div class="min-h-screen bg-ivory selection:bg-ebony selection:text-ivory overflow-x-hidden">
+    <!-- Couture Hero Section: Optimized for Above-the-Fold -->
+    <section class="relative min-h-[75vh] flex flex-col items-center justify-center px-6 overflow-hidden pt-20">
+      
+      <!-- Central Editorial Block -->
+      <div class="relative z-10 text-center max-w-6xl mx-auto space-y-10">
+        <div class="space-y-2 opacity-0 animate-fade-in-up" style="animation-duration: 1.5s;">
+          <span class="block text-[0.6rem] uppercase tracking-[0.4em] font-sans font-bold text-gold-muted">
+            {{ content.home.subtitle }}
+          </span>
+        </div>
 
-    <section class="relative h-[72svh] min-h-[34rem] max-h-[52rem] md:h-[82vh] md:min-h-[40rem] flex flex-col justify-center items-center overflow-hidden bg-surface-strong">
-      <!-- Background Image + Overlay -->
-      <div class="absolute inset-0 z-0">
-        <div class="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-dore/20 blur-3xl animate-float-soft"></div>
-        <div class="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-mauve/20 blur-3xl animate-float-soft delay-300"></div>
-        <img
-            :src="content.home.heroImageUrl"
-            srcset="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1200&q=80 1200w,
-                    https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1920&q=80 1920w,
-                    https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2560&q=80 2560w,
-                    https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=3200&q=80 3200w"
-            sizes="100vw"
-            alt="Mariage"
-            class="w-full h-full object-cover object-center"
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-        />
-        <div class="absolute inset-0 bg-surface-strong/35"></div>
-      </div>
-
-      <!-- Content -->
-      <div class="relative z-10 text-center px-4 max-w-3xl mx-auto space-y-6">
-
-        <!-- Couple Names -->
-        <h1
-            class="text-5xl sm:text-6xl md:text-7xl font-serif font-extrabold text-white tracking-tight transform transition-all duration-1000 ease-out opacity-0 scale-90 animate-fade-in-up"
-            style="animation-delay: 200ms;"
-        >
-          {{ content.coupleName }}
+        <h1 class="text-[clamp(2.5rem,10vw,7rem)] font-serif font-normal leading-[0.9] tracking-tighter text-ebony opacity-0 animate-fade-in-up" 
+            style="animation-delay: 0.3s; animation-duration: 2s;">
+          {{ content.coupleName.split('&')[0] }}<br/>
+          <span class="italic text-gold-muted">&</span> {{ content.coupleName.split('&')[1] }}
         </h1>
 
-        <!-- Subtitle -->
-        <p class="text-lg sm:text-xl text-white/80 italic animate-fade-in-up delay-300">
-          {{ content.home.subtitle }}
-        </p>
+        <div class="space-y-8 opacity-0 animate-fade-in-up" style="animation-delay: 0.6s; animation-duration: 2.2s;">
+          <p class="text-[0.65rem] font-sans font-bold tracking-[0.4em] uppercase text-ebony/60">
+            {{ weddingDateFormatted }} — {{ content.weddingLocation }}
+          </p>
+        </div>
+      </div>
 
-        <p class="text-lg sm:text-xl text-white/90 animate-fade-in-up delay-400">
-          {{ weddingDateFormatted }} • {{ content.weddingLocation }}
-        </p>
+      <!-- Minimal Decorative Elements -->
+      <div class="absolute top-[20%] right-[10%] w-px h-16 bg-stone/30 hidden lg:block"></div>
+    </section>
 
-        <!-- Countdown Timer -->
-        <CountdownTimer class="animate-fade-in-up delay-500"/>
+    <!-- Countdown Section: High Visibility -->
+    <CountdownTimer />
 
-        <!-- CTA Button -->
-        <router-link
-            to="/rsvp"
-            class="mt-8 app-btn-soft transform hover:scale-105 animate-fade-in-up delay-500"
-        >
-          {{ content.home.cta }}
-        </router-link>
+    <!-- Editorial Story Section -->
+    <section id="histoire" class="py-spacing-section bg-white border-y border-stone/20">
+      <div class="container mx-auto px-6 max-w-7xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+          <div class="lg:col-span-5 space-y-10" v-reveal>
+             <span class="text-[0.65rem] uppercase tracking-widest font-bold text-gold-muted">Notre Histoire</span>
+             <h2 class="text-5xl md:text-7xl font-serif leading-tight text-ebony">L'Essentiel est Invisible.</h2>
+             <p class="text-sm md:text-base leading-loose text-content-secondary font-light max-w-md">
+                Chaque chapitre de notre vie a été écrit with patience. Ce mariage n'est pas seulement une célébration, c'est l'affirmation d'une promesse faite un soir d'automne.
+             </p>
+             <div class="pt-6">
+                <button @click="isStoryModalOpen = true" class="px-10 py-4 bg-ebony text-ivory text-[0.7rem] uppercase tracking-[0.4em] font-bold shadow-floating hover:bg-gold-muted transition-all duration-700 inline-block">Explorer les détails</button>
+             </div>
+
+             <StoryModal 
+                :is-open="isStoryModalOpen" 
+                :title="'Notre Histoire'" 
+                :paragraphs="storyParagraphs" 
+                @close="isStoryModalOpen = false" 
+              />
+          </div>
+          <div class="lg:col-span-7 relative" v-reveal="{ delay: 200 }">
+             <div class="aspect-[4/5] bg-stone/10 overflow-hidden shadow-editorial">
+                <img :src="carouselImages[0]?.url" class="w-full h-full object-cover grayscale-[0.5] hover:grayscale-0 transition-all duration-[2s]" />
+             </div>
+             <!-- Asymmetric Overlay Text -->
+             <div class="absolute -bottom-10 -left-10 bg-ivory p-12 hidden md:block border border-stone/10">
+                <span class="font-serif text-3xl italic text-gold-muted leading-none">"Deux cœurs, un seul chemin."</span>
+             </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Story Section Enhanced -->
-    <div v-reveal="{ delay: 100 }"><NotreHistoire/></div>
-
-    <!-- Carousel Section with better design -->
-    <section v-reveal="{ delay: 80 }" class="relative py-24 bg-surface-elevated overflow-hidden w-full">
-      <!-- Top Gradient Accent -->
-      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-dore to-transparent"></div>
-
-      <!-- Section Header -->
-      <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-title-md sm:text-title-lg font-semibold tracking-tight text-content-primary">
-          {{ content.home.momentsTitle }}
-        </h2>
-        <p class="text-content-muted mt-3 text-body-sm sm:text-body">
-          {{ content.home.momentsSubtitle }}
-        </p>
-      </div>
-
-      <!-- Carousel Full Width -->
-      <div class="w-full">
-        <Carousel
-            :images="carouselImages"
-            :autoplay="true"
-            :interval="5000"
-            class="w-full rounded-none shadow-none"
-        />
+    <!-- Refined Gallery Preview -->
+    <section class="py-32 bg-ivory border-t border-stone/10">
+      <div class="container mx-auto px-6">
+        <div class="mb-24 text-center">
+           <div v-reveal>
+              <h2 class="text-4xl md:text-5xl lg:text-6xl font-serif text-ebony leading-none">{{ content.home.momentsTitle }}</h2>
+              <div class="mt-8 h-px w-24 bg-gold-muted/30 mx-auto"></div>
+           </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12" v-reveal>
+           <div v-for="(image, index) in carouselImages.slice(0, 3)" :key="index" class="aspect-[4/5] overflow-hidden shadow-floating group rounded-2xl">
+              <img :src="image.url" class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" />
+           </div>
+        </div>
       </div>
     </section>
 
-    <!-- Ceremony Locations -->
-    <div v-reveal="{ delay: 120 }"><CeremonyLocations /></div>
+    <!-- Locations & Invitation Ritual -->
+    <section class="py-spacing-section bg-ebony text-ivory overflow-hidden relative">
+      <div class="container mx-auto px-6 relative z-10">
+         <div class="max-w-4xl mx-auto text-center space-y-20">
+            <div class="space-y-8" v-reveal>
+               <span class="text-[0.6rem] uppercase tracking-[0.5em] text-gold-muted font-bold">Lieux de Célébration</span>
+               <h3 class="text-4xl md:text-6xl font-serif italic text-ivory">Une escale hors du temps.</h3>
+            </div>
+            
+            <CelebrationLocations />
 
-    <!-- Timeline Section -->
-    <div v-reveal="{ delay: 140 }"><Timeline /></div>
+            <div class="pt-20" v-reveal>
+               <router-link to="/rsvp" class="group inline-flex flex-col items-center gap-8">
+                  <div class="w-20 h-20 rounded-full border border-ivory/20 flex items-center justify-center group-hover:border-gold-muted group-hover:scale-110 transition-all duration-700 bg-ivory/5">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gold-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                  </div>
+                  <span class="text-[0.7rem] uppercase tracking-[0.6em] font-bold text-ivory/80 group-hover:text-gold-muted group-hover:tracking-[1em] transition-all duration-700">
+                     Suivre l'invitation
+                  </span>
+               </router-link>
+            </div>
+         </div>
+      </div>
+    </section>
 
-    <!-- FAQ Section -->
-    <div v-reveal="{ delay: 160 }"><FAQ /></div>
+    <!-- Minimal Timeline -->
+    <Timeline class="bg-white border-t border-stone/10" />
 
-    <div v-reveal="{ delay: 180 }"><RSVP/></div>
+    <FAQ class="bg-ivory" />
 
+    <!-- Couture Footer -->
+    <footer class="py-24 border-t border-stone/20 bg-ivory">
+       <div class="container mx-auto px-6 text-center space-y-10">
+          <div class="font-serif text-4xl text-ebony tracking-tighter font-bold">M. & S.</div>
+          <p class="text-[0.6rem] uppercase tracking-[0.4em] text-stone font-bold">Tous droits réservés © 2026</p>
+          <div class="flex justify-center gap-12">
+             <a href="#" class="text-[0.6rem] uppercase tracking-widest text-ebony/40 hover:text-ebony transition-colors font-bold">Instagram</a>
+             <a href="#" class="text-[0.6rem] uppercase tracking-widest text-ebony/40 hover:text-ebony transition-colors font-bold">Hébergement</a>
+          </div>
+       </div>
+    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import CountdownTimer from '@/components/home/CountdownTimer.vue'
-import Carousel from '@/components/home/Carousel.vue'
-import CeremonyLocations from '@/components/home/CeremonyLocations.vue'
+import { computed, ref } from 'vue'
+import CelebrationLocations from '@/components/home/CelebrationLocations.vue'
 import Timeline from '@/components/home/Timeline.vue'
 import FAQ from '@/components/home/FAQ.vue'
+import CountdownTimer from '@/components/home/CountdownTimer.vue'
+import StoryModal from '@/components/home/StoryModal.vue'
 import { formatDate } from '@/utils/formatters'
-import NotreHistoire from "@/components/home/NotreHistoire.vue";
-import RSVP from "@/components/home/RSVP.vue";
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-
-dayjs.extend(duration)
-
-
 import { useSiteContent } from '@/composables/useSiteContent'
 
+dayjs.extend(duration)
 const { content } = useSiteContent()
 
 const weddingDateFormatted = computed(() =>
-  formatDate(content.value.weddingDate, 'DD MMMM YYYY [à] HH[h]mm')
+  formatDate(content.value.weddingDate, 'DD MMMM YYYY')
 )
 
-const carouselImages = computed(() => content.value.carousel.map(item => ({
+const carouselImages = computed(() => content.value.carousel.slice(0, 5).map(item => ({
   url: item.imageUrl,
   alt: item.alt,
   title: item.title,
   caption: item.caption
 })))
+
+const isStoryModalOpen = ref(false)
+const storyParagraphs = [
+  "Tout a commencé lors d'un festival Afrobeat à Paris. Un simple regard échangé au milieu de la foule, et le temps a semblé se figer. Ce qui devait être une simple soirée entre amis est devenu le prologue de notre plus belle aventure.",
+  "Au fil des mois, nous avons découvert que nos âmes se complétaient parfaitement. Des discussions passionnées sur nos racines communes aux rires partagés devant des couchers de soleil, chaque instant renforçait ce lien invisible mais indéfectible.",
+  "Le point culminant de notre récit s'est déroulé à Marrakech, sous une voûte étoilée. C'est là, dans l'intimité du désert, que la promesse d'une vie à deux a été scellée. Aujourd'hui, nous vous invitons à célébrer non seulement un mariage, mais l'union de deux destins qui n'en forment désormais plus qu'un."
+]
 </script>
 
 <style scoped>
-.section-divider {
-  @apply w-32 h-1 bg-gradient-to-r from-transparent via-dore to-transparent mx-auto my-8;
-}
-
 @keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  0% { opacity: 0; transform: translateY(60px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s forwards;
+  animation: fadeInUp 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-pulse {
-  animation: pulse 1.5s infinite;
+:deep(.timeline-container) {
+  @apply bg-transparent;
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.05); opacity: 0.85; }
+/* Custom Editorial Overrides */
+:deep(.carousel-container) {
+  @apply rounded-none shadow-none;
+  background-color: rgb(var(--color-stone-rgb) / 0.05);
 }
 </style>

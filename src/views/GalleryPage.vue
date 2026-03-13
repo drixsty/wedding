@@ -1,40 +1,33 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-surface-base via-surface-elevated to-surface-subtle relative overflow-hidden">
-    <div class="pointer-events-none absolute -top-20 -left-16 h-72 w-72 rounded-full bg-dore/20 blur-3xl animate-float-soft"></div>
-    <div class="pointer-events-none absolute bottom-10 right-0 h-64 w-64 rounded-full bg-mauve/20 blur-3xl animate-float-soft delay-300"></div>
-
-    <header class="relative bg-surface-strong text-content-inverse">
-      <div class="container mx-auto px-4 pt-24 pb-16 sm:pt-28 sm:pb-20 text-center" v-reveal>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold tracking-wide animate-fade-in-down">
-          {{ content.galleryPage.title }}
+  <div class="min-h-screen bg-ivory selection:bg-ebony selection:text-ivory pt-32 pb-24">
+    <main class="container mx-auto px-10">
+      <!-- High-Impact Editorial Heading -->
+      <header class="mb-24 space-y-8" v-reveal>
+        <div class="flex items-center gap-4">
+          <span class="text-[0.6rem] uppercase tracking-[0.5em] text-gold-muted font-bold">La Collection</span>
+          <div class="h-[1px] w-12 bg-gold-muted/30"></div>
+        </div>
+        <h1 class="text-6xl md:text-8xl font-serif text-ebony leading-[0.9] tracking-tighter">
+          Fragments <br/>
+          <span class="italic text-gold-muted">d'éternité.</span>
         </h1>
-
-        <p class="mt-4 text-sm sm:text-base text-content-inverse/75 max-w-xl mx-auto animate-fade-in-up">
-          {{ content.galleryPage.subtitle }}
+        <p class="text-sm md:text-base text-content-secondary font-light max-w-xl leading-loose">
+          Une curation méticuleuse de nos moments les plus précieux. Chaque cliché est une fenêtre ouverte sur l'émotion pure de cette journée.
         </p>
-      </div>
+      </header>
 
-      <div class="absolute bottom-0 left-0 w-full h-px bg-content-inverse/10"></div>
-    </header>
-
-    <main class="container mx-auto px-4 py-12" v-reveal="{ delay: 120 }">
       <Gallery />
     </main>
+
+    <!-- Decorative Bottom Line -->
+    <div class="mt-20 border-t border-stone/10 mx-10"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import Gallery from '@/components/gallery/Gallery.vue'
-import { useSiteContent } from '@/composables/useSiteContent'
-
-const { content } = useSiteContent()
 </script>
 
 <style scoped>
-@keyframes fadeInDown {0% { opacity: 0; transform: translateY(-20px); }100% { opacity: 1; transform: translateY(0); }}
-@keyframes fadeInUp {0% { opacity: 0; transform: translateY(20px); }100% { opacity: 1; transform: translateY(0); }}
-.animate-fade-in-down { animation: fadeInDown 0.8s ease forwards; }
-.animate-fade-in-up { animation: fadeInUp 0.8s ease forwards; }
-.animate-fade-in-up.delay-100 { animation-delay: 0.1s; }
-.bg-gradient-elegant { background: var(--gradient-warm); }
+/* Transitive animations handled by v-reveal and Gallery component */
 </style>

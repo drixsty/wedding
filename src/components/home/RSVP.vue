@@ -44,7 +44,7 @@
 import {computed} from 'vue'
 import {formatDate} from '@/utils/formatters.ts'
 
-const weddingDateRaw = import.meta.env.VITE_WEDDING_DATE || '2025-08-15T14:00:00'
+const weddingDateRaw = import.meta.env.VITE_WEDDING_DATE || '2026-08-15T14:00:00'
 
 const deadline = computed(() => {
   const deadlineDate = new Date(weddingDateRaw)

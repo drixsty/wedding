@@ -1,81 +1,67 @@
 <template>
-  <Modal v-model="isOpen">
-    <transition name="fade">
-      <div
-          v-if="isOpen"
-          class="fixed inset-0 flex items-center justify-center bg-surface-strong/55 backdrop-blur-md p-4 z-50"
-      >
-        <div
-            class="bg-surface-elevated rounded-3xl shadow-2xl border border-border-soft/60 max-w-3xl w-full relative overflow-hidden animate-zoomIn flex flex-col"
-        >
-          <!-- Bouton de fermeture -->
-          <button
-              @click="isOpen = false"
-              class="absolute top-4 right-4 bg-surface-subtle rounded-full p-2 text-content-secondary hover:text-content-inverse hover:bg-surface-strong transition-colors duration-300 z-10"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                 stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12" />
-            </svg>
+  <Transition name="fade">
+    <div v-if="isOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-ebony/95 backdrop-blur-md">
+      <div class="relative w-full max-w-4xl max-h-[90vh] bg-white border border-stone/10 shadow-floating overflow-hidden flex flex-col animate-scale-in">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between p-8 border-b border-stone/5">
+          <span class="text-[0.6rem] uppercase tracking-[0.4em] font-bold text-gold-muted">Récit Intime</span>
+          <button @click="$emit('close')" class="group flex items-center gap-4 text-[0.65rem] uppercase tracking-widest font-bold text-stone hover:text-ebony transition-all">
+            Fermer
+            <div class="w-8 h-px bg-stone/30 group-hover:w-12 group-hover:bg-ebony transition-all"></div>
           </button>
+        </div>
 
-          <!-- Content -->
-          <div class="p-6 sm:p-8 overflow-y-auto max-h-[80vh]">
-            <h3 class="text-2xl sm:text-3xl font-semibold mb-4 text-center text-content-primary">
+        <!-- content -->
+        <div class="flex-1 overflow-y-auto p-12 md:p-20 space-y-16 selection:bg-gold-muted/10">
+          <div class="max-w-2xl mx-auto space-y-10">
+            <h2 class="text-4xl md:text-6xl font-serif text-ebony leading-tight">
               {{ title }}
-            </h3>
-            <div class="space-y-4 text-justify text-content-secondary text-body-sm sm:text-body leading-relaxed">
-              <p v-for="(paragraph, idx) in paragraphs" :key="idx">
-                <span v-html="paragraph"></span>
+            </h2>
+            
+            <div class="w-20 h-px bg-gold-muted/30"></div>
+
+            <div class="prose prose-stone prose-sm md:prose-base !max-w-none">
+              <p v-for="(paragraph, idx) in paragraphs" :key="idx" class="text-stone leading-loose mb-8 font-light italic">
+                {{ paragraph }}
               </p>
             </div>
           </div>
+
+          <!-- Decorative Footer in Modal -->
+          <div class="flex justify-center pt-10">
+            <div class="font-serif text-3xl italic text-gold-muted/40">M. & S.</div>
+          </div>
         </div>
       </div>
-    </transition>
-  </Modal>
+    </div>
+  </Transition>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import Modal from '@/components/common/Modal.vue'
-
 interface Props {
-  modelValue: boolean
+  isOpen: boolean
   title: string
   paragraphs: string[]
 }
 
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
-
-const isOpen = computed({
-  get: () => props.modelValue,
-  set: (val: boolean) => emit('update:modelValue', val)
-})
+defineProps<Props>()
+defineEmits(['close'])
 </script>
 
 <style scoped>
-/* Smooth fade for modal */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
+.fade-enter-active, .fade-leave-active { transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-.fade-enter-to, .fade-leave-from {
-  opacity: 1;
+.animate-scale-in {
+  animation: scaleIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Animation zoom */
-@keyframes zoomIn {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-.animate-zoomIn {
-  animation: zoomIn 0.25s ease-out forwards;
-}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #947B5A; }
 </style>

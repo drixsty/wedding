@@ -15,7 +15,7 @@ const router = createRouter({
       component: () => import('@/views/RsvpPage.vue')
     },
     {
-      path: '/galerie',
+      path: '/gallery',
       name: 'gallery',
       component: () => import('@/views/GalleryPage.vue')
     },

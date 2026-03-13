@@ -2,38 +2,7 @@ import { ref } from 'vue'
 import { supabase } from '@/utils/supabase'
 import type { Photo } from '@/types/models'
 
-const DEFAULT_PHOTOS: Photo[] = [
-  {
-    id: 'seed-1',
-    url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200&q=80',
-    titre: 'Notre rencontre',
-    description: 'Le jour où tout a commencé.',
-    categorie: 'couple',
-    visible: true,
-    uploaded_by_guest: false,
-    created_at: new Date().toISOString()
-  },
-  {
-    id: 'seed-2',
-    url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80',
-    titre: 'Famille réunie',
-    description: 'Un souvenir avec toutes nos familles.',
-    categorie: 'family',
-    visible: true,
-    uploaded_by_guest: false,
-    created_at: new Date().toISOString()
-  },
-  {
-    id: 'seed-3',
-    url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80',
-    titre: 'Soirée entre amis',
-    description: 'Une fête entourée de ceux qu’on aime.',
-    categorie: 'friends',
-    visible: true,
-    uploaded_by_guest: false,
-    created_at: new Date().toISOString()
-  }
-]
+const DEFAULT_PHOTOS: Photo[] = []
 
 interface UploadPhotoPayload {
   titre: string
