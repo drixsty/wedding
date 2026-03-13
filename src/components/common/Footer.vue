@@ -21,7 +21,7 @@
           </ul>
         </div>
 
-        <div class="md:col-span-4 space-y-8 text-right md:text-left">
+        <div class="md:col-span-4 space-y-8 text-left">
           <h4 class="text-[0.6rem] uppercase tracking-[0.5em] text-gold-muted font-bold">Contact & Support</h4>
           <p class="text-[0.65rem] uppercase tracking-widest text-stone leading-loose font-bold">{{ content.footer.questions }}</p>
           <a :href="`mailto:${content.contactEmail}`" class="inline-block text-[0.65rem] uppercase tracking-widest text-ebony font-bold border-b border-ebony/20 pb-1 hover:border-ebony transition-all">{{ content.contactEmail }}</a>

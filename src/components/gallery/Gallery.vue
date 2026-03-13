@@ -2,8 +2,8 @@
   <section class="max-w-6xl mx-auto space-y-24 animate-fade-in-up">
     <!-- Minimalist Category Filter & Action Bar -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-10 border-b border-stone/10 pb-10">
-      <div class="flex flex-wrap gap-6">
-        <button v-for="cat in categories" :key="cat" @click="selectedCategory = cat" class="px-6 py-2.5 text-[0.6rem] uppercase tracking-[0.3em] font-bold transition-all duration-700 rounded-full" :class="selectedCategory === cat ? 'bg-ebony text-ivory shadow-floating' : 'text-stone hover:text-ebony hover:bg-stone/10'">
+      <div class="flex flex-nowrap md:flex-wrap gap-4 md:gap-6 overflow-x-auto pb-4 md:pb-0 w-full no-scrollbar">
+        <button v-for="cat in categories" :key="cat" @click="selectedCategory = cat" class="px-6 py-2.5 text-[0.6rem] uppercase tracking-[0.3em] font-bold transition-all duration-700 rounded-full whitespace-nowrap" :class="selectedCategory === cat ? 'bg-ebony text-ivory shadow-floating' : 'text-stone hover:text-ebony hover:bg-stone/10'">
           {{ t(`gallery.categories.${cat}`) }}
         </button>
       </div>
@@ -22,7 +22,7 @@
 
         <EmptyState v-else-if="filteredPhotos.length === 0" :description="t('gallery.empty')" compact />
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div v-else class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
           <div v-for="(photo, idx) in filteredPhotos" :key="photo.id" class="group relative aspect-[4/5] bg-stone/5 overflow-hidden transition-all duration-1000 cursor-pointer shadow-editorial hover:shadow-floating rounded-2xl" @click="openLightbox(idx)">
             <img :src="photo.url" :alt="photo.titre || ''" class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110 grayscale group-hover:grayscale-0" />
             <div class="absolute inset-0 bg-ebony/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex flex-col justify-end p-8">

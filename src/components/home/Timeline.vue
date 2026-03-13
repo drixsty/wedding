@@ -15,7 +15,7 @@
 
           <div v-for="(item, index) in steps" :key="index" class="relative group" v-reveal="{ delay: index * 100 }">
              <!-- Asymmetric Steps -->
-             <div class="flex flex-col md:flex-row items-center gap-20" :class="index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'">
+             <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20" :class="index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'">
                 <!-- Text Content -->
                 <div class="flex-1 space-y-6" :class="index % 2 === 0 ? 'md:text-right' : 'md:text-left'">
                    <span class="font-serif text-6xl text-stone/20 group-hover:text-gold-muted/20 transition-colors duration-[1s]">{{ item.time }}</span>

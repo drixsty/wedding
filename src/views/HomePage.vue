@@ -75,7 +75,7 @@
            </div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12" v-reveal>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-12" v-reveal>
            <div v-for="(image, index) in carouselImages.slice(0, 3)" :key="index" class="aspect-[4/5] overflow-hidden shadow-floating group rounded-2xl">
               <img :src="image.url" class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110" />
            </div>
@@ -116,9 +116,9 @@
     <!-- Couture Footer -->
     <footer class="py-24 border-t border-stone/20 bg-ivory">
        <div class="container mx-auto px-6 text-center space-y-10">
-          <div class="font-serif text-4xl text-ebony tracking-tighter font-bold">M. & S.</div>
-          <p class="text-[0.6rem] uppercase tracking-[0.4em] text-stone font-bold">Tous droits réservés © 2026</p>
-          <div class="flex justify-center gap-12">
+          <div class="font-serif text-3xl md:text-4xl text-ebony tracking-tighter font-bold">M. & S.</div>
+          <p class="text-[0.6rem] uppercase tracking-[0.4em] text-stone font-bold whitespace-nowrap overflow-hidden text-ellipsis">Tous droits réservés © 2026</p>
+          <div class="flex flex-wrap justify-center gap-6 md:gap-12">
              <a href="#" class="text-[0.6rem] uppercase tracking-widest text-ebony/40 hover:text-ebony transition-colors font-bold">Instagram</a>
              <a href="#" class="text-[0.6rem] uppercase tracking-widest text-ebony/40 hover:text-ebony transition-colors font-bold">Hébergement</a>
           </div>

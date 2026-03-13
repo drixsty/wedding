@@ -16,10 +16,10 @@
       <!-- Stepped Form -->
       <form v-else @submit.prevent="handleSubmit" class="space-y-24 relative">
         <!-- Progress Indicator (Minimalist) -->
-        <div class="absolute -top-32 left-0 w-full flex justify-between items-center px-2">
+        <div class="mb-12 w-full flex justify-between items-center px-2">
           <span class="text-[0.6rem] font-bold uppercase tracking-[0.4em] text-stone">Étape 0{{ currentStep }} — 04</span>
-          <div class="flex gap-4">
-             <div v-for="i in 4" :key="i" class="w-12 h-[1px] transition-all duration-1000" :class="i <= currentStep ? 'bg-gold-muted' : 'bg-stone/20'"></div>
+          <div class="flex gap-2 md:gap-4">
+             <div v-for="i in 4" :key="i" class="w-8 md:w-12 h-[1px] transition-all duration-1000" :class="i <= currentStep ? 'bg-gold-muted' : 'bg-stone/20'"></div>
           </div>
         </div>
 
