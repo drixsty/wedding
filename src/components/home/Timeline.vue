@@ -4,10 +4,10 @@
 
       <div class="text-center mb-12 sm:mb-16">
         <h2 class="text-title-md sm:text-title-lg font-semibold tracking-tight text-content-primary">
-          Programme immersif du week-end
+          Programme du mariage
         </h2>
         <p class="text-content-muted mt-3 text-body-sm sm:text-body">
-          Plus qu'un mariage : une expérience en plusieurs actes, de l'accueil à la dernière danse
+          Trois jours de célébration à Yaoundé, du jeudi 23 au samedi 25 juillet
         </p>
       </div>
 
@@ -117,54 +117,30 @@ function createDate(date: string, time: string) {
 
 function formatDate(date: Date) {
   return date.toLocaleString('fr-FR', {
-    weekday: 'short',
+    weekday: 'long',
     day: '2-digit',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit'
+    month: 'long'
   })
 }
 
 const timeline = ref<TimelineEvent[]>([
   {
-    start: createDate('2026-07-17', '19:30'),
-    title: 'Veillée des proches',
-    description: 'Un dîner intimiste pour lancer les festivités : retrouvailles, anecdotes, musique douce et premières surprises imaginées par nos témoins.',
-    location: 'Rooftop Lumière • Paris'
+    start: createDate('2026-07-23', '10:00'),
+    title: 'Dot à Yaoundé',
+    description: 'Première étape de notre union : la dot, entourés de nos familles, entre traditions, émotions et bénédictions.',
+    location: 'Yaoundé'
   },
   {
-    start: createDate('2026-07-18', '13:00'),
-    end: createDate('2026-07-18', '14:15'),
-    title: 'Accueil signature',
-    description: 'Cocktail de bienvenue, remise du carnet invité et installation dans les espaces. Prenez le temps d’écrire un mot dans notre livre de promesses.',
-    location: 'Maison des Arts & Jardins'
+    start: createDate('2026-07-24', '10:00'),
+    title: 'Mariage civil + vin d’honneur',
+    description: 'Cérémonie civile à la mairie de Yaoundé VI, suivie d’un vin d’honneur pour partager ce moment avec nos proches.',
+    location: 'Mairie de Yaoundé VI'
   },
   {
-    start: createDate('2026-07-18', '14:30'),
-    end: createDate('2026-07-18', '16:00'),
-    title: 'Cérémonie de l’union',
-    description: 'Échange des vœux, rituels symboliques afro-européens, chants live et bénédictions familiales : le cœur de notre engagement.',
-    location: 'Pavillon des Cèdres'
-  },
-  {
-    start: createDate('2026-07-18', '16:15'),
-    end: createDate('2026-07-18', '18:30'),
-    title: 'Cocktail & expériences',
-    description: 'Ateliers signatures (bar à senteurs, photobooth éditorial, coin souvenirs) accompagnés de bouchées créatives et d’un set acoustique.',
-    location: 'Jardins suspendus'
-  },
-  {
-    start: createDate('2026-07-18', '19:30'),
-    end: createDate('2026-07-19', '00:30'),
-    title: 'Dîner spectacle & première danse',
-    description: 'Un dîner en 4 temps, ponctué de prises de parole, performances surprises et ouverture du bal avant la nuit dansante.',
-    location: 'Orangerie Royale'
-  },
-  {
-    start: createDate('2026-07-19', '11:30'),
-    title: 'Brunch de clôture',
-    description: 'Un dernier moment ensemble autour d’un brunch convivial pour revivre les plus beaux instants et prolonger la magie.',
-    location: 'Salon Azur'
+    start: createDate('2026-07-25', '10:00'),
+    title: 'Célébration religieuse + soirée',
+    description: 'Messe de mariage à la paroisse St Esprit de Mvolyé, puis soirée festive pour célébrer notre union jusqu’au bout de la nuit.',
+    location: 'Paroisse St Esprit de Mvolyé'
   }
 ].sort((a, b) => a.start.getTime() - b.start.getTime()))
 

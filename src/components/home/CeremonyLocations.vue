@@ -4,10 +4,10 @@
 
       <div class="text-center mb-12 sm:mb-16">
         <h2 class="text-title-md sm:text-title-lg font-semibold text-content-primary">
-          Nos lieux, pensés comme un voyage
+          Les lieux de célébration
         </h2>
         <p class="text-content-muted mt-2 sm:mt-3 text-body-sm sm:text-body">
-          Chaque espace raconte une ambiance : émotion, célébration et souvenirs à partager
+          Trois étapes, trois lieux à Yaoundé pour célébrer notre union
         </p>
       </div>
 
@@ -24,7 +24,7 @@
             to="/rsvp"
             class="app-btn-secondary px-6 py-3 shadow"
         >
-          📍 Recevoir le guide pratique avec votre confirmation
+          📍 Recevoir les informations pratiques
         </router-link>
       </div>
 
@@ -46,28 +46,28 @@ interface Location {
 
 const locations: Location[] = [
   {
-    name: 'La Cérémonie',
-    description: 'Un écrin végétal et solennel pour nos vœux, accompagné de musique live et de rituels symboliques.',
-    address: 'Pavillon des Cèdres, Paris 16e',
-    time: '14h30 - 16h00',
-    icon: '💍',
-    image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80'
+    name: 'La Dot',
+    description: 'Une célébration traditionnelle familiale pour marquer la première étape de notre union.',
+    address: 'Yaoundé',
+    time: 'Jeudi 23 juillet',
+    icon: '👑',
+    image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&q=80'
   },
   {
-    name: 'Le Cocktail Expérience',
-    description: 'Un moment vivant entre dégustations, animations artistiques et espace photo éditorial.',
-    address: 'Jardins suspendus des Cèdres',
-    time: '16h15 - 18h30',
-    icon: '🥂',
+    name: 'Le Mariage Civil',
+    description: 'Passage à la mairie de Yaoundé VI, suivi d’un vin d’honneur convivial avec nos proches.',
+    address: 'Mairie de Yaoundé VI',
+    time: 'Vendredi 24 juillet',
+    icon: '📜',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80'
+  },
+  {
+    name: 'La Célébration Religieuse & Soirée',
+    description: 'Messe à la paroisse St Esprit de Mvolyé puis soirée de fête pour clôturer ce week-end inoubliable.',
+    address: 'Paroisse St Esprit de Mvolyé',
+    time: 'Samedi 25 juillet',
+    icon: '⛪',
     image: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=80'
-  },
-  {
-    name: 'Le Dîner & La Nuit',
-    description: 'Un dîner en plusieurs actes suivi d’une soirée dansante jusqu’au bout de la nuit.',
-    address: 'Orangerie Royale',
-    time: '19h30 - 00h30',
-    icon: '🎉',
-    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80'
   }
 ]
 </script>
