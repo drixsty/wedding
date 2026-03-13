@@ -1,6 +1,6 @@
 <template>
-  <section class="space-y-5 animate-fade-in">
-    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+  <section class="space-y-6 animate-fade-in">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
       <article class="admin-workflow-card">
         <p class="admin-badge">Flux conseillé</p>
         <p class="mt-2 text-sm text-slate-600">1) Importez les photos officielles.</p>
@@ -16,7 +16,7 @@
     </div>
 
     <div class="admin-panel">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 class="admin-section-title">{{ t('admin.dashboard.galleryManagementTitle') }}</h2>
           <p class="text-sm text-slate-600">{{ t('admin.dashboard.galleryManagementDescription') }}</p>
@@ -24,7 +24,7 @@
         <button @click="loadAdminPhotos" class="admin-btn admin-btn-muted">{{ t('admin.dashboard.refreshGallery') }}</button>
       </div>
 
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-4" @submit.prevent="handleAdminUpload">
+      <form class="grid grid-cols-1 gap-4 md:grid-cols-2" @submit.prevent="handleAdminUpload">
         <div>
           <label class="admin-field-label">{{ t('admin.dashboard.adminUploadTitle') }}</label>
           <input v-model="adminUploadForm.titre" type="text" class="admin-input w-full" :placeholder="t('admin.dashboard.adminUploadTitlePlaceholder')" required />
@@ -60,16 +60,16 @@
     <div class="admin-panel">
       <div v-if="galleryLoading" class="p-10 text-center">{{ t('gallery.loading') }}</div>
       <EmptyState v-else-if="adminPhotos.length === 0" :description="t('admin.dashboard.galleryEmpty')" compact />
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <article v-for="photo in adminPhotos" :key="photo.id" class="rounded-xl border border-slate-200 overflow-hidden bg-white">
+      <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <article v-for="photo in adminPhotos" :key="photo.id" class="admin-media-card">
           <div class="p-3 pb-0">
             <label class="inline-flex items-center gap-2 text-xs text-slate-500">
               <input type="checkbox" :value="photo.id" v-model="selectedPhotos" />
               {{ t('admin.dashboard.selectPhoto') }}
             </label>
           </div>
-          <img :src="photo.url" :alt="photo.titre || 'Photo'" class="w-full h-44 object-cover" />
-          <div class="p-4 space-y-2">
+          <img :src="photo.url" :alt="photo.titre || 'Photo'" class="h-44 w-full object-cover" />
+          <div class="space-y-2 p-4">
             <div class="flex items-start justify-between gap-2">
               <div>
                 <h3 class="font-semibold text-slate-900">{{ photo.titre || t('admin.dashboard.noTitle') }}</h3>
@@ -79,12 +79,9 @@
                 {{ photo.uploaded_by_guest ? t('admin.dashboard.guestUpload') : t('admin.dashboard.coupleUpload') }}
               </span>
             </div>
-            <p class="text-sm text-slate-600 line-clamp-2">{{ photo.description }}</p>
+            <p class="line-clamp-2 text-sm text-slate-600">{{ photo.description }}</p>
             <div class="flex items-center justify-between pt-2">
-              <button
-                @click="togglePhotoVisibility(photo.id, !(photo.visible ?? true))"
-                class="admin-btn-soft"
-              >
+              <button @click="togglePhotoVisibility(photo.id, !(photo.visible ?? true))" class="admin-btn-soft">
                 {{ photo.visible ? t('admin.dashboard.hidePhoto') : t('admin.dashboard.showPhoto') }}
               </button>
               <button @click="removePhoto(photo.id)" class="admin-btn-soft">{{ t('admin.dashboard.deletePhoto') }}</button>
