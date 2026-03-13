@@ -4,7 +4,7 @@
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Back-office mariage</p>
         <h1 class="text-2xl font-serif text-slate-900 md:text-3xl">{{ currentTitle }}</h1>
-        <p class="text-sm text-slate-500">Un espace épuré pour suivre les RSVPs, publier rapidement et garder le site à jour.</p>
+        <p class="text-sm text-slate-500">Gestion des invitations et de la visibilité des photos.</p>
       </div>
       <div class="flex items-center gap-2">
         <router-link to="/" class="admin-shell__link">Prévisualiser le site</router-link>
@@ -41,10 +41,8 @@ const router = useRouter()
 const { signOut } = useAuth()
 
 const navItems = [
-  { to: '/admin/dashboard/overview', label: 'Vue globale', icon: '◈' },
-  { to: '/admin/dashboard/guests', label: 'Invités & RSVP', icon: '◉' },
-  { to: '/admin/dashboard/content', label: 'Contenus', icon: '◎' },
-  { to: '/admin/dashboard/gallery', label: 'Galerie', icon: '◌' }
+  { to: '/admin/dashboard/guests', label: 'Invitations & RSVP', icon: '◉' },
+  { to: '/admin/dashboard/gallery', label: 'Visibilité photos', icon: '◌' }
 ]
 
 const currentTitle = computed(() => navItems.find(item => route.path.startsWith(item.to))?.label || 'Administration')
